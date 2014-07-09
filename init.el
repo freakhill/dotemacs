@@ -135,3 +135,4 @@
 
 (defun insert-quote-char ()
   (insert-char #x0027)) ; codepoint for ' <- simple quote
+

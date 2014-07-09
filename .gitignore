@@ -1,0 +1,6 @@
+*~
+*.dat
+*.eld
+auto-save-list/
+elpa/
+url/
