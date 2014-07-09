@@ -94,8 +94,8 @@
 ; --- projectile (find files in projects)
 (projectile-global-mode)
 (setq projectile-show-paths-function 'projectile-hashify-with-relative-paths)
-(global-set-key (kbd "M-p") 'projectile-find-file)
-(global-set-key (kbd "M-o") 'recentf-open-files)
+(global-set-key (kbd "C-p") 'projectile-find-file)
+(global-set-key (kbd "C-o") 'recentf-open-files)
 
 ; --- clojure and nrepl hooks for autocompletion and my custom fun
 (defvar lisp-mode-hooks
