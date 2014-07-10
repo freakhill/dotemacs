@@ -1,6 +1,10 @@
 *~
 *.dat
 *.eld
+.smex-items
+places
+semanticdb/
 auto-save-list/
 elpa/
 url/
+projectile.cache
