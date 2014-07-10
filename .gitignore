@@ -3,8 +3,11 @@
 *.eld
 .smex-items
 places
+ede-projects.el
+abbrev_defs
 semanticdb/
 auto-save-list/
 elpa/
 url/
+dl/
 projectile.cache

@@ -16,6 +16,11 @@
  ;; If there is more than one, they won't work right.
  )
 
+;TODO!
+; need to automate:
+; cabal install ghc-mod
+; cabal install ariadne
+
 ;--------------------
 ;--- for emacs 24+ --
 ;--------------------
@@ -31,6 +36,7 @@
   (defvar my-packages '(auto-complete
 			grizzl
 			smex
+                        undo-tree
 			smartparens
 			rainbow-delimiters
 			projectile
@@ -38,7 +44,13 @@
 			evil
 			god-mode
 			evil-god-state
-                        everything))
+                        everything
+                        haskell-mode
+                        ghci-completion
+                        ariadne
+                        company-ghc
+                        utop
+                        tuareg))
   (defun autoinstall ()
     (dolist (p my-packages)
       (when (not (package-installed-p p))
@@ -49,11 +61,31 @@
              (package-refresh-contents)
              (autoinstall)))))
 
+;--- extra files
+(progn
+  (defvar dl-dir "~/.emacs.d/dl")
+  (unless (file-exists-p dl-dir)
+    (make-directory dl-dir))
+  (add-to-list 'load-path dl-dir)
+  (defvar url "https://raw.githubusercontent.com/buzztaiki/auto-complete/master/ac-company.el")
+  (defvar filename (concat dl-dir "/" "ac-company.el"))
+  (defvar module-name 'ac-company)
+  (defun download-load-remote-module (url filename module-name)
+    (unless (file-exists-p filename)
+      (url-copy-file url filename))
+    (require module-name))
+  (ignore-errors
+    download-load-remote-module url filename module-name))
+
 ;--------------------------------------- end of autoinstall --------------------
 
 (evil-mode 1)
 ; C-z switches between modes (states in evil parlance)
 (evil-define-key 'normal global-map "," 'evil-execute-in-god-state)
+(evil-set-initial-state 'magit-log-edit-mode 'emacs)
+(evil-set-initial-state 'nav-mode 'emacs)
+(evil-set-initial-state 'grep-mode 'emacs)
+(evil-set-initial-state 'ibuffer-mode 'emacs)
 
 ;-------------------
 ;--- basic stuff ---
@@ -98,8 +130,10 @@
 (setq hippie-expand-try-functions-list
       '(try-expand-dabbrev
 	try-expand-dabbrev-all-buffers
-	try-expand-dabbrev-from-kill try-complete-file-name-partially
-	try-complete-file-name try-expand-all-abbrevs
+	try-expand-dabbrev-from-kill
+        try-complete-file-name-partially
+	try-complete-file-name
+        try-expand-all-abbrevs
 	try-expand-list
 	try-expand-line
 	try-complete-lisp-symbol-partially
@@ -107,6 +141,11 @@
 
 ;--- REINDENT!
 (define-key global-map (kbd "RET") 'reindent-then-newline-and-indent)
+
+;--- set firefox as browser
+;(setq browse-url-browser-function 'browse-url-generic
+;      browse-url-generic-program "firefox")
+; fix it to be multiplatform
 
 ;-------------------
 ;-------------------
@@ -123,9 +162,9 @@
 (setq ac-delay 0.0)
 (setq ac-use-quick-help t)
 (setq ac-quick-help-delay 0.05)
-(setq ac-use-fuzzy 1)
+(setq ac-use-fuzzy t)
 (setq ac-auto-start 1)
-(setq ac-auto-show-menu 1)
+(setq ac-auto-show-menu t)
 (ac-config-default)
 
 (smex-initialize)
@@ -137,13 +176,37 @@
 (global-set-key (kbd "C-p") 'projectile-find-file)
 (global-set-key (kbd "C-o") 'recentf-open-files)
 
+;--- undo-tree
+(global-set-key (kbd "C-c C-u") 'undo-tree-visualize)
+(global-set-key (kbd "C-c C-g") 'magit-status)
 ;--------------------------------------- all my coding from here ---------------
 
 ;--------------
 ;--- Haskell --
 ;--------------
 
-; todo
+(add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template)
+(add-hook 'inferior-haskell-mode-hook 'turn-on-ghci-completion)
+(custom-set-variables '(haskell-stylish-on-save t))
+(define-key haskell-mode-map (kbd "C-c C-g") 'ariadne-goto-definition)
+(custom-set-variables  '(haskell-process-suggest-remove-import-lines t)
+                       '(haskell-process-auto-import-loaded-modules t)
+                         '(haskell-process-log t))
+(define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-or-reload)
+(define-key haskell-mode-map (kbd "C-`") 'haskell-interactive-bring)
+(define-key haskell-mode-map (kbd "C-c C-t") 'haskell-process-do-type)
+(define-key haskell-mode-map (kbd "C-c C-i") 'haskell-process-do-info)
+(define-key haskell-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
+(define-key haskell-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
+(define-key haskell-mode-map (kbd "C-c c") 'haskell-process-cabal)
+(define-key haskell-mode-map (kbd "SPC") 'haskell-mode-contextual-space)
+;(define-key haskell-cabal-mode-map (kbd "C-`") 'haskell-interactive-bring)
+;(define-key haskell-cabal-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
+;(define-key haskell-cabal-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
+;(define-key haskell-cabal-mode-map (kbd "C-c c") 'haskell-process-cabal)
+
+(custom-set-variables  '(haskell-process-type 'cabal-repl))
+;(custom-set-variables  '(haskell-process-type 'ghci))
 
 ;-----------
 ;--- Rust --
@@ -155,13 +218,28 @@
 ;--- Ocaml --
 ;------------
 
-; todo
+;--- picked up from github manzyuk/emacs-preamble thingies
+(autoload 'utop "utop" "Toplevel for OCaml" t)
+(setq utop-command "opam config exec \"utop -emacs\"")
+(add-to-list 'auto-mode-alist '("\\.ml[ily]?$" . tuareg-mode))
+
+(autoload 'tuareg-mode "tuareg" "Major mode for editing Caml code" t)
+;(autoload 'camldebug "camldebug" "Run the Caml debugger" t)
+(autoload 'utop-setup-ocaml-buffer "utop" "Toplevel for OCaml" t)
+(add-hook 'tuareg-mode-hook 'utop-setup-ocaml-buffer)
+
+(add-hook 'tuareg-mode-hook
+          (lambda ()
+            (define-key tuareg-mode-map (kbd "C-c C-s" 'tuareg-run-caml))))
 
 ;------------
 ;--- Shell --
 ;------------
 
-; todo -- i don't know if there is much emacs stuff for that
+(defun set-shell-to-bash ()
+  (setq shell-file-name "bash")
+  (setq explicit-shell-file-name shell-file-name))
+; used in the os customization part
 
 ;-----------
 ;--- JAVA --
@@ -242,7 +320,7 @@
 ;-----------------------
 
 (defun macos-custom ()
-  )
+  (set-shell-to-bash))
 
 (defun windows-custom ()
   (setq everything-use-ftp t)
@@ -255,7 +333,7 @@
   (global-set-key (kbd "C-x f") 'everything-find-file))
 
 (defun linux-custom ()
-  )
+  (set-shell-to-bash))
 
 (cond
  ((string-match "darwin" system-configuration)
