@@ -29,6 +29,7 @@
 ;--------------------
 
 (desktop-save-mode 1)
+(show-paren-mode 1)
 
 ; one day, rewrite emacs in rust, with a better VM, an optional
 ; embedded V8, and generally easier way to integrate other languages!
@@ -186,12 +187,6 @@
 ;-------------------
 ;-------------------
 
-(setq projectile-completion-system 'grizzl)
-;(fix-ido-mode t)
-;(setq fix-ido-use-faces nil)
-
-(show-paren-mode 1)
-
 ;--- regular auto-complete initialization
 (require 'auto-complete-config)
 (progn
@@ -237,6 +232,8 @@
 (require 'projectile)
 (require 'helm)
 (require 'helm-projectile)
+
+(setq projectile-completion-system 'grizzl)
 
 (defun my-open-files ()
   "picked from https://www.youtube.com/watch?v=qpv9i_I4jYU -> mr. Renn Seo"
