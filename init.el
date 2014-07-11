@@ -34,12 +34,12 @@
 ; embedded V8, and generally easier way to integrate other languages!
 ; And FASTER, FASTER, FASTER!
 
-(defun ensure-dir (d)
+(defun my-ensure-dir (d)
   (unless (file-exists-p d)
     (make-directory d)))
 
 (defvar my-save-dir "~/.emacs.d/save")
-(ensure-dir my-save-dir)
+(my-ensure-dir my-save-dir)
 
 ;--- packages
 (progn
@@ -76,30 +76,30 @@
                         vkill
                         utop
                         tuareg))
-  (defun autoinstall ()
+  (defun my-autoinstall ()
     (dolist (p my-packages)
       (when (not (package-installed-p p))
         (package-install p))))
   (condition-case nil
-      (autoinstall)
+      (my-autoinstall)
     (error (progn
              (package-refresh-contents)
-             (autoinstall)))))
+             (my-autoinstall)))))
 
 ;--- extra files
 (progn
   (defconst dl-dir "~/.emacs.d/dl")
-  (ensure-dir dl-dir)
+  (my-ensure-dir dl-dir)
   (add-to-list 'load-path dl-dir)
   (defvar url "https://raw.githubusercontent.com/buzztaiki/auto-complete/master/ac-company.el")
   (defvar filename (concat dl-dir "/" "ac-company.el"))
   (defvar module-name 'ac-company)
-  (defun download-load-remote-module (url filename module-name)
+  (defun my-download-load-remote-module (url filename module-name)
     (unless (file-exists-p filename)
       (url-copy-file url filename))
     (require module-name))
   (ignore-errors
-    download-load-remote-module url filename module-name))
+    my-download-load-remote-module url filename module-name))
 
 ;--------------------------------------- end of autoinstall --------------------
 
@@ -196,7 +196,7 @@
 (require 'auto-complete-config)
 (progn
   (defconst my-ac-dict-dir "~/.emacs.d/ac-dict")
-  (ensure-dir my-ac-dict-dir)
+  (my-ensure-dir my-ac-dict-dir)
   (add-to-list 'ac-dictionary-directories my-ac-dict-dir))
 (progn
   (setq ac-delay 0.0)
@@ -337,7 +337,7 @@
 ;-----------
 
 ;--- clojure and nrepl hooks for autocompletion and my custom fun
-(defconst lisp-mode-hooks
+(defconst my-lisp-mode-hooks
   '(clojure-mode-hook
     clojurescript-mode-hook
     clojure-nrepl-mode-hook
@@ -348,10 +348,10 @@
     geiser-repl-mode-hook
     scheme-mode-hook))
 
-(dolist (h lisp-mode-hooks)
-  (add-hook h 'lisp-custom))
+(dolist (h my-lisp-mode-hooks)
+  (add-hook h 'my-lisp-custom))
 
-(defun lisp-custom ()
+(defun my-lisp-custom ()
   (require 'smartparens-config)
   (smartparens-strict-mode)
   (rainbow-delimiters-mode)
@@ -370,7 +370,7 @@
   (local-set-key (kbd "ESC C-<left>") 'sp-forward-barf-sexp)
   ;--- custom entry stuff
   (local-set-key (kbd "<f1>") 'insert-parentheses)
-  (local-set-key (kbd "<f2>") 'insert-quote-char)
+  (local-set-key (kbd "<f2>") 'my-insert-quote-char)
   (local-set-key (kbd "C-:") 'insert-parentheses)
   (local-set-key (kbd "C-;") 'insert-parentheses))
 
@@ -379,7 +379,7 @@
 (add-hook 'nrepl-interaction-mode-hook 'ac-nrepl-setup)
 (add-hook 'clojure-nrepl-mode-hook 'ac-nrepl-setup)
 
-(defun insert-quote-char ()
+(defun my-insert-quote-char ()
   (insert-char #x0027)) ; codepoint for ' <- simple quote
 
 (defun my-reindent-buffer ()
@@ -411,7 +411,7 @@
       (setq mac-option-modifier 'super)
       (message "Command is now bound to SUPER and Option is bound to META."))))
 
-(defun macos-custom ()
+(defun my-macos-custom ()
   (set-shell-to-bash)
   (require 'exec-path-from-shell)
   (exec-path-from-shell-initialize)
@@ -422,7 +422,7 @@
   (global-set-key (kbd "s-/") 'hippie-expand)
   (global-set-key (kbd "C-c w") 'my-swap-meta-and-super))
 
-(defun windows-custom ()
+(defun my-windows-custom ()
   (setq everything-use-ftp t)
   (setq everything-host "127.0.0.1")
   (setq everything-port 22222)
@@ -432,16 +432,16 @@
   (setq everything-pass "I have made a ceaseless effort not to ridicule, not to bewail, not to scorn human actions, but to understand them.")
   (global-set-key (kbd "C-x f") 'everything-find-file))
 
-(defun linux-custom ()
+(defun my-linux-custom ()
   (set-shell-to-bash))
 
 (cond
  ((string-match "darwin" system-configuration)
   (message "customizing GNU Emacs for MacOS")
-  (macos-custom))
+  (my-macos-custom))
  ((string-match "linux" system-configuration)
   (message "customizing GNU Emacs for Linux")
-  (linux-custom))
+  (my-linux-custom))
  ((string-match "nt6" system-configuration)
   (message "customizing GNU Emacs for Win 7")
-  (windows-custom)))
+  (my-windows-custom)))
