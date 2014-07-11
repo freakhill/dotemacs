@@ -20,10 +20,20 @@
 ; need to automate:
 ; cabal install ghc-mod
 ; cabal install ariadne
+; cabal install stylish-haskell
+; cabal install hlint
+; cabal install hdevtools
 
 ;--------------------
 ;--- for emacs 24+ --
 ;--------------------
+
+(defun ensure-dir (d)
+  (unless (file-exists-p d)
+    (make-directory d)))
+
+(defvar my-save-dir "~/.emacs.d/save")
+(ensure-dir my-save-dir)
 
 ;--- packages
 (progn
@@ -35,11 +45,15 @@
     (package-refresh-contents))
   (defvar my-packages '(auto-complete
 			grizzl
+                        ido-ubiquitous
+                        flx-ido
 			smex
                         undo-tree
 			smartparens
 			rainbow-delimiters
 			projectile
+                        helm
+                        helm-projectile
 			nrepl
 			evil
 			god-mode
@@ -49,6 +63,9 @@
                         ghci-completion
                         ariadne
                         company-ghc
+                        rust-mode
+                        exec-path-from-shell
+                        vkill
                         utop
                         tuareg))
   (defun autoinstall ()
@@ -63,9 +80,8 @@
 
 ;--- extra files
 (progn
-  (defvar dl-dir "~/.emacs.d/dl")
-  (unless (file-exists-p dl-dir)
-    (make-directory dl-dir))
+  (defconst dl-dir "~/.emacs.d/dl")
+  (ensure-dir dl-dir)
   (add-to-list 'load-path dl-dir)
   (defvar url "https://raw.githubusercontent.com/buzztaiki/auto-complete/master/ac-company.el")
   (defvar filename (concat dl-dir "/" "ac-company.el"))
@@ -79,13 +95,24 @@
 
 ;--------------------------------------- end of autoinstall --------------------
 
-(evil-mode 1)
+;--- evil
+
 ; C-z switches between modes (states in evil parlance)
-(evil-define-key 'normal global-map "," 'evil-execute-in-god-state)
+(setq evil-mode-line-format 'before)
+(setq evil-emacs-state-cursor '("red" box))
+(setq evil-normal-state-custor '("gray" box))
+(setq evil-visual-state-cursor '("gray" box))
+(setq evil-insert-state-cursor '("gray" bar))
+(setq evil-motion-state-cursor '("gray" box))
+
+(evil-mode 1)
+
 (evil-set-initial-state 'magit-log-edit-mode 'emacs)
 (evil-set-initial-state 'nav-mode 'emacs)
 (evil-set-initial-state 'grep-mode 'emacs)
 (evil-set-initial-state 'ibuffer-mode 'emacs)
+
+(evil-define-key 'normal global-map "," 'evil-execute-in-god-state)
 
 ;-------------------
 ;--- basic stuff ---
@@ -112,9 +139,6 @@
 (setq indent-tabs-mode nil)
 
 ;--- ido, recentf, lacarte, hippie-expand, ibuffer, occur
-(ido-mode t)
-(ido-everywhere t)
-
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
 
@@ -158,23 +182,61 @@
 
 ;--- regular auto-complete initialization
 (require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-(setq ac-delay 0.0)
-(setq ac-use-quick-help t)
-(setq ac-quick-help-delay 0.05)
-(setq ac-use-fuzzy t)
-(setq ac-auto-start 1)
-(setq ac-auto-show-menu t)
-(ac-config-default)
+(progn
+  (defconst my-ac-dict-dir "~/.emacs.d/ac-dict")
+  (ensure-dir my-ac-dict-dir)
+  (add-to-list 'ac-dictionary-directories my-ac-dict-dir))
+(progn
+  (setq ac-delay 0.0)
+  (setq ac-use-quick-help t)
+  (setq ac-quick-help-delay 0.05)
+  (setq ac-use-fuzzy t)
+  (setq ac-auto-start 1)
+  (setq ac-auto-show-menu t)
+  (ac-config-default))
 
+;--- smex and ido (picked from prelude)
+(require 'ido)
+(require 'ido-ubiquitous)
+(require 'flx-ido)
+
+(setq ido-enable-prefix nil
+      ido-enable-flex-matching t
+      ido-create-new-buffer 'always
+      ido-use-filename-at-point 'guess
+      ido-max-prospects 10
+      ido-save-directory-list-file (expand-file-name "ido.hist" my-save-dir)
+      ido-default-file-method 'selected-window
+      ido-auto-merge-work-directories-length -1)
+(ido-mode +1)
+(ido-ubiquitous-mode +1)
+; smarter fuzzy matching for ido
+(flx-ido-mode +1)
+; disable ido faces to see flx highlights
+(setq ido-use-faces nil)
+
+(require 'smex)
 (smex-initialize)
 (global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
 
 ;--- projectile (find files in projects)
+
+(require 'projectile)
+(require 'helm)
+(require 'helm-projectile)
+
+(defun my-open-files ()
+  "picked from https://www.youtube.com/watch?v=qpv9i_I4jYU -> mr. Renn Seo"
+  (interactive)
+  (if (projectile-project-p)
+      (helm-projectile)
+    (helm-for-files)))
+
 (projectile-global-mode)
 (setq projectile-show-paths-function 'projectile-hashify-with-relative-paths)
-(global-set-key (kbd "C-p") 'projectile-find-file)
-(global-set-key (kbd "C-o") 'recentf-open-files)
+(global-set-key (kbd "C-o") 'my-open-files)
+(global-set-key (kbd "C-p") 'recentf-open-files)
 
 ;--- undo-tree
 (global-set-key (kbd "C-c C-u") 'undo-tree-visualize)
@@ -185,9 +247,14 @@
 ;--- Haskell --
 ;--------------
 
-(add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template)
 (add-hook 'inferior-haskell-mode-hook 'turn-on-ghci-completion)
+
+(add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template)
+(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+
 (custom-set-variables '(haskell-stylish-on-save t))
+
 (define-key haskell-mode-map (kbd "C-c C-g") 'ariadne-goto-definition)
 (custom-set-variables  '(haskell-process-suggest-remove-import-lines t)
                        '(haskell-process-auto-import-loaded-modules t)
@@ -258,7 +325,7 @@
 ;-----------
 
 ;--- clojure and nrepl hooks for autocompletion and my custom fun
-(defvar lisp-mode-hooks
+(defconst lisp-mode-hooks
   '(clojure-mode-hook
     clojurescript-mode-hook
     clojure-nrepl-mode-hook
@@ -319,8 +386,29 @@
 ;--- OS customization --
 ;-----------------------
 
+(defun my-swap-meta-and-super ()
+  "picked from emacs prelude"
+  (interactive)
+  (if (eq mac-command-modifier 'super)
+      (progn
+        (setq mac-command-modifier 'meta)
+        (setq mac-option-modifier 'super)
+        (message "Command is now bound to META and Option is bound to SUPER."))
+    (progn
+      (setq mac-command-modifier 'meta)
+      (setq mac-option-modifier 'super)
+      (message "Command is now bound to SUPER and Option is bound to META."))))
+
 (defun macos-custom ()
-  (set-shell-to-bash))
+  (set-shell-to-bash)
+  (require 'exec-path-from-shell)
+  (exec-path-from-shell-initialize)
+  (setq ns-function-modifier 'hyper)
+  (autoload 'vkill "vkill" nil t)
+  ; from prelude, proced mode doesnt work on macos
+  (global-set-key (kbd "C-x p") 'vkill)
+  (global-set-key (kbd "s-/") 'hippie-expand)
+  (global-set-key (kbd "C-c w") 'my-swap-meta-and-super))
 
 (defun windows-custom ()
   (setq everything-use-ftp t)
