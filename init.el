@@ -28,8 +28,9 @@
 ;--- for emacs 24+ --
 ;--------------------
 
-(desktop-save-mode 1)
-(show-paren-mode 1)
+(desktop-save-mode t)
+(show-paren-mode t)
+(semantic-mode t)
 
 ; one day, rewrite emacs in rust, with a better VM, an optional
 ; embedded V8, and generally easier way to integrate other languages!
@@ -227,28 +228,33 @@
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
 
-;--- projectile (find files in projects)
+;--- helm and projectile
 
-(require 'projectile)
 (require 'helm)
+(require 'projectile)
 (require 'helm-projectile)
 
-(setq projectile-completion-system 'grizzl)
+(global-set-key (kbd "C-x x") 'helm-M-x)
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+(global-set-key (kbd "C-c C-i") 'helm-semantic-or-imenu)
+(global-set-key (kbd "C-c C-o") 'helm-occur)
+
+(global-set-key (kbd "C-o") 'my-open-files)
 
 (defun my-open-files ()
   "picked from https://www.youtube.com/watch?v=qpv9i_I4jYU -> mr. Renn Seo"
   (interactive)
   (if (projectile-project-p)
       (helm-projectile)
-    (helm-for-files)))
+    (helm-mini)))
 
 (projectile-global-mode)
+(setq projectile-completion-system 'grizzl)
 (setq projectile-show-paths-function 'projectile-hashify-with-relative-paths)
-(global-set-key (kbd "C-o") 'my-open-files)
-(global-set-key (kbd "C-p") 'recentf-open-files)
 
 ;--- undo-tree
 (global-set-key (kbd "C-c C-u") 'undo-tree-visualize)
+;--- magit
 (global-set-key (kbd "C-c C-g") 'magit-status)
 ;--------------------------------------- all my coding from here ---------------
 
