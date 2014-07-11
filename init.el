@@ -344,7 +344,7 @@
     (define-key sp-keymap (kbd "M-<right>") 'sp-forward-sexp)
     (define-key sp-keymap (kbd "M-<up>") 'sp-up-sexp)
     (define-key sp-keymap (kbd "M-<down>") 'sp-down-sexp)
-    ;;--- manipultation
+    ;;--- manipulattion
     (local-set-key (kbd "ESC C-<right>") 'sp-forward-slurp-sexp)
     (local-set-key (kbd "ESC C-<left>") 'sp-forward-barf-sexp)
     ;;--- custom entry stuff
