@@ -77,7 +77,6 @@
 			smex
                         undo-tree
                         yasnippet
-                        yasnippet-bundle
                         auto-yasnippet
 			smartparens
 			rainbow-delimiters
@@ -252,7 +251,6 @@
 
 (defun my-yasnippet ()
   (require 'yasnippet)
-  (require 'yasnippet-bundle)
   (require 'auto-yasnippet)
   (global-set-key (kbd "C-c C-c") 'aya-create)
   (global-set-key (kbd "C-c C-v") 'aya-expand))
@@ -353,7 +351,7 @@
     (local-set-key (kbd "<f1>") 'insert-parentheses)
     (local-set-key (kbd "<f2>") 'my-insert-quote-char)
     (local-set-key (kbd "C-:") 'insert-parentheses)
-    (local-set-key (kbd "C-;;") 'insert-parentheses))
+    (local-set-key (kbd "C-;") 'insert-parentheses))
 
   ;;--- nrepl
   (add-hook 'nrepl-mode-hook 'ac-nrepl-setup)
