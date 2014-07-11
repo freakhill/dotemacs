@@ -5,6 +5,8 @@
 places
 ede-projects.el
 abbrev_defs
+.emacs.desktop
+.emacs.desktop.lock
 semanticdb/
 auto-save-list/
 elpa/

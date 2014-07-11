@@ -28,6 +28,8 @@
 ;--- for emacs 24+ --
 ;--------------------
 
+(desktop-save-mode 1)
+
 (defun ensure-dir (d)
   (unless (file-exists-p d)
     (make-directory d)))
@@ -58,6 +60,8 @@
 			evil
 			god-mode
 			evil-god-state
+                        powerline
+                        powerline-evil
                         everything
                         haskell-mode
                         ghci-completion
@@ -113,6 +117,10 @@
 (evil-set-initial-state 'ibuffer-mode 'emacs)
 
 (evil-define-key 'normal global-map "," 'evil-execute-in-god-state)
+
+(require 'powerline)
+(require 'powerline-evil)
+(powerline-evil-vim-color-theme)
 
 ;-------------------
 ;--- basic stuff ---
