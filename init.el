@@ -304,7 +304,7 @@
               (define-key tuareg-mode-map (kbd "C-c C-s" 'tuareg-run-caml)))))
 
 (defun my-shell ()
-  (defun set-shell-to-bash ()
+  (defun my-set-shell-to-bash ()
     (setq shell-file-name "bash")
     (setq explicit-shell-file-name shell-file-name)))
 
@@ -387,7 +387,7 @@
         (message "Command is now bound to SUPER and Option is bound to META."))))
   
   (defun my-macos-custom ()
-    (set-shell-to-bash)
+    (my-set-shell-to-bash)
     (require 'exec-path-from-shell)
     (exec-path-from-shell-initialize)
     (setq ns-function-modifier 'hyper)
@@ -408,7 +408,7 @@
     (global-set-key (kbd "C-x f") 'everything-find-file))
   
   (defun my-linux-custom ()
-    (set-shell-to-bash))
+    (my-set-shell-to-bash))
   
   (cond
    ((string-match "darwin" system-configuration)
