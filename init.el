@@ -270,7 +270,7 @@
 
 (custom-set-variables '(haskell-stylish-on-save t))
 
-(define-key haskell-mode-map (kbd "C-c C-g") 'ariadne-goto-definition)
+(define-key haskell-mode-map (kbd "C-c C-d") 'ariadne-goto-definition)
 (custom-set-variables  '(haskell-process-suggest-remove-import-lines t)
                        '(haskell-process-auto-import-loaded-modules t)
                          '(haskell-process-log t))
