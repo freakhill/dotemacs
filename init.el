@@ -238,6 +238,7 @@
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 (global-set-key (kbd "C-c C-i") 'helm-semantic-or-imenu)
 (global-set-key (kbd "C-c C-o") 'helm-occur)
+(global-set-key (kbd "C-c C-r") 'helm-all-mark-rings)
 
 (global-set-key (kbd "C-o") 'my-open-files)
 
