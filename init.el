@@ -30,6 +30,10 @@
 
 (desktop-save-mode 1)
 
+; one day, rewrite emacs in rust, with a better VM, an optional
+; embedded V8, and generally easier way to integrate other languages!
+; And FASTER, FASTER, FASTER!
+
 (defun ensure-dir (d)
   (unless (file-exists-p d)
     (make-directory d)))
@@ -46,17 +50,17 @@
   (when (not package-archive-contents)
     (package-refresh-contents))
   (defvar my-packages '(auto-complete
-			grizzl
                         ido-ubiquitous
                         flx-ido
+			grizzl
 			smex
                         undo-tree
 			smartparens
 			rainbow-delimiters
+			nrepl
 			projectile
                         helm
                         helm-projectile
-			nrepl
 			evil
 			god-mode
 			evil-god-state
