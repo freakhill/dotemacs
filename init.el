@@ -238,6 +238,7 @@
   (global-set-key (kbd "C-c C-r") 'helm-all-mark-rings)
   
   (global-set-key (kbd "C-o") 'my-open-files)
+  (global-set-key (kbd "C-x C-f" ) 'helm-find-files)
   
   (projectile-global-mode)
   (setq projectile-completion-system 'grizzl)
