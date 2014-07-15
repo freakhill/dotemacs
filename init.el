@@ -102,6 +102,7 @@
                         rust-mode
                         exec-path-from-shell
                         vkill
+                        discover-my-major
                         utop
                         tuareg))
   (defun my-autoinstall ()
@@ -128,6 +129,9 @@
     (require module-name))
   (ignore-errors
     my-download-load-remote-module url filename module-name))
+
+(defun my-discover-my-major ()
+  (define-key 'help-command (kbd "C-m") 'discover-my-major))
 
 (defun my-evil ()
   ;; C-z switches between modes (states in evil parlance)
@@ -433,6 +437,7 @@
   (my-ensure-packages)
   (my-load-extra-files)
   ;; -- configuring global packages
+  (my-discover-my-major)
   (my-evil)
   (my-windmove)
   (my-recentf)
