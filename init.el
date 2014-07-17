@@ -563,7 +563,7 @@
   (my-yasnippet)
   (my-workgroups2)
   (my-dired+)
-  (my-golden-ratio)
+  ;; (my-golden-ratio)
   ;; -- configuring language specific packages
   (my-haskell)
   (my-rust)
