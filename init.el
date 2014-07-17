@@ -34,7 +34,7 @@
 ;;--------------------
 
 (defun my-basic-init ()
-  (desktop-save-mode t)
+  ;(desktop-save-mode t)
   (show-paren-mode t)
   (semantic-mode t)
   
@@ -52,6 +52,8 @@
   (setq tab-width 4)
   (setq indent-tabs-mode nil)
   (global-set-key (kbd "C-l") 'goto-line)
+  (global-set-key (kbd "C-M-,") 'point-to-register)
+  (global-set-key (kbd "C-,") 'jump-to-register)
 
   (define-key global-map (kbd "RET") 'reindent-then-newline-and-indent))
 
@@ -77,6 +79,8 @@
     (package-refresh-contents))
   (defvar my-packages '(auto-complete
                         ido-ubiquitous
+                        ibuffer-vc
+                        workgroups2
                         flx-ido
 			grizzl
 			smex
@@ -165,7 +169,23 @@
 
 (defun my-ibuffer ()
   (autoload 'ibuffer "ibuffer" "List buffers." t)
-  (global-set-key (kbd "C-c C-b") 'ibuffer))
+  (global-set-key (kbd "C-c C-b") 'ibuffer)
+  (setq ibuffer-use-other-window t)
+  (add-hook 'ibuffer-hook
+            (lambda () (ibuffer-vc-set-filter-groups-by-vc-root)
+              (unless (eq ibuffer-sorting-mode 'alphabetic)
+                (ibuffer-do-sort-by-alphabetic))))
+  (setq ibuffer-formats
+        '((mark modified read-only vc-status-mini " "
+                (name 18 18 :left :elide)
+                " "
+                (size 9 -1 :right)
+                " "
+                (mode 16 16 :left :elide)
+                " "
+                (vc-status 16 16 :left)
+                " "
+                filename-and-process))))
 
 (defun my-hippie ()
   (global-set-key "\M- " 'hippie-expand)
@@ -257,6 +277,12 @@
 
 (defun my-magit ()
   (global-set-key (kbd "C-c C-g") 'magit-status))
+
+(defun my-workgroups2 ()
+  (require 'workgroups2)
+  (setq wg-prefix-key (kbd "C-c C-w"))
+  (setq wg-default-session-file (concat "~/.emacs.d/.emacs_workgroups_" system-name))
+  (workgroups-mode 1))
 
 (defun my-yasnippet ()
   (require 'yasnippet)
@@ -451,6 +477,7 @@
   (my-undo-tree)
   (my-magit)
   (my-yasnippet)
+  (my-workgroups2)
   ;; -- configuring language specific packages
   (my-haskell)
   (my-rust)
