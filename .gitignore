@@ -2,6 +2,7 @@
 *.dat
 *.eld
 .smex-items
+.emacs_workgroups_*
 places
 ede-projects.el
 abbrev_defs

@@ -34,24 +34,57 @@
 ;;--------------------
 
 (defun my-basic-init ()
-  (desktop-save-mode t)
+  ;;(desktop-save-mode t)
   (show-paren-mode t)
   (semantic-mode t)
+
+  (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+  (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+  (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+
+  (blink-cursor-mode -1)
+
+  (setq scroll-margin 0
+        scroll-conservatively 100000
+        scroll-preserve-screen-position 1)
   
   (defalias 'yes-or-no-p 'y-or-n-p)
   
+  (setq large-file-warning-threshold 100000000)
+  (defconst backup-dir "~/.backups")
+  (my-ensure-dir backup-dir)
+  
   (setq inhibit-startup-message t)
   (setq inhibit-startup-echo-area-message t)
-
+  
   (setq backup-directory-alist
         `((".*" . ,temporary-file-directory)))
   (setq auto-save-file-name-transforms
         `((".*" ,temporary-file-directory t)))
+  (setq
+   make-backup-files t
+   backup-by-copying t
+   version-control t
+   delete-old-versions t
+   kept-old-versions 6
+   kept-new-versions 9
+   auto-save-default t
+   auto-save-timeout 20
+   auto-save-interval 200)
+  
+  (setq
+   dired-recursive-copies 'always
+   dired-recursive-deletes 'top
+   dired-listing-switches "-lha")
 
+  (add-hook 'dired-mode-hook 'auto-revert-mode)
+  
   (setq c-basic-indent 2)
   (setq tab-width 4)
   (setq indent-tabs-mode nil)
   (global-set-key (kbd "C-l") 'goto-line)
+  (global-set-key (kbd "M-,") 'point-to-register)
+  (global-set-key (kbd "C-,") 'jump-to-register)
 
   (define-key global-map (kbd "RET") 'reindent-then-newline-and-indent))
 
@@ -78,6 +111,18 @@
   (defvar my-packages '(auto-complete
 			auto-install
                         ido-ubiquitous
+                        ibuffer-vc
+                        workgroups2
+                        flycheck
+                        flycheck-tip
+                        flycheck-haskell
+                        flycheck-hdevtools
+                        nyan-mode
+                        golden-ratio
+                        recentf-ext
+                        dired+
+                        vlf
+                        diff-hl
                         flx-ido
 			grizzl
 			smex
@@ -103,17 +148,16 @@
                         rust-mode
                         exec-path-from-shell
                         vkill
+                        discover-my-major
                         utop
                         tuareg))
-  (defun my-autoinstall ()
-    (dolist (p my-packages)
-      (when (not (package-installed-p p))
-        (package-install p))))
-  (condition-case nil
-      (my-autoinstall)
-    (error (progn
-             (package-refresh-contents)
-             (my-autoinstall)))))
+  (let ((not-yet-installed '()))
+    (mapcar (lambda (pkg) (when (not (package-installed-p pkg))
+                       (push pkg not-yet-installed)))
+	    my-packages)
+    (when (not (eq (length not-yet-installed) 0))
+      (package-refresh-contents)
+      (dolist (pkg not-yet-installed) (package-install pkg)))))
 
 ;;--- extra files
 (defun my-load-extra-files ()
@@ -129,6 +173,9 @@
     (require module-name))
   (ignore-errors
     my-download-load-remote-module url filename module-name))
+
+(defun my-discover-my-major ()
+  (define-key 'help-command (kbd "C-m") 'discover-my-major))
 
 (defun my-evil ()
   ;; C-z switches between modes (states in evil parlance)
@@ -157,12 +204,30 @@
     (windmove-default-keybindings)))
 
 (defun my-recentf ()
+  (require 'recentf-ext)
   (recentf-mode 1)
-  (setq recentf-max-menu-items 25))
+  (setq recentf-max-menu-items 25)
+  (setq recentf-max-saved-items 5000))
 
 (defun my-ibuffer ()
   (autoload 'ibuffer "ibuffer" "List buffers." t)
-  (global-set-key (kbd "C-c C-b") 'ibuffer))
+  (global-set-key (kbd "C-c C-b") 'ibuffer)
+  (setq ibuffer-use-other-window t)
+  (add-hook 'ibuffer-hook
+            (lambda () (ibuffer-vc-set-filter-groups-by-vc-root)
+              (unless (eq ibuffer-sorting-mode 'alphabetic)
+                (ibuffer-do-sort-by-alphabetic))))
+  (setq ibuffer-formats
+        '((mark modified read-only vc-status-mini " "
+                (name 18 18 :left :elide)
+                " "
+                (size 9 -1 :right)
+                " "
+                (mode 16 16 :left :elide)
+                " "
+                (vc-status 16 16 :left)
+                " "
+                filename-and-process))))
 
 (defun my-hippie ()
   (global-set-key "\M- " 'hippie-expand)
@@ -218,6 +283,34 @@
   ;; disable ido faces to see flx highlights
   (setq ido-use-faces nil))
 
+(defun my-flycheck ()
+  (require 'flycheck)
+  (add-hook 'after-init-hook #'global-flycheck-mode)
+  (require 'flycheck-tip)
+  (flycheck-tip-use-timer 'verbose))
+
+(defun my-golden-ratio ()
+  (eval-after-load "golden-ratio"
+    '(progn
+       (add-to-list 'golden-ratio-exclude-modes "ediff-mode")
+       (add-to-list 'golden-ratio-exclude-modes "helm-mode")
+       (add-to-list 'golden-ratio-exclude-modes "dired-mode")
+       (add-to-list 'golden-ratio-inhibit-functions 'pl/helm-alive-p)))
+       ;(add-to-list 'golden-ratio-inhibit-functions 'pl/ediff-comparison-buffer-p)))
+  ;(defun pl/ediff-comparison-buffer-p () ediff-this-buffer-ediff-sessions)
+  (defun pl/helm-alive-p () (if (boundp 'helm-alive-p) (symbol-value 'helm-alive-p)))
+  (setq golden-ratio-exclude-modes '("ediff-mode"
+                                     "gdb-locals-mode"
+                                     "gdb-frame-modes"
+                                     "gud-mode"
+                                     "gdb-inferior-io-mode"
+                                     "magit-log-mode"
+                                     "magit-reflog-mode"
+                                     "magit-status-mode"
+                                     "eshell-mode"
+                                     "dired-mode"))
+  (golden-ratio-mode))
+
 (defun my-smex ()
   (require 'smex)
   (smex-initialize)
@@ -254,6 +347,23 @@
 
 (defun my-magit ()
   (global-set-key (kbd "C-c C-g") 'magit-status))
+
+(defun my-diff-hl ()
+  (global-diff-hl-mode)
+  (add-hook 'dired-mode-hook 'diff-hl-dired-mode))
+
+(defun my-dired+ ()
+  (require 'dired+))
+
+(defun my-vlf ()
+  (require 'vlf-integrate)
+  (setq vlf-application 'dont-ask))
+
+(defun my-workgroups2 ()
+  (require 'workgroups2)
+  (setq wg-prefix-key (kbd "C-c C-w"))
+  (setq wg-default-session-file (concat "~/.emacs.d/.emacs_workgroups_" system-name))
+  (workgroups-mode 1))
 
 (defun my-yasnippet ()
   (require 'yasnippet)
@@ -337,6 +447,7 @@
     (add-hook h 'my-lisp-custom))
 
   (defun my-lisp-custom ()
+    (interactive)
     (require 'smartparens-config)
     (smartparens-strict-mode)
     (rainbow-delimiters-mode)
@@ -366,10 +477,9 @@
 
   (defun my-insert-quote-char ()
     (insert-char #x0027)) ; codepoint for ' <- simple quote
-  
-  (defun my-reindent-buffer ()
-    (interactive)
-    (indent-region (point-min) (point-max)))
+
+  (defun my-insert-parentheses ()
+    (insert-char 40))
   
   (setq nrepl-hide-special-buffers t)
   ;;(setq cider-popup-stacktraces nil)
@@ -397,6 +507,7 @@
     (exec-path-from-shell-initialize)
     (setq ns-function-modifier 'hyper)
     (autoload 'vkill "vkill" nil t)
+    (setq dired-listing-switches "-lha --group-directories-first")
     ;; from prelude, proced mode doesnt work on macos
     (global-set-key (kbd "C-x p") 'vkill)
     (global-set-key (kbd "s-/") 'hippie-expand)
@@ -413,6 +524,7 @@
     (global-set-key (kbd "C-x f") 'everything-find-file))
   
   (defun my-linux-custom ()
+    (setq dired-listing-switches "-lha --group-directories-first")
     (my-set-shell-to-bash))
   
   (cond
@@ -434,6 +546,7 @@
   (my-ensure-packages)
   (my-load-extra-files)
   ;; -- configuring global packages
+  (my-discover-my-major)
   (my-evil)
   (my-windmove)
   (my-recentf)
@@ -443,10 +556,15 @@
   ;; -- configuring ide packages
   (my-ido)
   (my-smex)
+  (my-flycheck)
   (my-helm-and-projectile)
+  (my-diff-hl)
   (my-undo-tree)
   (my-magit)
   (my-yasnippet)
+  (my-workgroups2)
+  (my-dired+)
+  ;; (my-golden-ratio)
   ;; -- configuring language specific packages
   (my-haskell)
   (my-rust)
