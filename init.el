@@ -76,6 +76,7 @@
   (when (not package-archive-contents)
     (package-refresh-contents))
   (defvar my-packages '(auto-complete
+			auto-install
                         ido-ubiquitous
                         flx-ido
 			grizzl
