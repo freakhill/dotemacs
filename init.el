@@ -109,6 +109,7 @@
   (when (not package-archive-contents)
     (package-refresh-contents))
   (defvar my-packages '(auto-complete
+			auto-install
                         ido-ubiquitous
                         ibuffer-vc
                         workgroups2
