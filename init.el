@@ -128,6 +128,7 @@
                         undo-tree
                         yasnippet
                         auto-yasnippet
+                        typed-clojure-mode
 			smartparens
 			rainbow-delimiters
 			nrepl
@@ -373,9 +374,9 @@
 (defun my-haskell ()
   (add-hook 'inferior-haskell-mode-hook 'turn-on-ghci-completion)
   
-  (add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template)
-  (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
-  (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+  (add-hook 'inferior-haskell-mode-hook 'haskell-auto-insert-module-template)
+  (add-hook 'inferior-haskell-mode-hook 'turn-on-haskell-indentation)
+  (add-hook 'inferior-haskell-mode-hook 'turn-on-haskell-doc-mode)
   
   (custom-set-variables '(haskell-stylish-on-save t))
   
@@ -474,6 +475,8 @@
   (add-hook 'nrepl-interaction-mode-hook 'ac-nrepl-setup)
   (add-hook 'clojure-nrepl-mode-hook 'ac-nrepl-setup)
 
+  (add-hook 'clojure-mode-hook 'typed-clojure-mode)
+  
   (defun my-insert-quote-char ()
     (insert-char #x0027)) ; codepoint for ' <- simple quote
 
