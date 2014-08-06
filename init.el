@@ -151,6 +151,7 @@
                         vkill
                         discover-my-major
                         utop
+                        merlin
                         tuareg))
   (let ((not-yet-installed '()))
     (mapcar (lambda (pkg) (when (not (package-installed-p pkg))
@@ -403,7 +404,8 @@
   )                                        
 
 (defun my-rust ()
-  )
+  (autoload 'rust-mode "rust-mode" nil t)
+  (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode)))
 
 (defun my-ocaml ()
   (autoload 'utop "utop" "Toplevel for OCaml" t)
@@ -413,6 +415,9 @@
   (autoload 'tuareg-mode "tuareg" "Major mode for editing Caml code" t)
   ;;(autoload 'camldebug "camldebug" "Run the Caml debugger" t)
   (autoload 'utop-setup-ocaml-buffer "utop" "Toplevel for OCaml" t)
+  (autoload 'merlin-mode "merlin" "Merlin mode" t)
+  (add-hook 'tuareg-mode-hook 'merlin-mode)
+  (add-hook 'caml-mode-hook 'merlin-mode)
   (add-hook 'tuareg-mode-hook 'utop-setup-ocaml-buffer)
   
   (add-hook 'tuareg-mode-hook
@@ -475,7 +480,7 @@
   (add-hook 'nrepl-mode-hook 'ac-nrepl-setup)
   (add-hook 'nrepl-interaction-mode-hook 'ac-nrepl-setup)
   (add-hook 'clojure-nrepl-mode-hook 'ac-nrepl-setup)
-
+  
   (add-hook 'clojure-mode-hook 'typed-clojure-mode)
   
   (defun my-insert-quote-char ()
