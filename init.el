@@ -86,7 +86,9 @@
   (global-set-key (kbd "M-,") 'point-to-register)
   (global-set-key (kbd "C-,") 'jump-to-register)
 
-  (define-key global-map (kbd "RET") 'reindent-then-newline-and-indent))
+  (define-key global-map (kbd "RET") 'reindent-then-newline-and-indent)
+
+  (setq tramp-default-method "ssh"))
 
 ;; one day, rewrite emacs in rust, with a better VM, an optional
 ;; embedded V8, and generally easier way to integrate other languages!
@@ -129,6 +131,7 @@
                         undo-tree
                         yasnippet
                         auto-yasnippet
+			js3-mode
                         typed-clojure-mode
 			smartparens
 			rainbow-delimiters
@@ -424,6 +427,11 @@
             (lambda ()
               (define-key tuareg-mode-map (kbd "C-c C-s" 'tuareg-run-caml)))))
 
+(defun my-js ()
+  '(js3-auto-indent-p t)
+  '(js3-enter-indent-newline t)
+  '(js3-indent-on-enter-key t))
+
 (defun my-shell ()
   (defun my-set-shell-to-bash ()
     (setq shell-file-name "bash")
@@ -577,6 +585,7 @@
   (my-haskell)
   (my-rust)
   (my-ocaml)
+  (my-js)
   (my-shell)
   (my-ruby)
   (my-java)
