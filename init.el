@@ -114,7 +114,6 @@
 			auto-install
                         ido-ubiquitous
                         ibuffer-vc
-                        workgroups2
                         flycheck
                         flycheck-tip
                         flycheck-haskell
@@ -364,7 +363,7 @@
   (require 'vlf-integrate)
   (setq vlf-application 'dont-ask))
 
-(defun my-workgroups2 ()
+'(defun my-workgroups2 ()
   (require 'workgroups2)
   (setq wg-prefix-key (kbd "C-c C-w"))
   (setq wg-default-session-file (concat "~/.emacs.d/.emacs_workgroups_" system-name))
@@ -578,7 +577,7 @@
   (my-undo-tree)
   (my-magit)
   (my-yasnippet)
-  (my-workgroups2)
+  '(my-workgroups2)
   (my-dired+)
   ;; (my-golden-ratio)
   ;; -- configuring language specific packages
