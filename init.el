@@ -112,6 +112,10 @@
     (package-refresh-contents))
   (defvar my-packages '(auto-complete
 			auto-install
+			expand-region
+			ace-jump-mode
+			ace-jump-buffer
+			multiple-cursors
                         ido-ubiquitous
                         ibuffer-vc
                         flycheck
@@ -202,6 +206,46 @@
   (require 'powerline)
   (require 'powerline-evil)
   (powerline-evil-vim-color-theme))
+
+(defun my-ace-jump-mode ()
+  ;;
+  ;; ace jump mode major function
+  ;;
+  (add-to-list 'load-path "/full/path/where/ace-jump-mode.el/in/")
+  (autoload  'ace-jump-mode
+	      "ace-jump-mode"
+	      "Emacs quick move minor mode"
+	      t)
+  ;; you can select the key you prefer to
+  (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
+
+
+
+  ;;
+  ;; enable a more powerful jump back function from ace jump mode
+  ;;
+  (autoload  'ace-jump-mode-pop-mark
+	      "ace-jump-mode"
+	      "Ace jump back:-)"
+	      t)
+  (eval-after-load "ace-jump-mode"
+    '(ace-jump-mode-enable-mark-sync))
+  (define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
+
+  (define-key evil-normal-state-map (kbd "SPC") 'ace-jump-mode))
+
+(defun my-ace-jump-buffer ()
+  )
+
+(defun my-expand-region ()
+  (require 'expand-region)
+  (global-set-key (kbd "C-@") 'er/expand-region))
+
+(defun my-multiple-cursors ()
+  (require 'multiple-cursors)
+  (global-set-key (kbd "C-.") 'mc/mark-next-like-this)
+  (global-set-key (kbd "C-,") 'mc/mark-previous-like-this)
+  (global-set-key (kbd "C-c C-,") 'mc/mark-all-like-this))
 
 (defun my-windmove ()
   (when (fboundp 'windmove-default-keybindings)
@@ -563,6 +607,10 @@
   ;; -- configuring global packages
   (my-discover-my-major)
   (my-evil)
+  (my-ace-jump-mode)
+  (my-ace-jump-buffer)
+  (my-expand-region)
+  ;;(my-multiple-cursors)
   (my-windmove)
   (my-recentf)
   (my-ibuffer)
