@@ -35,13 +35,12 @@
 
 (defun my-basic-init ()
   ;;(desktop-save-mode t)
-  (show-paren-mode t)
-  (semantic-mode t)
-
   (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
   (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
   (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
-
+  (setq inhibit-startup-message t)
+  (setq inhibit-startup-echo-area-message t)
+ 
   (blink-cursor-mode -1)
 
   (setq scroll-margin 0
@@ -49,18 +48,18 @@
         scroll-preserve-screen-position 1)
   
   (defalias 'yes-or-no-p 'y-or-n-p)
-  
+  (show-paren-mode t)
+  (semantic-mode t)
+ 
   (setq large-file-warning-threshold 100000000)
   (defconst backup-dir "~/.backups")
   (my-ensure-dir backup-dir)
-  
-  (setq inhibit-startup-message t)
-  (setq inhibit-startup-echo-area-message t)
-  
+ 
   (setq backup-directory-alist
         `((".*" . ,temporary-file-directory)))
   (setq auto-save-file-name-transforms
         `((".*" ,temporary-file-directory t)))
+
   (setq
    make-backup-files t
    backup-by-copying t
@@ -76,7 +75,7 @@
    dired-recursive-copies 'always
    dired-recursive-deletes 'top
    dired-listing-switches "-lha")
-
+  
   (add-hook 'dired-mode-hook 'auto-revert-mode)
   
   (setq c-basic-indent 2)
@@ -87,7 +86,7 @@
   (global-set-key (kbd "C-,") 'jump-to-register)
 
   (define-key global-map (kbd "RET") 'reindent-then-newline-and-indent)
-
+  
   (setq tramp-default-method "ssh"))
 
 ;; one day, rewrite emacs in rust, with a better VM, an optional
@@ -519,10 +518,9 @@
     (define-key sp-keymap (kbd "M-<up>") 'sp-up-sexp)
     (define-key sp-keymap (kbd "M-<down>") 'sp-down-sexp)
     ;;--- manipulattion
-    (local-set-key (kbd "ESC C-<right>") 'sp-forward-slurp-sexp)
-    (local-set-key (kbd "ESC C-<left>") 'sp-forward-barf-sexp)
+    (local-set-key (kbd "C-<right>") 'sp-forward-slurp-sexp)
+    (local-set-key (kbd "C-<left>") 'sp-forward-barf-sexp)
     ;;--- custom entry stuff
-    (local-set-key (kbd "<f1>") 'insert-parentheses)
     (local-set-key (kbd "<f2>") 'my-insert-quote-char)
     (local-set-key (kbd "C-:") 'insert-parentheses)
     (local-set-key (kbd "C-;") 'insert-parentheses))
@@ -535,9 +533,11 @@
   (add-hook 'clojure-mode-hook 'typed-clojure-mode)
   
   (defun my-insert-quote-char ()
+    (interactive)
     (insert-char #x0027)) ; codepoint for ' <- simple quote
 
   (defun my-insert-parentheses ()
+    (interactive)
     (insert-char 40))
   
   (setq nrepl-hide-special-buffers t)
