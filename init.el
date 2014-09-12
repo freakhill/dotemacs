@@ -10,7 +10,6 @@
  '(haskell-process-log t)
  '(haskell-process-suggest-remove-import-lines t)
  '(haskell-process-type (quote cabal-repl))
- '(haskell-stylish-on-save t)
  '(inhibit-startup-screen t)
  '(semantic-mode t)
  '(uniquify-buffer-name-style (quote post-forward-angle-brackets) nil (uniquify)))
@@ -23,9 +22,7 @@
 
 ;;TODO!
 ;; need to automate:
-;; cabal install ghc-mod
 ;; cabal install ariadne
-;; cabal install stylish-haskell
 ;; cabal install hlint
 ;; cabal install hdevtools
 
@@ -135,6 +132,10 @@
                         auto-yasnippet
 			js3-mode
                         typed-clojure-mode
+                        cljdoc
+                        clj-refactor
+                        clojure-cheatsheet
+                        clojure-mode-extra-font-locking
 			smartparens
 			rainbow-delimiters
 			nrepl
@@ -148,6 +149,7 @@
                         powerline-evil
                         everything
                         haskell-mode
+                        shm ;; structured haskell mode
                         ghci-completion
                         ariadne
                         company-ghc
@@ -419,20 +421,24 @@
   (global-set-key (kbd "C-c C-v") 'aya-expand))
 
 (defun my-haskell ()
-  (add-hook 'inferior-haskell-mode-hook 'turn-on-ghci-completion)
+  ;; cabal install hdevtools structured-haskell-mode ghci-ng hlint ariadne
+  (add-hook 'haskell-mode-hook 'structured-haskell-mode)
+
+  (eval-after-load 'flycheck '(require 'flycheck-hdevtools))
+  (eval-after-load 'haskell-mode '(require 'ariadne))
+
+  ;;(add-hook 'haskell-mode-hook 'turn-on-haskell-unicode-input-method)
   
+  (add-hook 'inferior-haskell-mode-hook 'turn-on-ghci-completion)
   (add-hook 'inferior-haskell-mode-hook 'haskell-auto-insert-module-template)
-  (add-hook 'inferior-haskell-mode-hook 'turn-on-haskell-indentation)
   (add-hook 'inferior-haskell-mode-hook 'turn-on-haskell-doc-mode)
   
-  (custom-set-variables '(haskell-stylish-on-save t))
+  ;;(custom-set-variables '(haskell-stylish-on-save t))
   
   (define-key haskell-mode-map (kbd "C-c C-d") 'ariadne-goto-definition)
-  (custom-set-variables  '(haskell-process-suggest-remove-import-lines t)
-                         '(haskell-process-auto-import-loaded-modules t)
-                         '(haskell-process-log t))
+  
   (define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-or-reload)
-  (define-key haskell-mode-map (kbd "C-`") 'haskell-interactive-bring)
+  (define-key haskell-mode-map (kbd "C-c i") 'haskell-interactive-bring)
   (define-key haskell-mode-map (kbd "C-c C-t") 'haskell-process-do-type)
   (define-key haskell-mode-map (kbd "C-c C-i") 'haskell-process-do-info)
   (define-key haskell-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
@@ -443,6 +449,10 @@
   ;;(define-key haskell-cabal-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
   ;;(define-key haskell-cabal-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
   ;;(define-key haskell-cabal-mode-map (kbd "C-c c") 'haskell-process-cabal)
+
+  (custom-set-variables  '(haskell-process-suggest-remove-import-lines t)
+                         '(haskell-process-auto-import-loaded-modules t)
+                         '(haskell-process-log t))
   
   (custom-set-variables  '(haskell-process-type 'cabal-repl))
   ;;(custom-set-variables  '(haskell-process-type 'ghci))
@@ -505,6 +515,7 @@
   (defun my-lisp-custom ()
     (interactive)
     (require 'smartparens-config)
+    (require 'clojure-mode-extra-font-locking)
     (smartparens-strict-mode)
     (rainbow-delimiters-mode)
     ;;--- navigation (just merge macos and windows config, will have to
@@ -529,8 +540,8 @@
   (add-hook 'nrepl-mode-hook 'ac-nrepl-setup)
   (add-hook 'nrepl-interaction-mode-hook 'ac-nrepl-setup)
   (add-hook 'clojure-nrepl-mode-hook 'ac-nrepl-setup)
-  
   (add-hook 'clojure-mode-hook 'typed-clojure-mode)
+  
   
   (defun my-insert-quote-char ()
     (interactive)
