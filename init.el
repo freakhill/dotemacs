@@ -465,6 +465,7 @@
   (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode)))
 
 (defun my-ocaml ()
+  (require 'ocp-indent)
   (setq opam-share
         (substring
          (shell-command-to-string "opam config var share 2> /dev/null") 0 -1))
