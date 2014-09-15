@@ -140,6 +140,8 @@
 			smartparens
 			rainbow-delimiters
 			nrepl
+			csharp-mode
+			omnisharp
 			projectile
                         helm
                         helm-projectile
@@ -558,6 +560,13 @@
   (setq nrepl-popup-stacktraces-in-repl t)
   (setq nrepl-history-file "~/nrepl-history.dat"))
 
+(defun my-csharp ()
+  (autoload 'csharp-mode "csharp-mode" "Major mode for editing C# code." t)
+  (setq auto-mode-alist
+        (append '(("\\.cs$" . csharp-mode)) auto-mode-alist))
+  (add-hook 'csharp-mode-hook 'omnisharp-mode)
+  (eval-after-load 'company-css  '(add-to-list 'company-backends 'company-omnisharp)))
+
 (defun my-os-custom ()
   (defun my-swap-meta-and-super ()
     "picked from emacs prelude"
@@ -649,6 +658,7 @@
   (my-ruby)
   (my-java)
   (my-lisp)
+  (my-csharp)
   ;; -- os specific customization
   (my-os-custom))
 
