@@ -31,6 +31,19 @@
 ;;--- for emacs 24+ --
 ;;--------------------
 
+(defun my-ensure-dir (d)
+  (unless (file-exists-p d)
+    (make-directory d)))
+
+(defvar my-save-dir "~/.emacs.d/save")
+(defvar my-temp-dir "~/.emacs.d/tmp")
+
+(defun my-ensure-save-dir ()
+  (my-ensure-dir my-save-dir))
+
+(defun my-ensure-temp-dir ()
+  (my-ensure-dir my-temp-dir))
+
 (defun my-basic-init ()
   ;;(desktop-save-mode t)
   (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
@@ -38,21 +51,21 @@
   (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
   (setq inhibit-startup-message t)
   (setq inhibit-startup-echo-area-message t)
- 
+
   (blink-cursor-mode -1)
 
   (setq scroll-margin 0
         scroll-conservatively 100000
         scroll-preserve-screen-position 1)
-  
+
   (defalias 'yes-or-no-p 'y-or-n-p)
   (show-paren-mode t)
   (semantic-mode t)
- 
+
   (setq large-file-warning-threshold 100000000)
   (defconst backup-dir "~/.backups")
   (my-ensure-dir backup-dir)
- 
+
   (setq backup-directory-alist
         `((".*" . ,temporary-file-directory)))
   (setq auto-save-file-name-transforms
@@ -68,14 +81,14 @@
    auto-save-default t
    auto-save-timeout 20
    auto-save-interval 200)
-  
+
   (setq
    dired-recursive-copies 'always
    dired-recursive-deletes 'top
    dired-listing-switches "-lha")
-  
+
   (add-hook 'dired-mode-hook 'auto-revert-mode)
-  
+
   (setq c-basic-indent 2)
   (setq tab-width 4)
   (setq indent-tabs-mode nil)
@@ -84,20 +97,67 @@
   (global-set-key (kbd "C-,") 'jump-to-register)
 
   (define-key global-map (kbd "RET") 'reindent-then-newline-and-indent)
-  
-  (setq tramp-default-method "ssh"))
+
+  (setq tramp-default-method "ssh")
+
+  (setq uniquify-buffer-name-style 'forward)
+  (setq uniquify-separator "/")
+  (setq uniquify-after-kill-buffer-p t)
+  (setq uniquify-ignore-buffers-re "^\\*")
+
+  (setq initial-major-mode 'lisp-interaction-mode
+	redisplay-dont-pause t
+	column-number-mode t
+	echo-keystrokes 0.02
+	inhibit-startup-message t
+	transient-mark-mode t
+	shift-select-mode nil
+	require-final-newline t
+	truncate-partial-width-windows nil
+	delete-by-moving-to-trash nil
+	confirm-nonexistent-file-or-buffer nil
+	query-replace-highlight t
+	next-error-highlight t
+	next-error-highlight-no-select t)
+  ;;set all coding systems to utf-8
+  (set-language-environment 'utf-8)
+  (set-default-coding-systems 'utf-8)
+  (setq locale-coding-system 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (set-selection-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8)
+
+  (set-default 'indent-tabs-mode nil)
+  (auto-compression-mode t)
+  (show-paren-mode 1)
+
+  ;; make emacs use the clipboard
+  (setq x-select-enable-clipboard t)
+  ;;remove all trailing whitespace and trailing blank lines before
+  ;;saving the file
+  (defvar live-ignore-whitespace-modes '(markdown-mode))
+  (defun live-cleanup-whitespace ()
+    (if (not (member major-mode live-ignore-whitespace-modes))
+	(let ((whitespace-style '(trailing empty)) )
+	  (whitespace-cleanup))))
+  (add-hook 'before-save-hook 'live-cleanup-whitespace)
+  ;; savehist keeps track of some history
+  (setq savehist-additional-variables
+	;; search entries
+	'(search ring regexp-search-ring)
+	;; save every minute
+	savehist-autosave-interval 60
+	;; keep the home clean
+	savehist-file (concat my-temp-dir "savehist"))
+  (savehist-mode t))
 
 ;; one day, rewrite emacs in rust, with a better VM, an optional
 ;; embedded V8, and generally easier way to integrate other languages!
 ;; And FASTER, FASTER, FASTER!
 
-(defun my-ensure-dir (d)
-  (unless (file-exists-p d)
-    (make-directory d)))
-
-(defun my-ensure-save-dir ()
-  (defvar my-save-dir "~/.emacs.d/save")
-  (my-ensure-dir my-save-dir))
+(defun my-highlight-tail ()
+  (highlight-tail-mode t))
 
 ;;--- packages
 (defun my-ensure-packages ()
@@ -109,6 +169,7 @@
     (package-refresh-contents))
   (defvar my-packages '(auto-complete
 			auto-install
+			auto-compile
 			expand-region
 			ace-jump-mode
 			ace-jump-buffer
@@ -122,6 +183,7 @@
                         nyan-mode
                         golden-ratio
                         recentf-ext
+			popwin
                         dired+
                         vlf
                         diff-hl
@@ -132,6 +194,7 @@
                         yasnippet
                         auto-yasnippet
 			js3-mode
+			markdown-mode
                         typed-clojure-mode
                         cljdoc
                         clj-refactor
@@ -154,6 +217,7 @@
                         haskell-mode
                         shm ;; structured haskell mode
                         ghci-completion
+			highlight-tail
                         ariadne
                         company-ghc
                         rust-mode
@@ -295,6 +359,58 @@
           try-complete-lisp-symbol-partially
           try-complete-lisp-symbol)))
 
+
+(defun my-auto-compile ()
+  (require 'auto-compile)
+  (auto-compile-on-load-mode 1)
+  (auto-compile-on-save-mode 1))
+
+(defun my-popwin ()
+  (require 'popwin)
+  (setq display-buffer-function 'popwin:display-buffer)
+  (setq popwin:special-display-config
+	'(("*Help*" :height 30)
+	  ("*Completions*" :noselect t)
+	  ("*Messages*" :noselect t :height 30)
+	  ("*Apropos*" :noselect t :height 30)
+	  ("*compilation*" :noselect t)
+	  ("*Backtrace*" :height 30)
+	  ("*Messages*" :height 30)
+	  ("*Occur*" :noselect t)
+	  ("*Ido Completions*" :noselect t :height 30)
+	  ("*magit-commit*" :noselect t :height 40 :width 80 :stick t)
+	  ("*magit-diff*" :noselect t :height 40 :width 80)
+	  ("*magit-edit-log*" :noselect t :height 15 :width 80)
+	  ("\\*ansi-term\\*.*" :regexp t :height 30)
+	  ("*shell*" :height 30)
+	  (".*overtone.log" :regexp t :height 30)
+	  ("*gists*" :height 30)
+	  ("*sldb.*":regexp t :height 30)
+	  ("*cider-error*" :height 30 :stick t)
+	  ("*cider-doc*" :height 30 :stick t)
+	  ("*cider-src*" :height 30 :stick t)
+	  ("*cider-result*" :height 30 :stick t)
+	  ("*cider-macroexpansion*" :height 30 :stick t)
+	  ("*Kill Ring*" :height 30)
+	  ("*Compile-Log*" :height 30 :stick t)
+	  ("*git-gutter:diff*" :height 30 :stick t)))
+  (defun live-show-messages ()
+    (interactive)
+    (popwin:display-buffer "*Messages*"))
+  (defun live-display-messages ()
+    (interactive)
+    (popwin:display-buffer "*Messages*"))
+  (defun live-display-ansi ()
+    (interactive)
+    (popwin:display-buffer "*ansi-term*")))
+
+(defun my-markdown ()
+  (require 'markdown-mode)
+  (autoload 'markdown-mode "markdown-mode.el"
+    "Major mode for editing Markdown files" t)
+  (add-to-list 'auto-mode-alist '("\\.md" . markdown-mode))
+  (add-to-list 'auto-mode-alist '("\\.markdown" . markdown-mode)))
+
 ;;--- set firefox as browser
 ;;(setq browse-url-browser-function 'browse-url-generic
 ;;      browse-url-generic-program "firefox")
@@ -373,31 +489,37 @@
   (require 'helm)
   (require 'projectile)
   (require 'helm-projectile)
-  
+
   (defun my-open-files ()
     "picked from https://www.youtube.com/watch?v=qpv9i_I4jYU -> mr. Renn Seo"
     (interactive)
     (if (projectile-project-p)
         (helm-projectile)
       (helm-mini)))
-  
+
   (global-set-key (kbd "C-x x") 'helm-M-x)
   (global-set-key (kbd "M-y") 'helm-show-kill-ring)
   (global-set-key (kbd "C-c C-i") 'helm-semantic-or-imenu)
   (global-set-key (kbd "C-c C-o") 'helm-occur)
   (global-set-key (kbd "C-c C-r") 'helm-all-mark-rings)
-  
+
   (global-set-key (kbd "C-o") 'my-open-files)
   (global-set-key (kbd "C-x C-f" ) 'helm-find-files)
-  
+
   (projectile-global-mode)
   (setq projectile-completion-system 'grizzl)
   (setq projectile-show-paths-function 'projectile-hashify-with-relative-paths))
 
 (defun my-undo-tree ()
+  (require 'undo-tree)
+  (global-undo-tree-mode)
   (global-set-key (kbd "C-c C-u") 'undo-tree-visualize))
 
 (defun my-magit ()
+  (add-hook 'magit-log-edit-mode-hook
+	     (lambda ()
+	       (set-fill-column 72)
+	       (auto-fill-mode 1)))
   (global-set-key (kbd "C-c C-g") 'magit-status))
 
 (defun my-diff-hl ()
@@ -431,15 +553,15 @@
   (eval-after-load 'haskell-mode '(require 'ariadne))
 
   ;;(add-hook 'haskell-mode-hook 'turn-on-haskell-unicode-input-method)
-  
+
   (add-hook 'inferior-haskell-mode-hook 'turn-on-ghci-completion)
   (add-hook 'inferior-haskell-mode-hook 'haskell-auto-insert-module-template)
   (add-hook 'inferior-haskell-mode-hook 'turn-on-haskell-doc-mode)
-  
+
   ;;(custom-set-variables '(haskell-stylish-on-save t))
-  
+
   (define-key haskell-mode-map (kbd "C-c C-d") 'ariadne-goto-definition)
-  
+
   (define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-or-reload)
   (define-key haskell-mode-map (kbd "C-c i") 'haskell-interactive-bring)
   (define-key haskell-mode-map (kbd "C-c C-t") 'haskell-process-do-type)
@@ -456,10 +578,10 @@
   (custom-set-variables  '(haskell-process-suggest-remove-import-lines t)
                          '(haskell-process-auto-import-loaded-modules t)
                          '(haskell-process-log t))
-  
+
   (custom-set-variables  '(haskell-process-type 'cabal-repl))
   ;;(custom-set-variables  '(haskell-process-type 'ghci))
-  )                                        
+  )
 
 (defun my-rust ()
   (autoload 'rust-mode "rust-mode" nil t)
@@ -469,7 +591,7 @@
   (autoload 'utop "utop" "Toplevel for OCaml" t)
   (setq utop-command "opam config exec \"utop -emacs\"")
   (add-to-list 'auto-mode-alist '("\\.ml[ily]?$" . tuareg-mode))
-  
+
   (autoload 'tuareg-mode "tuareg" "Major mode for editing Caml code" t)
   ;;(autoload 'camldebug "camldebug" "Run the Caml debugger" t)
   (autoload 'utop-setup-ocaml-buffer "utop" "Toplevel for OCaml" t)
@@ -477,7 +599,7 @@
   (add-hook 'tuareg-mode-hook 'merlin-mode)
   (add-hook 'caml-mode-hook 'merlin-mode)
   (add-hook 'tuareg-mode-hook 'utop-setup-ocaml-buffer)
-  
+
   (add-hook 'tuareg-mode-hook
             (lambda ()
               (define-key tuareg-mode-map (kbd "C-c C-s" 'tuareg-run-caml)))))
@@ -497,7 +619,17 @@
   )
 
 (defun my-ruby ()
-  (add-hook 'ruby-mode-hook 'robe-mode))
+  (add-hook 'ruby-mode-hook 'robe-mode)
+  (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("\\.ru$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("\\.gemspec$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("Thorfile$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("\\.thor$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("Capfile$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("Vagrantfile$" . ruby-mode)))
 
 (defun my-lisp ()
   ;;--- clojure and nrepl hooks for autocompletion and my custom fun
@@ -544,8 +676,8 @@
   (add-hook 'nrepl-interaction-mode-hook 'ac-nrepl-setup)
   (add-hook 'clojure-nrepl-mode-hook 'ac-nrepl-setup)
   (add-hook 'clojure-mode-hook 'typed-clojure-mode)
-  
-  
+
+
   (defun my-insert-quote-char ()
     (interactive)
     (insert-char #x0027)) ; codepoint for ' <- simple quote
@@ -553,7 +685,7 @@
   (defun my-insert-parentheses ()
     (interactive)
     (insert-char 40))
-  
+
   (setq nrepl-hide-special-buffers t)
   ;;(setq cider-popup-stacktraces nil)
   ;;(setq cider-repl-popup-stacktraces t)
@@ -580,7 +712,7 @@
         (setq mac-command-modifier 'meta)
         (setq mac-option-modifier 'super)
         (message "Command is now bound to SUPER and Option is bound to META."))))
-  
+
   (defun my-macos-custom ()
     (my-set-shell-to-bash)
     (require 'exec-path-from-shell)
@@ -591,8 +723,13 @@
     ;; from prelude, proced mode doesnt work on macos
     (global-set-key (kbd "C-x p") 'vkill)
     (global-set-key (kbd "s-/") 'hippie-expand)
-    (global-set-key (kbd "C-c w") 'my-swap-meta-and-super))
-  
+    (global-set-key (kbd "C-c w") 'my-swap-meta-and-super)
+    ;; Work around a bug on OS X where system-name is a fully qualified
+    ;; domain name
+    (setq system-name (car (split-string system-name "\\.")))
+    ;; Ignore .DS_Store files with ido mode
+    (add-to-list 'ido-ignore-files "\\.DS_Store"))
+
   (defun my-windows-custom ()
     (setq everything-use-ftp t)
     (setq everything-host "127.0.0.1")
@@ -602,11 +739,11 @@
     ;; find me t_t...
     (setq everything-pass "I have made a ceaseless effort not to ridicule, not to bewail, not to scorn human actions, but to understand them.")
     (global-set-key (kbd "C-x f") 'everything-find-file))
-  
+
   (defun my-linux-custom ()
     (setq dired-listing-switches "-lha --group-directories-first")
     (my-set-shell-to-bash))
-  
+
   (cond
    ((string-match "darwin" system-configuration)
     (message "customizing GNU Emacs for MacOS")
@@ -633,11 +770,13 @@
   (my-expand-region)
   ;;(my-multiple-cursors)
   (my-windmove)
-  (my-recentf)
   (my-ibuffer)
   (my-hippie)
   (my-auto-complete)
+  (my-popwin)
+  (my-auto-compile)
   ;; -- configuring ide packages
+  (my-recentf)
   (my-ido)
   (my-smex)
   (my-flycheck)
@@ -646,12 +785,13 @@
   (my-undo-tree)
   (my-magit)
   (my-yasnippet)
-  '(my-workgroups2)
+  ;; (my-workgroups2)
   (my-dired+)
   ;; (my-golden-ratio)
   ;; -- configuring language specific packages
   (my-haskell)
   (my-rust)
+  (my-ruby)
   (my-ocaml)
   (my-js)
   (my-shell)
@@ -659,7 +799,10 @@
   (my-java)
   (my-lisp)
   (my-csharp)
+  (my-markdown)
   ;; -- os specific customization
-  (my-os-custom))
+  (my-os-custom)
+  ;; other
+  (my-highlight-tail))
 
 (my-init)
