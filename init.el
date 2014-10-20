@@ -18,7 +18,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(shm-current-face ((t (:background "green"))))
+ '(shm-current-face ((t (:background "green" :foreground "black"))))
  '(shm-quarantine-face ((t (:background "yellow")))))
 
 ;;TODO!
@@ -226,6 +226,7 @@
                         discover-my-major
                         utop
                         merlin
+                        ocp-indent
                         tuareg))
   (let ((not-yet-installed '()))
     (mapcar (lambda (pkg) (when (not (package-installed-p pkg))
@@ -588,6 +589,11 @@
   (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode)))
 
 (defun my-ocaml ()
+  (require 'ocp-indent)
+  (setq opam-share
+        (substring
+         (shell-command-to-string "opam config var share 2> /dev/null") 0 -1))
+  
   (autoload 'utop "utop" "Toplevel for OCaml" t)
   (setq utop-command "opam config exec \"utop -emacs\"")
   (add-to-list 'auto-mode-alist '("\\.ml[ily]?$" . tuareg-mode))
@@ -600,6 +606,9 @@
   (add-hook 'caml-mode-hook 'merlin-mode)
   (add-hook 'tuareg-mode-hook 'utop-setup-ocaml-buffer)
 
+  (setq merlin-use-auto-complete-mode 'easy)
+  (setq merlin-command 'opam)
+  
   (add-hook 'tuareg-mode-hook
             (lambda ()
               (define-key tuareg-mode-map (kbd "C-c C-s" 'tuareg-run-caml)))))
@@ -663,7 +672,7 @@
     (define-key sp-keymap (kbd "M-<right>") 'sp-forward-sexp)
     (define-key sp-keymap (kbd "M-<up>") 'sp-up-sexp)
     (define-key sp-keymap (kbd "M-<down>") 'sp-down-sexp)
-    ;;--- manipulattion
+    ;;--- manipulation
     (local-set-key (kbd "C-<right>") 'sp-forward-slurp-sexp)
     (local-set-key (kbd "C-<left>") 'sp-forward-barf-sexp)
     ;;--- custom entry stuff
