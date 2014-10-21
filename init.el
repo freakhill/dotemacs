@@ -869,8 +869,8 @@
   (message "PACKAGE LOADING!")
   (my-ensure-packages)
 
-  (eval-after-load "dash" '(dash-enable-font-lock))
   (require 'dash)
+  (dash-enable-font-lock)
   (my-load-extra-files)
   (my-wordy
    ;; --- before loading external packages
