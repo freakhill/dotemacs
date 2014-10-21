@@ -245,6 +245,7 @@
 (defun my-load-extra-files ()
   (let
       ((dl-dir              "~/.emacs.d/dl")
+       (ac-dict-dir         "~/.emacs.d/ac-dict")
        (dl-and-load         (lambda (dir url filename &optional module-name)
                               (let ((filename (concat dir "/" filename))
                                     (message (concat "loat extra file: " filename)))
@@ -255,8 +256,9 @@
                                       (require module-name)
                                     (load module-name))))))
        (dl-and-load-mode    (lambda (&rest r) (apply dl-and-load (cons dl-dir r))))
-       (dl-and-load-ac-dict (lambda (&rest r) (apply dl-and-load (cons "ac-dict" r)))))
+       (dl-and-load-ac-dict (lambda (&rest r) (apply dl-and-load (cons ac-dict-dir r)))))
     (my-ensure-dir dl-dir)
+    (my-ensure-dir ac-dict-dir)
     (add-to-list 'load-path dl-dir)
     (-each ;; packages
         '(("https://raw.githubusercontent.com/buzztaiki/auto-complete/master/ac-company.el"
