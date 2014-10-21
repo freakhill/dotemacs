@@ -871,9 +871,10 @@
 
   (require 'dash)
   (dash-enable-font-lock)
-  (my-load-extra-files)
+
   (my-wordy
-   ;; --- before loading external packages
+   (my-load-extra-files)
+   ;; --- and here we go!
    (my-basic-init)
    (my-ensure-save-dir)
    ;; -- configuring global packages
