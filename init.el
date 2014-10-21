@@ -402,6 +402,8 @@
     (windmove-default-keybindings)))
 
 (defun my-highlight-tail ()
+  (setq highlight-tail-steps 12
+        highlight-tail-timer 0.06)
   (highlight-tail-mode t))
 
 (defun my-recentf ()
