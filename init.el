@@ -338,13 +338,12 @@
   ;;
   ;; ace jump mode major function
   ;;
-  (add-to-list 'load-path "/full/path/where/ace-jump-mode.el/in/")
   (autoload  'ace-jump-mode
     "ace-jump-mode"
     "Emacs quick move minor mode"
     t)
   ;; you can select the key you prefer to
-  (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
+  ;; (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
 
   ;;
   ;; enable a more powerful jump back function from ace jump mode
@@ -379,7 +378,7 @@
   ;; (for new terminals via emacsclient).
   (initialise-mouse-mode)
   (add-hook 'after-make-frame-functions 'initialise-mouse-mode)
-  (setq mouse-yank-at-point t)
+  ;;(setq mouse-yank-at-point t)
   (global-set-key [mouse-4] '(lambda ()
                                (interactive)
                                (scroll-down 1)))
@@ -393,9 +392,9 @@
 
 (defun my-multiple-cursors ()
   (require 'multiple-cursors)
-  (global-set-key (kbd "C-.") 'mc/mark-next-like-this)
-  (global-set-key (kbd "C-,") 'mc/mark-previous-like-this)
-  (global-set-key (kbd "C-c C-,") 'mc/mark-all-like-this))
+  (global-set-key (kbd "C-c C-n") 'mc/mark-next-like-this)
+  (global-set-key (kbd "C-c C-p") 'mc/mark-previous-like-this)
+  (global-set-key (kbd "C-c C-a") 'mc/mark-all-like-this))
 
 (defun my-windmove ()
   (when (fboundp 'windmove-default-keybindings)
@@ -751,8 +750,8 @@
     (interactive)
     (require 'smartparens-config)
     (require 'clojure-mode-extra-font-locking)
-    (smartparens-strict-mode)
-    (rainbow-delimiters-mode)
+    (smartparens-strict-mode t)
+    (rainbow-delimiters-mode t)
     ;;--- navigation (just merge macos and windows config, will have to
     ;; work on refining that!)
     (local-set-key (kbd "C-f") 'sp-forward-sexp)
@@ -883,7 +882,7 @@
    (my-ace-jump-mode)
    (my-ace-jump-buffer)
    (my-expand-region)
-   ;;(my-multiple-cursors)
+   (my-multiple-cursors)
    (my-windmove)
    (my-ibuffer)
    (my-hippie)
