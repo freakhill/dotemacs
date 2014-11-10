@@ -93,8 +93,6 @@
   (setq tab-width 4)
   (setq indent-tabs-mode nil)
   (global-set-key (kbd "C-l") 'goto-line)
-  (global-set-key (kbd "M-,") 'point-to-register)
-  (global-set-key (kbd "C-,") 'jump-to-register)
 
   (define-key global-map (kbd "RET") 'reindent-then-newline-and-indent)
 
@@ -637,6 +635,7 @@
   (set-cursor-color "yellow"))
 
 (defun my-haskell ()
+  ;; LARGELY UNTESTED.... DON'T KNOW HOW WELL IT WORK FOR ACTUAL DEV
   ;; cabal install hdevtools structured-haskell-mode ghci-ng hlint ariadne
   (add-hook 'haskell-mode-hook 'structured-haskell-mode)
 
@@ -704,6 +703,7 @@
               (define-key tuareg-mode-map (kbd "C-c C-s" 'tuareg-run-caml)))))
 
 (defun my-js ()
+  ;; I DON'T DO JS...
   '(js3-auto-indent-p t)
   '(js3-enter-indent-newline t)
   '(js3-indent-on-enter-key t))
