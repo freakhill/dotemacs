@@ -148,7 +148,10 @@
 	savehist-autosave-interval 60
 	;; keep the home clean
 	savehist-file (concat my-temp-dir "savehist"))
-  (savehist-mode t))
+  (savehist-mode t)
+
+  ;; C-x r j E -- to edit my config file
+  (set-register ?E `(file . ,user-init-file)))
 
 ;; one day, rewrite emacs in rust, with a better VM, an optional
 ;; embedded V8, and generally easier way to integrate other languages!
