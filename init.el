@@ -876,15 +876,14 @@
 (defun my-funcs ()
   ;; ---
   (defun myfn-delete-region-if-uniq ()
-  (interactive)
-  (let ((p1 (region-beginning))
-        (p2 (region-end)))
-    (if (= 1 (count-matches (buffer-substring p1 p2)))
-        (save-excursion
-          (progn
-            (delete-region p1 p2)
-            (message "deleted region.")))
-      (progn
+    (interactive)
+    (let ((p1 (region-beginning))
+          (p2 (region-end)))
+      (if (= 1 (count-matches (buffer-substring p1 p2)))
+          (save-excursion
+            (progn
+              (delete-region p1 p2)
+              (message "deleted region.")))
         (message "not unique!"))))
   ;; ---
   (defun myfn-narrow-indirect (start end)
@@ -896,7 +895,7 @@
         (switch-to-buffer buf))))
   (global-set-key (kbd "C-x n i") 'myfn-narrow-indirect)
   ;; ---
-  ))
+  )
 
 (defmacro my-wordy (&rest prog)
   (cons 'progn
