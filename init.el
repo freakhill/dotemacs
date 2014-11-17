@@ -613,6 +613,7 @@
 (defun my-undo-tree ()
   ;;(require 'undo-tree)
   (global-undo-tree-mode)
+  (define-key undo-tree-map (kbd "C-/") 'undo-tree-visualize)
   (global-set-key (kbd "C-c C-u") 'undo-tree-visualize))
 
 (defun my-magit ()
