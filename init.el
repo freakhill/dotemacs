@@ -51,6 +51,7 @@
   (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
   (setq inhibit-startup-message t)
   (setq inhibit-startup-echo-area-message t)
+  (put 'narrow-to-region 'disabled nil)
 
   (blink-cursor-mode -1)
 
@@ -273,7 +274,10 @@
            "cyberpunk")
           ("https://raw.githubusercontent.com/overtone/emacs-live/master/packs/stable/colour-pack/lib/gandalf.el"
            "gandalf.el"
-           "gandalf"))
+           "gandalf")
+          ("http://www.emacswiki.org/emacs-en/download/wide-n.el"
+           "wide-n.el"
+           wide-n))
       (lambda (pkg)
         (condition-case e
             (apply dl-and-load-mode pkg)
