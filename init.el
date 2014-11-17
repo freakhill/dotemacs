@@ -873,6 +873,7 @@
     (my-windows-custom))))
 
 (defun my-funcs ()
+  ;; ---
   (defun myfn-delete-region-if-uniq ()
   (interactive)
   (let ((p1 (region-beginning))
@@ -883,7 +884,18 @@
             (delete-region p1 p2)
             (message "deleted region.")))
       (progn
-        (message "not unique!"))))))
+        (message "not unique!"))))
+  ;; ---
+  (defun myfn-narrow-indirect (start end)
+    (interactive "r")
+    (deactivate-mark)
+    (let ((buf (clone-indirect-buffer nil nil)))
+      (with-current-buffer buf
+        (narrow-to-region start end)
+        (switch-to-buffer buf))))
+  (global-set-key (kbd "C-x n i") 'myfn-narrow-indirect)
+  ;; ---
+  ))
 
 (defmacro my-wordy (&rest prog)
   (cons 'progn
