@@ -166,8 +166,10 @@
   (when (not package-archive-contents)
     (package-refresh-contents))
   (defvar my-packages '(auto-complete
+                        company
 			auto-install
 			auto-compile
+                        buffer-move
                         color-theme
                         color-theme-library
 			expand-region
@@ -206,7 +208,8 @@
                         clojure-mode-extra-font-locking
 			smartparens
 			rainbow-delimiters
-			nrepl
+                        cider
+                        cider-profile
 			csharp-mode
 			omnisharp
 			projectile
@@ -313,6 +316,12 @@
 (defun my-discover-my-major ()
   (define-key 'help-command (kbd "C-m") 'discover-my-major))
 
+(defun my-buffer-move ()
+  (global-set-key (kbd "C-c <up>") 'buf-move-up)
+  (global-set-key (kbd "C-c <down>") 'buf-move-down)
+  (global-set-key (kbd "C-c <left>") 'buf-move-left)
+  (global-set-key (kbd "C-c <right>") 'buf-move-right))
+
 (defun my-evil ()
   ;; C-z switches between modes (states in evil parlance)
   (setq evil-mode-line-format 'before)
@@ -388,11 +397,11 @@
                                (scroll-up 1))))
 
 (defun my-expand-region ()
-  (require 'expand-region)
+  ;;(require 'expand-region)
   (global-set-key (kbd "C-@") 'er/expand-region))
 
 (defun my-multiple-cursors ()
-  (require 'multiple-cursors)
+  ;;(require 'multiple-cursors)
   (global-set-key (kbd "C-c C-n") 'mc/mark-next-like-this)
   (global-set-key (kbd "C-c C-p") 'mc/mark-previous-like-this)
   (global-set-key (kbd "C-c C-SPC") 'mc/mark-all-like-this))
@@ -492,7 +501,7 @@
     (popwin:display-buffer "*ansi-term*")))
 
 (defun my-markdown ()
-  (require 'markdown-mode)
+  ;;(require 'markdown-mode)
   (autoload 'markdown-mode "markdown-mode.el"
     "Major mode for editing Markdown files" t)
   (add-to-list 'auto-mode-alist '("\\.md" . markdown-mode))
@@ -504,7 +513,7 @@
 ;; fix it to be multiplatform
 
 (defun my-auto-complete ()
-  (require 'auto-complete-config)
+  ;;(require 'auto-complete-config)
   (progn
     (defconst my-ac-dict-dir "~/.emacs.d/ac-dict")
     (my-ensure-dir my-ac-dict-dir)
@@ -539,7 +548,7 @@
   (setq ido-use-faces nil))
 
 (defun my-flycheck ()
-  (require 'flycheck)
+  ;;(require 'flycheck)
   (add-hook 'after-init-hook #'global-flycheck-mode)
   (require 'flycheck-tip)
   (flycheck-tip-use-timer 'verbose))
@@ -598,7 +607,7 @@
   (setq projectile-show-paths-function 'projectile-hashify-with-relative-paths))
 
 (defun my-undo-tree ()
-  (require 'undo-tree)
+  ;;(require 'undo-tree)
   (global-undo-tree-mode)
   (global-set-key (kbd "C-c C-u") 'undo-tree-visualize))
 
@@ -620,15 +629,15 @@
   (require 'vlf-integrate)
   (setq vlf-application 'dont-ask))
 
-'(defun my-workgroups2 ()
-   (require 'workgroups2)
+(defun my-workgroups2 ()
+   ;;(require 'workgroups2)
    (setq wg-prefix-key (kbd "C-c C-w"))
    (setq wg-default-session-file (concat "~/.emacs.d/.emacs_workgroups_" system-name))
    (workgroups-mode 1))
 
 (defun my-yasnippet ()
-  (require 'yasnippet)
-  (require 'auto-yasnippet)
+  ;;(require 'yasnippet)
+  ;;(require 'auto-yasnippet)
   (global-set-key (kbd "C-c C-c") 'aya-create)
   (global-set-key (kbd "C-c C-v") 'aya-expand))
 
@@ -738,7 +747,7 @@
   (defconst my-lisp-mode-hooks
     '(clojure-mode-hook
       clojurescript-mode-hook
-      clojure-nrepl-mode-hook
+      cider-mode-hook
       emacs-lisp-mode-hook
       ielm-mode-hook
       lisp-mode-hook
@@ -775,12 +784,12 @@
     (local-set-key (kbd "C-:") 'insert-parentheses)
     (local-set-key (kbd "C-;") 'insert-parentheses))
 
-  ;;--- nrepl
-  (add-hook 'nrepl-mode-hook 'ac-nrepl-setup)
-  (add-hook 'nrepl-interaction-mode-hook 'ac-nrepl-setup)
-  (add-hook 'clojure-nrepl-mode-hook 'ac-nrepl-setup)
-  (add-hook 'clojure-mode-hook 'typed-clojure-mode)
-
+  ;;--- cider
+  (add-hook 'cider-mode-hook 'company-mode)
+  (add-hook 'cider-repl-mode-hook 'company-mode)
+  (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+  (setq cider-repl-use-clojure-font-lock t)
+  (setq nrepl-log-messages t)
 
   (defun my-insert-quote-char ()
     (interactive)
@@ -905,6 +914,7 @@
    (my-auto-complete)
    (my-popwin)
    (my-auto-compile)
+   (my-buffer-move)
    (my-mouse)
    ;; -- configuring ide packages
    (my-recentf)
