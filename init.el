@@ -168,6 +168,7 @@
     (package-refresh-contents))
   (defvar my-packages '(auto-complete
                         company
+                        restclient
 			auto-install
 			auto-compile
                         buffer-move
@@ -476,6 +477,7 @@
           ("*compilation*" :noselect t)
           ("*Backtrace*" :height 30)
           ("*Messages*" :height 30)
+          ("*HTTP Response*" :height 30)
           ("*Occur*" :noselect t)
           ("*Ido Completions*" :noselect t :height 30)
           ("*magit-commit*" :noselect t :height 40 :width 80 :stick t)
@@ -493,16 +495,7 @@
           ("*cider-macroexpansion*" :height 30 :stick t)
           ("*Kill Ring*" :height 30)
           ("*Compile-Log*" :height 30 :stick t)
-          ("*git-gutter:diff*" :height 30 :stick t)))
-  (defun live-show-messages ()
-    (interactive)
-    (popwin:display-buffer "*Messages*"))
-  (defun live-display-messages ()
-    (interactive)
-    (popwin:display-buffer "*Messages*"))
-  (defun live-display-ansi ()
-    (interactive)
-    (popwin:display-buffer "*ansi-term*")))
+          ("*git-gutter:diff*" :height 30 :stick t))))
 
 (defun my-markdown ()
   ;;(require 'markdown-mode)
