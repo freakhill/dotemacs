@@ -169,6 +169,7 @@
   (defvar my-packages '(auto-complete
                         company
                         restclient
+                        browse-kill-ring
 			auto-install
 			auto-compile
                         buffer-move
@@ -278,7 +279,10 @@
            "gandalf")
           ("http://www.emacswiki.org/emacs-en/download/wide-n.el"
            "wide-n.el"
-           wide-n))
+           wide-n)
+          ("https://raw.githubusercontent.com/baohaojun/skeleton-complete/master/skeleton-complete.el"
+           "skeleton-complete.el"
+           skeleton-complete))
       (lambda (pkg)
         (condition-case e
             (apply dl-and-load-mode pkg)
@@ -348,6 +352,12 @@
   (require 'powerline)
   (require 'powerline-evil)
   (powerline-evil-vim-color-theme))
+
+(defun my-skeleton-complete ()
+  (require 'skeleton-complete)
+  (skeleton-complete-global-mode 1)
+  (global-set-key (kbd "M-z") 'skeleton-expand-symbols)
+  (global-set-key (kbd "M-a") 'skeleton-expand-partial-lines))
 
 (defun my-ace-jump-mode ()
   ;;
@@ -925,6 +935,7 @@
    (my-auto-compile)
    (my-buffer-move)
    (my-mouse)
+   (my-skeleton-complete)
    ;; -- configuring ide packages
    (my-recentf)
    (my-ido)
