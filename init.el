@@ -403,7 +403,7 @@
 
 (defun my-expand-region ()
   ;;(require 'expand-region)
-  (global-set-key (kbd "C-@") 'er/expand-region))
+  (global-set-key (kbd "C-SPC") 'er/expand-region))
 
 (defun my-multiple-cursors ()
   ;;(require 'multiple-cursors)
