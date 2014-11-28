@@ -827,6 +827,15 @@
       (setq racket-program "/usr/local/bin/racket"
             raco-program "/usr/local/bin/raco")))))
 
+(defun my-chickenscheme ()
+  (add-to-list 'auto-mode-alist '("\\.scm$" . scheme-mode))
+  (setq geiser-mode-auto-p nil)
+  (setq scheme-program-name "csi -:c")
+  (when (string= system-name "localhost.localdomain")
+    (add-to-list 'load-path "/sur/local/lib/chicken/6")
+    (autoload 'chicken-slime "chicken-slime" "SWANK backend for Chicken" t))
+  (add-hook 'scheme-mode-hook (lambda () (auto-fill-mode t))))
+
 (defun my-csharp ()
   (autoload 'csharp-mode "csharp-mode" "Major mode for editing C# code." t)
   (setq auto-mode-alist
@@ -966,6 +975,7 @@
    (my-color-theme)
    ;; -- configuring language specific packages
    (my-racket)
+   (my-chickenscheme)
    (my-haskell)
    (my-rust)
    (my-ruby)
