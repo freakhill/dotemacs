@@ -832,7 +832,7 @@
   (setq geiser-mode-auto-p nil)
   (setq scheme-program-name "csi -:c")
   (when (string= system-name "localhost.localdomain")
-    (add-to-list 'load-path "/sur/local/lib/chicken/6")
+    (add-to-list 'load-path "/usr/lib64/chicken/6")
     (autoload 'chicken-slime "chicken-slime" "SWANK backend for Chicken" t))
   (add-hook 'scheme-mode-hook (lambda () (auto-fill-mode t))))
 
