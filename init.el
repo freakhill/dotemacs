@@ -181,6 +181,7 @@
 			multiple-cursors
                         ido-ubiquitous
                         ibuffer-vc
+                        racket-mode
                         flycheck
                         flycheck-tip
                         flycheck-haskell
@@ -761,7 +762,8 @@
       lisp-mode-hook
       lisp-interaction-mode-hook
       geiser-repl-mode-hook
-      scheme-mode-hook))
+      scheme-mode-hook
+      racket-mode-hook))
 
   (dolist (h my-lisp-mode-hooks)
     (add-hook h 'my-lisp-custom))
@@ -812,6 +814,18 @@
   ;;(setq cider-repl-popup-stacktraces t)
   (setq nrepl-popup-stacktraces-in-repl t)
   (setq nrepl-history-file "~/nrepl-history.dat"))
+
+(defun my-racket ()
+  (add-to-list 'auto-mode-alist '("\\.rkt$" . racket-mode))
+  (cond
+   ((string= system-name "W010391306024")
+    (progn
+      (setq racket-program "c:\Program Files\Racket\Racket.exe"
+            raco-program "c:\Program Files\Racket\raco.exe")))
+   ((string= system-name "localhost.localdomain")
+    (progn
+      (setq racket-program "/usr/local/bin/racket"
+            raco-program "/usr/local/bin/raco")))))
 
 (defun my-csharp ()
   (autoload 'csharp-mode "csharp-mode" "Major mode for editing C# code." t)
@@ -951,6 +965,7 @@
    ;; (my-golden-ratio)
    (my-color-theme)
    ;; -- configuring language specific packages
+   (my-racket)
    (my-haskell)
    (my-rust)
    (my-ruby)
