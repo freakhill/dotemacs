@@ -182,6 +182,9 @@
                         ido-ubiquitous
                         ibuffer-vc
                         racket-mode
+                        slime
+                        ac-slime
+                        slime-repl
                         flycheck
                         flycheck-tip
                         flycheck-haskell
@@ -836,6 +839,16 @@
     (autoload 'chicken-slime "chicken-slime" "SWANK backend for Chicken" t))
   (add-hook 'scheme-mode-hook (lambda () (auto-fill-mode t))))
 
+(defun my-slime ()
+  (setq slime-contribs '(slime-fancy slime-banner))
+  (cond
+   ((string= system-name "localhost.localdomain")
+    (setq inferior-lisp-program "/usr/bin/sbcl")))
+  (add-hook 'slime-mode-hook 'set-up-slime-ac)
+  (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+  (eval-after-load "auto-complete"
+    '(add-to-list 'ac-modes 'slime-repl-mode)))
+
 (defun my-csharp ()
   (autoload 'csharp-mode "csharp-mode" "Major mode for editing C# code." t)
   (setq auto-mode-alist
@@ -974,6 +987,7 @@
    ;; (my-golden-ratio)
    (my-color-theme)
    ;; -- configuring language specific packages
+   (my-slime)
    (my-racket)
    (my-chickenscheme)
    (my-haskell)
