@@ -21,12 +21,6 @@
  '(shm-current-face ((t (:background "green" :foreground "black"))))
  '(shm-quarantine-face ((t (:background "yellow")))))
 
-;;TODO!
-;; need to automate:
-;; cabal install ariadne
-;; cabal install hlint
-;; cabal install hdevtools
-
 ;;--------------------
 ;;--- for emacs 24+ --
 ;;--------------------
@@ -188,7 +182,7 @@
                         flycheck
                         flycheck-tip
                         flycheck-haskell
-                        flycheck-hdevtools
+                        go-mode
                         nyan-mode
                         golden-ratio
                         recentf-ext
@@ -230,6 +224,7 @@
                         everything
                         haskell-mode
                         shm ;; structured haskell mode
+                        ghc
                         ghci-completion
 			highlight-tail
                         ariadne
@@ -658,12 +653,31 @@
   (color-theme-cyberpunk)
   (set-cursor-color "yellow"))
 
+(defun my-go-customs ()
+  ;; need to do "go get -u github.com/dougm/goflymake" for flycheck support
+  (local-set-key (kbd "C-c C-r") 'go-remove-unused-imports)
+  (local-set-key (kbd "C-c C-a") 'go-import-add)
+  (local-set-key (kbd "C-c i") 'go-goto-imports)
+  (cond
+   ((string= (system-name "W010391306024"))
+    (progn (setenv "GOPATH" "d:\gocode")
+           (setenv "PATH" (concat (getenv "PATH") ";" "d:\gocode\bin"))
+           (add-to-list 'load-path "d:\gocode\src\github.com\dougm\goflymake")
+           (require 'flycheck)
+           (require 'go-flycheck)))
+   ((string= (system-name "localhost.localdomain"))
+    (message "go not configured for my centos vm yet..."))))
+
+(defun my-go ()
+  (require 'go-mode-load)
+  (add-hook 'before-save-hook 'gofmt-before-save)
+  (add-hook 'go-mode-hook 'my-go-customs))
+
 (defun my-haskell ()
-  ;; LARGELY UNTESTED.... DON'T KNOW HOW WELL IT WORK FOR ACTUAL DEV
-  ;; cabal install hdevtools structured-haskell-mode ghci-ng hlint ariadne
+  ;; you need...
+  ;; cabal install ghc-mod hlint structured-haskell-mode ghci-ng hlint ariadne
   (add-hook 'haskell-mode-hook 'structured-haskell-mode)
 
-  (eval-after-load 'flycheck '(require 'flycheck-hdevtools))
   (eval-after-load 'haskell-mode '(require 'ariadne))
 
   ;;(add-hook 'haskell-mode-hook 'turn-on-haskell-unicode-input-method)
