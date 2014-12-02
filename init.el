@@ -5,6 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
  '(custom-enabled-themes (quote (tango-dark)))
+ '(custom-safe-themes (quote ("cdc7555f0b34ed32eb510be295b6b967526dd8060e5d04ff0dce719af789f8e5" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" default)))
  '(global-ede-mode t)
  '(haskell-process-auto-import-loaded-modules t)
  '(haskell-process-log t)
@@ -18,8 +19,16 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(shm-current-face ((t (:background "green" :foreground "black"))))
- '(shm-quarantine-face ((t (:background "yellow")))))
+ '(diff-added ((t (:foreground "Green"))))
+ '(diff-removed ((t (:foreground "Red"))))
+ '(ediff-even-diff-A ((((class color) (background dark)) (:background "dark green"))) t)
+ '(ediff-even-diff-B ((((class color) (background dark)) (:background "dark red"))) t)
+ '(ediff-odd-diff-A ((((class color) (background dark)) (:background "dark green"))) t)
+ '(ediff-odd-diff-B ((((class color) (background dark)) (:background "dark red"))) t)
+ '(mumamo-background-chunk-major ((((class color) (background dark)) (:background "black"))) t)
+ '(mumamo-background-chunk-submode1 ((((class color) (background dark)) (:background "black"))) t)
+ '(shm-current-face ((t (:background "green" :foreground "black"))) t)
+ '(shm-quarantine-face ((t (:background "yellow"))) t))
 
 ;;--------------------
 ;;--- for emacs 24+ --
@@ -162,6 +171,7 @@
     (package-refresh-contents))
   (defvar my-packages '(auto-complete
                         company
+                        framesize
                         restclient
                         browse-kill-ring
 			auto-install
@@ -219,8 +229,9 @@
 			evil
 			god-mode
 			evil-god-state
-                        powerline
-                        powerline-evil
+                        smart-mode-line
+                        smart-mode-line-powerline-theme
+                        rich-minority
                         everything
                         haskell-mode
                         shm ;; structured haskell mode
@@ -281,7 +292,10 @@
            wide-n)
           ("https://raw.githubusercontent.com/baohaojun/skeleton-complete/master/skeleton-complete.el"
            "skeleton-complete.el"
-           skeleton-complete))
+           skeleton-complete)
+          ("http://webonastick.com/emacs-lisp/hide-mode-line.el"
+           "hide-mode-line.el"
+           hide-mode-line))
       (lambda (pkg)
         (condition-case e
             (apply dl-and-load-mode pkg)
@@ -347,10 +361,20 @@
   (evil-set-initial-state 'ibuffer-mode 'emacs)
 
   (evil-define-key 'normal global-map "," 'evil-execute-in-god-state)
+  ;;(require 'powerline)
+  ;;(require 'powerline-evil)
+  ;;(powerline-evil-vim-color-theme)
+  )
 
-  (require 'powerline)
-  (require 'powerline-evil)
-  (powerline-evil-vim-color-theme))
+(defun my-modeline ()
+  (require 'rich-minority)
+  (require 'smart-mode-line)
+  (sml/setup)
+  (sml/apply-theme 'powerline)
+  (setq sml/shorten-modes t
+        sml/shorten-directory t)
+  (add-to-list 'rm-blacklist '("SkelC" "UndoTree" "Projectile.*" "AC" "SP" "SP/s" "ht"))
+  (hide-mode-line))
 
 (defun my-skeleton-complete ()
   (require 'skeleton-complete)
@@ -655,6 +679,7 @@
 
 (defun my-go-customs ()
   ;; need to do "go get -u github.com/dougm/goflymake" for flycheck support
+  (smartparens-strict-mode)
   (local-set-key (kbd "C-c C-r") 'go-remove-unused-imports)
   (local-set-key (kbd "C-c C-a") 'go-import-add)
   (local-set-key (kbd "C-c i") 'go-goto-imports)
@@ -709,6 +734,7 @@
 
   (custom-set-variables  '(haskell-process-type 'cabal-repl))
   ;;(custom-set-variables  '(haskell-process-type 'ghci))
+
   )
 
 (defun my-rust ()
@@ -1019,6 +1045,7 @@
    (my-os-custom)
    ;; other
    (my-highlight-tail)
-   (my-funcs)))
+   (my-funcs)
+   (my-modeline)))
 
 (my-init)
