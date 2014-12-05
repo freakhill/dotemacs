@@ -953,6 +953,12 @@
     (my-windows-custom))))
 
 (defun my-funcs ()
+  (defun myfn-eval-last-sexp-with-value (value &optional prefix)
+    (interactive "svalue: \nP")
+    (cider-interactive-eval (s-concat "(" (cider-last-sexp) " " value " )")
+                            (cider-last-sexp-start-pos)
+                            (when prefix (cider-eval-print-handler))))
+  (define-key cider-mode-map (kbd "C-c e") 'myfn-eval-last-sexp-with-value)
   ;; ---
   (defun myfn-delete-region-if-uniq ()
     (interactive)
