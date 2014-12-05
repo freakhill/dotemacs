@@ -958,7 +958,7 @@
     (cider-interactive-eval (s-concat "(" (cider-last-sexp) " " value " )")
                             (cider-last-sexp-start-pos)
                             (when prefix (cider-eval-print-handler))))
-  (define-key cider-mode-map (kbd "C-c e") 'myfn-eval-last-sexp-with-value)
+  (add-hook 'cider-mode-hook (lambda () (define-key cider-mode-map (kbd "C-c e") 'myfn-eval-last-sexp-with-value)))
   ;; ---
   (defun myfn-delete-region-if-uniq ()
     (interactive)
