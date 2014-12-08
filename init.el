@@ -962,6 +962,7 @@
   ;; ---
   (defun myfn-delete-region-if-uniq ()
     (interactive)
+    (setq deactivate-mark t)
     (let ((p1 (region-beginning))
           (p2 (region-end)))
       (if (= 1 (count-matches (buffer-substring p1 p2)))
