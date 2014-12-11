@@ -5,7 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
  '(custom-enabled-themes (quote (tango-dark)))
- '(custom-safe-themes (quote ("cdc7555f0b34ed32eb510be295b6b967526dd8060e5d04ff0dce719af789f8e5" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" default)))
+ '(custom-safe-themes (quote ("756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e" "cdc7555f0b34ed32eb510be295b6b967526dd8060e5d04ff0dce719af789f8e5" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" default)))
  '(global-ede-mode t)
  '(haskell-process-auto-import-loaded-modules t)
  '(haskell-process-log t)
@@ -25,6 +25,7 @@
  '(ediff-even-diff-B ((((class color) (background dark)) (:background "dark red"))) t)
  '(ediff-odd-diff-A ((((class color) (background dark)) (:background "dark green"))) t)
  '(ediff-odd-diff-B ((((class color) (background dark)) (:background "dark red"))) t)
+ '(guide-key-tip/pos-tip-face ((t (:background "dark slate gray" :foreground "white smoke" :weight bold))))
  '(mumamo-background-chunk-major ((((class color) (background dark)) (:background "black"))) t)
  '(mumamo-background-chunk-submode1 ((((class color) (background dark)) (:background "black"))) t)
  '(shm-current-face ((t (:background "green" :foreground "black"))) t)
@@ -179,16 +180,24 @@
                         buffer-move
                         color-theme
                         color-theme-library
+                        window-numbering
+                        monokai-theme
 			expand-region
 			ace-jump-mode
 			ace-jump-buffer
 			multiple-cursors
+                        guide-key
+                        pos-tip
+                        guide-key-tip
+                        magit
+                        org-projectile
                         ido-ubiquitous
                         ibuffer-vc
                         racket-mode
                         slime
                         ac-slime
                         slime-repl
+                        fancy-narrow
                         flycheck
                         flycheck-tip
                         flycheck-haskell
@@ -208,10 +217,17 @@
                         epl
                         pkg-info
                         undo-tree
+                        git-gutter-fringe
+                        git-timemachine
+                        git-messenger
                         yasnippet
                         auto-yasnippet
 			js3-mode
 			markdown-mode
+                        wandbox
+                        rcirc
+                        rcirc-color
+                        zenburn-theme
                         typed-clojure-mode
                         cljdoc
                         clj-refactor
@@ -225,8 +241,15 @@
 			omnisharp
 			projectile
                         helm
+                        helm-ag
+                        helm-make
+                        helm-themes
                         helm-projectile
+                        helm-swoop
+                        helm-mode-manager
 			evil
+                        evil-terminal-cursor-changer
+                        evil-numbers
 			god-mode
 			evil-god-state
                         smart-mode-line
@@ -237,6 +260,8 @@
                         shm ;; structured haskell mode
                         ghc
                         ghci-completion
+                        highlight
+                        hl-anything
 			highlight-tail
                         ariadne
                         company-ghc
@@ -366,6 +391,10 @@
   ;;(powerline-evil-vim-color-theme)
   )
 
+(defun my-evil-numbers ()
+  (global-set-key (kbd "C-c +") 'evil-numbers/inc-at-pt)
+  (global-set-key (kbd "C-c -") 'evil-numbers/dec-at-pt))
+
 (defun my-modeline ()
   (require 'rich-minority)
   (require 'smart-mode-line)
@@ -376,13 +405,17 @@
   (add-to-list 'rm-blacklist '("SkelC" "UndoTree" "Projectile.*" "AC" "SP" "SP/s" "ht"))
   (hide-mode-line))
 
+(defun my-hl-anything ()
+  ;; TODO
+  )
+
 (defun my-skeleton-complete ()
   (require 'skeleton-complete)
   (skeleton-complete-global-mode 1)
   (global-set-key (kbd "M-z") 'skeleton-expand-symbols)
   (global-set-key (kbd "M-a") 'skeleton-expand-partial-lines))
 
-(defun my-ace-jump-mode ()
+(defun my-ace-jump ()
   ;;
   ;; ace jump mode major function
   ;;
@@ -407,7 +440,16 @@
   (define-key evil-normal-state-map (kbd "SPC") 'ace-jump-mode))
 
 (defun my-ace-jump-buffer ()
-  )
+  (global-set-key (kbd "C-b") 'ace-jump-buffer)
+  (define-key evil-normal-state-map "b" 'ace-jump-buffer))
+
+(defun my-help-swoop ()
+  (define-key evil-normal-state-map "s" 'helm-swoop))
+
+(defun my-window-numbering ()
+  (window-numbering-mode t)
+  (setq window-numbering-assign-func
+        (lambda () (when (equal (buffer-name) "*scratch*") 0))))
 
 (defun my-mouse ()
   ;; Mouse in terminal
@@ -647,7 +689,13 @@
             (lambda ()
               (set-fill-column 72)
               (auto-fill-mode 1)))
-  (global-set-key (kbd "C-c C-g") 'magit-status))
+  (global-set-key (kbd "C-c M-s") 'magit-status)) ;; ,cgs in god-mode
+
+(defun my-git-messenger ()
+  (global-set-key (kbd "C-c M-c") 'git-messenger:popup-message)) ;; ,xgc in god-mode
+
+(defun my-git-timemachine ()
+  (global-set-key (kbd "C-c M-h") 'git-timemachine))
 
 (defun my-diff-hl ()
   (global-diff-hl-mode)
@@ -661,10 +709,10 @@
   (setq vlf-application 'dont-ask))
 
 (defun my-workgroups2 ()
-   ;;(require 'workgroups2)
-   (setq wg-prefix-key (kbd "C-c C-w"))
-   (setq wg-default-session-file (concat "~/.emacs.d/.emacs_workgroups_" system-name))
-   (workgroups-mode 1))
+  ;;(require 'workgroups2)
+  (setq wg-prefix-key (kbd "C-c C-w"))
+  (setq wg-default-session-file (concat "~/.emacs.d/.emacs_workgroups_" system-name))
+  (workgroups-mode 1))
 
 (defun my-yasnippet ()
   ;;(require 'yasnippet)
@@ -676,6 +724,12 @@
   (require 'color-theme)
   (color-theme-cyberpunk)
   (set-cursor-color "yellow"))
+
+(defun my-guide-key ()
+  (guide-key-mode t)
+  (setq guide-key/recursive-key-sequence-flag t)
+  (setq guide-key/guide-key-sequence '("C-x" "C-c"))
+  (guide-key-tip/toggle-enable))
 
 (defun my-go-customs ()
   ;; need to do "go get -u github.com/dougm/goflymake" for flycheck support
@@ -843,6 +897,12 @@
   (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
   (setq cider-repl-use-clojure-font-lock t)
   (setq nrepl-log-messages t)
+  ;; remove the cider bind that overshadows the git messenger bind
+  (add-hook 'clojure-mode-hook (lambda ()
+                              (local-unset-key (kbd "C-c M-c"))))
+
+  ;;--- typed clojure mode
+  (add-hook 'clojure-mode-hook 'typed-clojure-mode)
 
   (defun my-insert-quote-char ()
     (interactive)
@@ -869,6 +929,9 @@
     (progn
       (setq racket-program "/usr/local/bin/racket"
             raco-program "/usr/local/bin/raco")))))
+
+(defun my-fancy-narrow ()
+  (fancy-narrow-mode))
 
 (defun my-chickenscheme ()
   (add-to-list 'auto-mode-alist '("\\.scm$" . scheme-mode))
@@ -1006,8 +1069,10 @@
    ;; -- configuring global packages
    (my-discover-my-major)
    (my-evil)
-   (my-ace-jump-mode)
+   (my-evil-numbers)
+   (my-ace-jump)
    (my-ace-jump-buffer)
+   (my-help-swoop)
    (my-expand-region)
    (my-multiple-cursors)
    (my-windmove)
@@ -1019,7 +1084,10 @@
    (my-buffer-move)
    (my-mouse)
    (my-skeleton-complete)
+   (my-window-numbering)
    ;; -- configuring ide packages
+   (my-guide-key)
+   (my-hl-anything)
    (my-recentf)
    (my-ido)
    (my-smex)
@@ -1028,11 +1096,14 @@
    (my-diff-hl)
    (my-undo-tree)
    (my-magit)
+   (my-git-messenger)
+   (my-git-timemachine)
    (my-yasnippet)
    ;; (my-workgroups2)
    (my-dired+)
    ;; (my-golden-ratio)
-   (my-color-theme)
+   ;; (my-color-theme)
+   (my-fancy-narrow)
    ;; -- configuring language specific packages
    (my-slime)
    (my-racket)
