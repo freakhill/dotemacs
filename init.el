@@ -193,6 +193,7 @@
                         org-projectile
                         ido-ubiquitous
                         ibuffer-vc
+                        android-mode
                         racket-mode
                         slime
                         ac-slime
@@ -389,7 +390,7 @@
   ;;(require 'powerline)
   ;;(require 'powerline-evil)
   ;;(powerline-evil-vim-color-theme)
-  )
+  (evil-define-key 'normal global-map (kbd "M") 'evil-goto-mark-line))
 
 (defun my-evil-numbers ()
   (global-set-key (kbd "C-c +") 'evil-numbers/inc-at-pt)
@@ -730,6 +731,13 @@
   (setq guide-key/recursive-key-sequence-flag t)
   (setq guide-key/guide-key-sequence '("C-x" "C-c"))
   (guide-key-tip/toggle-enable))
+
+(defun my-android ()
+  (cond
+   ((string= system-name "W010391306024")
+    (setq android-mode-sdk-dir "d:/adt-bundle-windows/sdk"))
+   ((string= system-name "localhost.localdomain")
+    (message "go not configured for my centos vm yet..."))))
 
 (defun my-go-customs ()
   ;; need to do "go get -u github.com/dougm/goflymake" for flycheck support
@@ -1104,6 +1112,7 @@
    ;; (my-golden-ratio)
    ;; (my-color-theme)
    (my-fancy-narrow)
+   (my-android)
    ;; -- configuring language specific packages
    (my-slime)
    (my-racket)
