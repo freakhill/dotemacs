@@ -235,6 +235,10 @@
                         clojure-cheatsheet
                         clojure-mode-extra-font-locking
 			smartparens
+                        align-cljlet
+                        emr ;; emacs-refactor
+                        clj-refactor
+                        paxedit
 			rainbow-delimiters
                         cider
                         cider-profile
@@ -281,7 +285,7 @@
     (when (not (eq (length not-yet-installed) 0))
       (package-refresh-contents)
       (dolist (pkg not-yet-installed) (with-demoted-errors
-                                        "Package install error: %S"
+                                          "Package install error: %S"
                                         (package-install pkg))))))
 
 ;;--- extra files
@@ -480,6 +484,45 @@
 (defun my-expand-region ()
   ;;(require 'expand-region)
   (global-set-key (kbd "C-SPC") 'er/expand-region))
+
+(defun my-gnus ()
+  ;; stuff picked from www.xsteve.at/prg/gnus
+  (setq gnus-select-method '(nntp "news.gmane.org"))
+  (setq gnus-use-adaptive-scoring t)
+  (setq gnus-score-expiry-days 14)
+  (setq gnus-default-adaptive-score-alist
+        '((gnus-unread-mark)
+          (gnus-ticked-mark (from 4))
+          (gnus-dormant-mark (from 5))
+          (gnus-saved-mark (from 20) (subject 5))
+          (gnus-del-mark (from -2) (subject -5))
+          (gnus-read-mark (from 2) (subject 1))))
+  (setq gnus-score-decay-constant 1)
+  (setq gnus-score-decay-scale 0.03)
+  (setq gnus-decay-scores t)
+
+  (setq gnus-global-score-files '("~/Dropbox/gnus/all.SCORE"))
+  (setq gnus-summary-expunge-below -999)
+
+  (add-hook 'message-sent-hook 'gnus-score-followup-article)
+  (add-hook 'message-sent-hook 'gnus-score-followup-thread)
+
+  (setq gnus-directory "~/Dropbox/gnus")
+  (setq message-directory "~/Dropbox/gnus/mail")
+  (setq nnml-directory "~/Dropbox/gnus/nnml-mail")
+  (setq gnus-article-save-directory "~/Dropbox/gnus/saved")
+  (setq gnus-kill-files-directory "~/Dropbox/gnus/scores")
+  (setq gnus-cache-directory "~/Dropbox/gnus/cache")
+
+  (setq gnus-summary-line-format "%O%U%R%z%d %B%(%[%4L: %-22,22f%]%) %s\n")
+  (setq gnus-summary-mode-line-format "Gnus: %p [%A / Sc:%4z] %Z")
+
+  (setq gnus-summary-same-subject "")
+  (setq gnus-sum-thread-tree-root "")
+  (setq gnus-sum-thread-tree-single-indent "")
+  (setq gnus-sum-thread-tree-leaf-with-other "+-> ")
+  (setq gnus-sum-thread-tree-vertical "|")
+  (setq gnus-sum-thread-tree-single-leaf "`-> "))
 
 (defun my-multiple-cursors ()
   ;;(require 'multiple-cursors)
@@ -856,6 +899,10 @@
   (add-to-list 'auto-mode-alist '("Capfile$" . ruby-mode))
   (add-to-list 'auto-mode-alist '("Vagrantfile$" . ruby-mode)))
 
+(defun my-emacs-refactor ()
+  (define-key prog-mode-map (kbd "M-RET") 'emr-show-refactor-menu)
+  (add-hook 'prog-mode-hook 'emr-initialize))
+
 (defun my-lisp ()
   ;;--- clojure and nrepl hooks for autocompletion and my custom fun
   (defconst my-lisp-mode-hooks
@@ -873,31 +920,44 @@
   (dolist (h my-lisp-mode-hooks)
     (add-hook h 'my-lisp-custom))
 
+  (add-hook 'clojure-mode-hook 'my-clojure-custom)
+
+  (defun my-clojure-custom ()
+    (require 'clojure-mode-extra-font-locking)
+    (require 'clj-refactor)
+    (clj-refactor-mode t)
+    (cljr-add-keybindings-with-prefix "C-r")
+    (local-set-key (kbd "C-c C-a") 'align-cljlet))
+
   (defun my-lisp-custom ()
     (interactive)
     (require 'smartparens-config)
-    (require 'clojure-mode-extra-font-locking)
     (smartparens-strict-mode t)
+    (paxedit-mode t)
     (rainbow-delimiters-mode t)
     ;;--- navigation (just merge macos and windows config, will have to
     ;; work on refining that!)
     (local-set-key (kbd "C-f") 'sp-forward-sexp)
-    (local-set-key (kbd "C-M-y") 'sp-copy-sexp)
-    (local-set-key (kbd "C-c C-s") 'sp-splice-sexp)
     (local-set-key (kbd "M-f") 'sp-backward-sexp)
+    (local-set-key (kbd "C-M-y") 'sp-copy-sexp)
+    (evil-define-key 'normal global-map "Y" 'paxedit-copy)
+    (local-set-key (kbd "C-M-k") 'sp-kill-sexp)
+    (evil-define-key 'normal global-map "K" 'paxedit-kill)
+    (local-set-key (kbd "C-c C-s") 'sp-splice-sexp)
+    (evil-define-key 'normal global-map "S" 'sp-splice-sexp)
+    (evil-define-key 'normal global-map "R" 'paxedit-sexp-raise)
+    (evil-define-key 'normal global-map "C" 'paxedit-wrap-comment)
+    (evil-define-key 'normal global-map "E" 'paxedit-macro-expand-replace)
+    (evil-define-key 'normal global-map "T" 'paxedit-transpose-forward)
     (local-set-key (kbd "ESC <up>") 'sp-up-sexp)
     (local-set-key (kbd "ESC <down>") 'sp-down-sexp)
     (define-key sp-keymap (kbd "M-<left>") 'sp-backward-sexp)
     (define-key sp-keymap (kbd "M-<right>") 'sp-forward-sexp)
-    (define-key sp-keymap (kbd "M-<up>") 'sp-up-sexp)
-    (define-key sp-keymap (kbd "M-<down>") 'sp-down-sexp)
+    (define-key sp-keymap (kbd "M-<up>") 'paxedit-backward-up)
+    (define-key sp-keymap (kbd "M-<down>") 'paxedit-backward-end)
     ;;--- manipulation
     (local-set-key (kbd "C-<right>") 'sp-forward-slurp-sexp)
-    (local-set-key (kbd "C-<left>") 'sp-forward-barf-sexp)
-    ;;--- custom entry stuff
-    (local-set-key (kbd "<f2>") 'my-insert-quote-char)
-    (local-set-key (kbd "C-:") 'insert-parentheses)
-    (local-set-key (kbd "C-;") 'insert-parentheses))
+    (local-set-key (kbd "C-<left>") 'sp-forward-barf-sexp))
 
   ;;--- cider
   (add-hook 'cider-mode-hook 'company-mode)
@@ -907,14 +967,14 @@
   (setq nrepl-log-messages t)
   ;; remove the cider bind that overshadows the git messenger bind
   (add-hook 'clojure-mode-hook (lambda ()
-                              (local-unset-key (kbd "C-c M-c"))))
+                                 (local-unset-key (kbd "C-c M-c"))))
 
   ;;--- typed clojure mode
   (add-hook 'clojure-mode-hook 'typed-clojure-mode)
 
   (defun my-insert-quote-char ()
     (interactive)
-    (insert-char #x0027)) ; codepoint for ' <- simple quote
+    (insert-char #x0027))            ; codepoint for ' <- simple quote
 
   (defun my-insert-parentheses ()
     (interactive)
@@ -1114,6 +1174,7 @@
    (my-fancy-narrow)
    (my-android)
    ;; -- configuring language specific packages
+   (my-emacs-refactor)
    (my-slime)
    (my-racket)
    (my-chickenscheme)
@@ -1133,6 +1194,7 @@
    ;; other
    (my-highlight-tail)
    (my-funcs)
-   (my-modeline)))
+   (my-modeline)
+   (my-gnus)))
 
 (my-init)
