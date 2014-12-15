@@ -158,8 +158,7 @@
   ;; C-x r j E -- to edit my config file
   (set-register ?E `(file . ,user-init-file)))
 
-;; one day, rewrite emacs in rust, with a better VM, an optional
-;; embedded V8, and generally easier way to integrate other languages!
+;; one day, rewrite emacs in my custom lisp
 ;; And FASTER, FASTER, FASTER!
 
 ;;--- packages
