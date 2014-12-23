@@ -192,6 +192,7 @@
 			multiple-cursors
                         guide-key
                         pos-tip
+                        flycheck-pos-tip
                         guide-key-tip
                         magit
                         org-projectile
@@ -204,7 +205,6 @@
                         slime-repl
                         fancy-narrow
                         flycheck
-                        flycheck-tip
                         flycheck-haskell
                         go-mode
                         nyan-mode
@@ -234,6 +234,7 @@
                         rcirc-color
                         zenburn-theme
                         typed-clojure-mode
+                        squiggly-clojure
                         cljdoc
                         clj-refactor
                         clojure-cheatsheet
@@ -672,9 +673,10 @@
 
 (defun my-flycheck ()
   ;;(require 'flycheck)
-  (add-hook 'after-init-hook #'global-flycheck-mode)
-  (require 'flycheck-tip)
-  (flycheck-tip-use-timer 'verbose))
+  (eval-after-load 'flycheck
+    '(custom-set-variables
+         '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
+  (add-hook 'after-init-hook #'global-flycheck-mode))
 
 (defun my-golden-ratio ()
   (eval-after-load "golden-ratio"
@@ -933,8 +935,11 @@
     (require 'clojure-mode-extra-font-locking)
     (require 'clj-refactor)
     (clj-refactor-mode t)
+    (flycheck-mode t)
     (cljr-add-keybindings-with-prefix "C-r")
-    (local-set-key (kbd "C-c C-a") 'align-cljlet))
+    (local-set-key (kbd "C-c C-a") 'align-cljlet)
+  ;; remove the cider bind that overshadows the git messenger bind
+    (local-unset-key (kbd "C-c M-c")))
 
   (defun my-lisp-custom ()
     (interactive)
@@ -972,9 +977,6 @@
   (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
   (setq cider-repl-use-clojure-font-lock t)
   (setq nrepl-log-messages t)
-  ;; remove the cider bind that overshadows the git messenger bind
-  (add-hook 'clojure-mode-hook (lambda ()
-                                 (local-unset-key (kbd "C-c M-c"))))
 
   ;;--- typed clojure mode
   (add-hook 'clojure-mode-hook 'typed-clojure-mode)
@@ -1094,7 +1096,6 @@
   (defun myfn-eval-last-sexp-with-value (value &optional prefix)
     (interactive "svalue: \nP")
     (cider-interactive-eval (s-concat "(" (cider-last-sexp) " " value " )")
-                            (cider-last-sexp-start-pos)
                             (when prefix (cider-eval-print-handler))))
   (add-hook 'cider-mode-hook (lambda () (define-key cider-mode-map (kbd "C-c e") 'myfn-eval-last-sexp-with-value)))
   ;; ---
