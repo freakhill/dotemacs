@@ -189,6 +189,7 @@
 			expand-region
 			ace-jump-mode
 			ace-jump-buffer
+                        fill-column-indicator
 			multiple-cursors
                         guide-key
                         pos-tip
@@ -912,6 +913,29 @@
   (define-key prog-mode-map (kbd "M-RET") 'emr-show-refactor-menu)
   (add-hook 'prog-mode-hook 'emr-initialize))
 
+(defun my-fill-column-indicator ()
+  (setq fci-rule-column 80)
+
+  (defun my-fci-enabled-p () (symbol-value 'fci-mode))
+
+  (defvar my-fci-mode-suppressed nil)
+  (make-variable-buffer-local 'my-fci-mode-suppressed)
+
+  (defadvice popup-create (before suppress-fci-mode activate)
+    "Suspend fci-mode while popups are visible"
+    (let ((fci-enabled (my-fci-enabled-p)))
+      (when fci-enabled
+        (setq my-fci-mode-suppressed fci-enabled)
+        (turn-off-fci-mode))))
+
+  (defadvice popup-delete (after restore-fci-mode activate)
+    "Restore fci-mode when all popups have closed"
+    (when (and my-fci-mode-suppressed
+               (null popup-instances))
+      (setq my-fci-mode-suppressed nil)
+      (turn-on-fci-mode)))
+  (add-hook 'prog-mode-hook (lambda () (fci-mode t))))
+
 (defun my-lisp ()
   ;;--- clojure and nrepl hooks for autocompletion and my custom fun
   (defconst my-lisp-mode-hooks
@@ -934,6 +958,7 @@
   (defun my-clojure-custom ()
     (require 'clojure-mode-extra-font-locking)
     (require 'clj-refactor)
+    (setq fci-rule-column 120)
     (clj-refactor-mode t)
     (flycheck-mode t)
     (cljr-add-keybindings-with-prefix "C-r")
@@ -1181,6 +1206,7 @@
    ;; (my-color-theme)
    (my-fancy-narrow)
    (my-android)
+   (my-fill-column-indicator)
    ;; -- configuring language specific packages
    (my-emacs-refactor)
    (my-slime)
