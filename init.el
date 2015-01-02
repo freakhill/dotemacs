@@ -175,6 +175,8 @@
   (defvar my-packages '(auto-complete
                         company
                         framesize
+                        tiny
+                        deft
                         restclient
                         browse-kill-ring
 			auto-install
@@ -791,6 +793,12 @@
    ((string= system-name "localhost.localdomain")
     (message "go not configured for my centos vm yet..."))))
 
+(defun my-deft ()
+  (setq deft-extension "org")
+  (setq deft-directory "~/Dropbox/notes")
+  (setq deft-text-mode 'org-mode)
+  (setq deft-use-filename-as-title t))
+
 (defun my-go-customs ()
   ;; need to do "go get -u github.com/dougm/goflymake" for flycheck support
   (smartparens-strict-mode)
@@ -935,22 +943,58 @@
       (turn-on-fci-mode)))
   (add-hook 'prog-mode-hook (lambda () (fci-mode t))))
 
-(defun my-lisp ()
-  ;;--- clojure and nrepl hooks for autocompletion and my custom fun
-  (defconst my-lisp-mode-hooks
-    '(clojure-mode-hook
-      clojurescript-mode-hook
-      cider-mode-hook
-      emacs-lisp-mode-hook
-      ielm-mode-hook
-      lisp-mode-hook
-      lisp-interaction-mode-hook
-      geiser-repl-mode-hook
-      scheme-mode-hook
-      racket-mode-hook))
+(defvar my-lisp-minor-mode-map
+  (let ((map (make-sparse-keymap)))
+    (progn
+      (define-key map (kbd "C-f") 'sp-forward-sexp)
+      (define-key map (kbd "M-f") 'sp-backward-sexp)
+      (define-key map (kbd "C-M-y") 'sp-copy-sexp)
+      (define-key map (kbd "C-M-k") 'sp-kill-sexp)
+      (define-key map (kbd "C-c C-s") 'sp-splice-sexp)
+      (define-key map (kbd "ESC <up>") 'sp-up-sexp)
+      (define-key map (kbd "ESC <down>") 'sp-down-sexp)
+      (define-key map (kbd "C-<right>") 'sp-forward-slurp-sexp)
+      (define-key map (kbd "C-<left>") 'sp-forward-barf-sexp)
+      (define-key map (kbd "M-<left>") 'sp-backward-sexp)
+      (define-key map (kbd "M-<right>") 'sp-forward-sexp)
+      (define-key map (kbd "M-<up>") 'paxedit-backward-up)
+      (define-key map (kbd "M-<down>") 'paxedit-backward-end))
+    map)
+  "Keymap used for `mylisp-minor-mode'.")
 
-  (dolist (h my-lisp-mode-hooks)
-    (add-hook h 'my-lisp-custom))
+(define-minor-mode my-lisp-minor-mode
+    "My custom made lisp minor mode."
+    :init-value nil
+    :lighter " mylisp"
+    :group 'my-modes
+    :keymap my-lisp-minor-mode-map
+    (progn
+      (require 'smartparens-config)
+      (smartparens-strict-mode t)
+      (paxedit-mode t)
+      (rainbow-delimiters-mode t)
+      (evil-define-key 'normal my-lisp-minor-mode-map
+        (kbd "C-f") 'sp-forward-sexp
+        "K" 'paxedit-kill
+        "Y" 'paxedit-copy
+        "S" 'paxedit-context-new-statement
+        "R" 'paxedit-sexp-raise
+        "C" 'paxedit-wrap-comment
+        "E" 'paxedit-macro-expand-replace
+        "T" 'paxedit-transpose-forward)))
+
+(defun my-lisp ()
+  (dolist (h '(clojure-mode-hook
+               clojurescript-mode-hook
+               cider-mode-hook
+               emacs-lisp-mode-hook
+               ielm-mode-hook
+               lisp-mode-hook
+               lisp-interaction-mode-hook
+               geiser-repl-mode-hook
+               scheme-mode-hook
+               racket-mode-hook))
+    (add-hook h 'my-lisp-minor-mode))
 
   (add-hook 'clojure-mode-hook 'my-clojure-custom)
 
@@ -962,38 +1006,8 @@
     (flycheck-mode t)
     (cljr-add-keybindings-with-prefix "C-r")
     (local-set-key (kbd "C-c C-a") 'align-cljlet)
-  ;; remove the cider bind that overshadows the git messenger bind
+    ;; remove the cider bind that overshadows the git messenger bind
     (local-unset-key (kbd "C-c M-c")))
-
-  (defun my-lisp-custom ()
-    (interactive)
-    (require 'smartparens-config)
-    (smartparens-strict-mode t)
-    (paxedit-mode t)
-    (rainbow-delimiters-mode t)
-    ;;--- navigation (just merge macos and windows config, will have to
-    ;; work on refining that!)
-    (local-set-key (kbd "C-f") 'sp-forward-sexp)
-    (local-set-key (kbd "M-f") 'sp-backward-sexp)
-    (local-set-key (kbd "C-M-y") 'sp-copy-sexp)
-    (evil-define-key 'normal global-map "Y" 'paxedit-copy)
-    (local-set-key (kbd "C-M-k") 'sp-kill-sexp)
-    (evil-define-key 'normal global-map "K" 'paxedit-kill)
-    (local-set-key (kbd "C-c C-s") 'sp-splice-sexp)
-    (evil-define-key 'normal global-map "S" 'sp-splice-sexp)
-    (evil-define-key 'normal global-map "R" 'paxedit-sexp-raise)
-    (evil-define-key 'normal global-map "C" 'paxedit-wrap-comment)
-    (evil-define-key 'normal global-map "E" 'paxedit-macro-expand-replace)
-    (evil-define-key 'normal global-map "T" 'paxedit-transpose-forward)
-    (local-set-key (kbd "ESC <up>") 'sp-up-sexp)
-    (local-set-key (kbd "ESC <down>") 'sp-down-sexp)
-    (define-key sp-keymap (kbd "M-<left>") 'sp-backward-sexp)
-    (define-key sp-keymap (kbd "M-<right>") 'sp-forward-sexp)
-    (define-key sp-keymap (kbd "M-<up>") 'paxedit-backward-up)
-    (define-key sp-keymap (kbd "M-<down>") 'paxedit-backward-end)
-    ;;--- manipulation
-    (local-set-key (kbd "C-<right>") 'sp-forward-slurp-sexp)
-    (local-set-key (kbd "C-<left>") 'sp-forward-barf-sexp))
 
   ;;--- cider
   (add-hook 'cider-mode-hook 'company-mode)
@@ -1179,11 +1193,11 @@
    (my-ibuffer)
    (my-hippie)
    (my-auto-complete)
+   (my-skeleton-complete)
    (my-popwin)
    (my-auto-compile)
    (my-buffer-move)
    (my-mouse)
-   (my-skeleton-complete)
    (my-window-numbering)
    ;; -- configuring ide packages
    (my-guide-key)
@@ -1225,6 +1239,7 @@
    ;; -- os specific customization
    (my-os-custom)
    ;; other
+   (my-deft)
    (my-highlight-tail)
    (my-funcs)
    (my-modeline)
