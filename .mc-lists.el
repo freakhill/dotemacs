@@ -3,11 +3,15 @@
 
 (setq mc/cmds-to-run-for-all
       '(
-	evil-execute-in-god-state
-	smex
-	))
+        evil-execute-in-god-state
+        evil-next-line
+        evil-normal-state
+        smex
+        sp-delete-char
+        ))
 
 (setq mc/cmds-to-run-once
       '(
-	helm-confirm-and-exit-minibuffer
-	))
+        evil-delete-backward-char-and-join
+        helm-confirm-and-exit-minibuffer
+        ))
