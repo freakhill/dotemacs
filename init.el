@@ -757,7 +757,10 @@
   (add-hook 'dired-mode-hook 'diff-hl-dired-mode))
 
 (defun my-dired+ ()
-  (require 'dired+))
+  (require 'dired+)
+  (comment (when (eq system-type 'darwin)
+             (require 'ls-lisp)
+             (setq ls-lisp-use-insert-directory-program nil))))
 
 (defun my-vlf ()
   (require 'vlf-integrate)
@@ -819,6 +822,10 @@
   (require 'go-mode-load)
   (add-hook 'before-save-hook 'gofmt-before-save)
   (add-hook 'go-mode-hook 'my-go-customs))
+
+(defun my-c++ ()
+  (add-hook 'c++-mode (lambda ()
+                        (local-set-key (kbd "C-c C-u") 'undo-tree-visualize))))
 
 (defun my-haskell ()
   ;; you need...
@@ -1222,6 +1229,7 @@
    (my-fill-column-indicator)
    ;; -- configuring language specific packages
    (my-emacs-refactor)
+   (my-c++)
    (my-slime)
    (my-racket)
    (my-chickenscheme)
