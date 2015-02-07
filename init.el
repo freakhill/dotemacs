@@ -3,12 +3,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector
-   ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
+ '(ansi-color-names-vector ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
  '(custom-enabled-themes (quote (tango-dark)))
- '(custom-safe-themes
-   (quote
-    ("b71d5d49d0b9611c0afce5c6237aacab4f1775b74e513d8ba36ab67dfab35e5a" "756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e" "cdc7555f0b34ed32eb510be295b6b967526dd8060e5d04ff0dce719af789f8e5" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" default)))
+ '(custom-safe-themes (quote ("e56f1b1c1daec5dbddc50abd00fcd00f6ce4079f4a7f66052cf16d96412a09a9" "b71d5d49d0b9611c0afce5c6237aacab4f1775b74e513d8ba36ab67dfab35e5a" "756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e" "cdc7555f0b34ed32eb510be295b6b967526dd8060e5d04ff0dce719af789f8e5" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" default)))
+ '(flycheck-display-errors-function (function flycheck-pos-tip-error-messages))
  '(global-ede-mode t)
  '(haskell-process-auto-import-loaded-modules t)
  '(haskell-process-log t)
@@ -177,8 +175,10 @@
                         framesize
                         tiny
                         deft
+                        ;;history
                         restclient
                         browse-kill-ring
+                        bbyac
 			auto-install
                         auto-package-update
 			auto-compile
@@ -188,6 +188,8 @@
                         window-numbering
                         monokai-theme
 			expand-region
+                        clipmon
+                        elmacro ;; save macros as emacs lisp
 			ace-jump-mode
 			ace-jump-buffer
                         fill-column-indicator
@@ -249,6 +251,8 @@
 			rainbow-delimiters
                         cider
                         cider-profile
+                        ac-cider
+                        ac-cider-compliment
 			csharp-mode
 			omnisharp
 			projectile
@@ -327,9 +331,6 @@
           ("http://www.emacswiki.org/emacs-en/download/wide-n.el"
            "wide-n.el"
            wide-n)
-          ("https://raw.githubusercontent.com/baohaojun/skeleton-complete/master/skeleton-complete.el"
-           "skeleton-complete.el"
-           skeleton-complete)
           ("http://webonastick.com/emacs-lisp/hide-mode-line.el"
            "hide-mode-line.el"
            hide-mode-line))
@@ -424,11 +425,9 @@
   ;; TODO
   )
 
-(defun my-skeleton-complete ()
-  (require 'skeleton-complete)
-  (skeleton-complete-global-mode 1)
-  (global-set-key (kbd "M-z") 'skeleton-expand-symbols)
-  (global-set-key (kbd "M-a") 'skeleton-expand-partial-lines))
+(defun my-bbyac ()
+  (require 'bbyac)
+  (bbyac-global-mode 1))
 
 (defun my-ace-jump ()
   ;;
@@ -494,6 +493,9 @@
 (defun my-expand-region ()
   ;;(require 'expand-region)
   (global-set-key (kbd "C-SPC") 'er/expand-region))
+
+(defun my-nyan ()
+  (nyan-mode t))
 
 (defun my-gnus ()
   ;; stuff picked from www.xsteve.at/prg/gnus
@@ -744,10 +746,12 @@
             (lambda ()
               (set-fill-column 72)
               (auto-fill-mode 1)))
-  (global-set-key (kbd "C-c M-s") 'magit-status)) ;; ,cgs in god-mode
+  ;; ,cgs in god-mode
+  (global-set-key (kbd "C-c M-s") 'magit-status))
 
 (defun my-git-messenger ()
-  (global-set-key (kbd "C-c M-c") 'git-messenger:popup-message)) ;; ,xgc in god-mode
+  ;; ,cgc in god-mode
+  (global-set-key (kbd "C-c M-c") 'git-messenger:popup-message))
 
 (defun my-git-timemachine ()
   (global-set-key (kbd "C-c M-h") 'git-timemachine))
@@ -776,7 +780,8 @@
   ;;(require 'yasnippet)
   ;;(require 'auto-yasnippet)
   (global-set-key (kbd "C-c C-c") 'aya-create)
-  (global-set-key (kbd "C-c C-v") 'aya-expand))
+  (global-set-key (kbd "C-c C-v") 'aya-expand)
+  (evil-define-key 'insert global-map (kbd "C-<tab>") 'aya-open-line))
 
 (defun my-color-theme ()
   (require 'color-theme)
@@ -801,6 +806,14 @@
   (setq deft-directory "~/Dropbox/notes")
   (setq deft-text-mode 'org-mode)
   (setq deft-use-filename-as-title t))
+
+(defun my-history ()
+  ;; Add history just before `find-tag' executed.
+  ;; (add-to-list 'history-advised-before-functions 'find-tag-noselect t)
+  ;; Add history just before `find-file' executed.
+  ;; (add-to-list 'history-advised-before-functions 'find-file-noselect t)
+  (setq history-history-max 999)
+  (history-mode))
 
 (defun my-go-customs ()
   ;; need to do "go get -u github.com/dougm/goflymake" for flycheck support
@@ -861,10 +874,8 @@
                          '(haskell-process-auto-import-loaded-modules t)
                          '(haskell-process-log t))
 
-  (custom-set-variables  '(haskell-process-type 'cabal-repl))
   ;;(custom-set-variables  '(haskell-process-type 'ghci))
-
-  )
+  (custom-set-variables  '(haskell-process-type 'cabal-repl)))
 
 (defun my-rust ()
   (autoload 'rust-mode "rust-mode" nil t)
@@ -1001,14 +1012,14 @@
                geiser-repl-mode-hook
                scheme-mode-hook
                racket-mode-hook))
-    (add-hook h 'my-lisp-minor-mode))
+    (add-hook h (lambda () (my-lisp-minor-mode t))))
 
   (add-hook 'clojure-mode-hook 'my-clojure-custom)
 
   (defun my-clojure-custom ()
     (require 'clojure-mode-extra-font-locking)
     (require 'clj-refactor)
-    (setq fci-rule-column 120)
+    (eval-after-load 'flycheck '(flycheck-clojure-setup))
     (clj-refactor-mode t)
     (flycheck-mode t)
     (cljr-add-keybindings-with-prefix "C-r")
@@ -1019,6 +1030,15 @@
   ;;--- cider
   (add-hook 'cider-mode-hook 'company-mode)
   (add-hook 'cider-repl-mode-hook 'company-mode)
+
+  ;; (add-hook 'cider-mode-hook 'ac-cider-setup)
+  ;; (add-hook 'cider-repl-mode-hook 'ac-cider-setup)
+
+  ;; (eval-after-load "auto-complete"
+  ;;   '(progn
+  ;;      (add-to-list 'ac-modes 'cider-mode)
+  ;;      (add-to-list 'ac-modes 'cider-repl-mode)))
+
   (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
   (setq cider-repl-use-clojure-font-lock t)
   (setq nrepl-log-messages t)
@@ -1200,13 +1220,14 @@
    (my-ibuffer)
    (my-hippie)
    (my-auto-complete)
-   (my-skeleton-complete)
+   (my-bbyac)
    (my-popwin)
    (my-auto-compile)
    (my-buffer-move)
    (my-mouse)
    (my-window-numbering)
    ;; -- configuring ide packages
+   ;;(my-history)
    (my-guide-key)
    (my-hl-anything)
    (my-recentf)
