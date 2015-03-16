@@ -3,10 +3,12 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        evil-emacs-state
         evil-execute-in-god-state
         evil-next-line
         evil-normal-state
         smex
+        sp-backward-delete-char
         sp-delete-char
         ))
 

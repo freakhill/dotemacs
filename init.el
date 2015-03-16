@@ -5,7 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
  '(custom-enabled-themes (quote (tango-dark)))
- '(custom-safe-themes (quote ("e56f1b1c1daec5dbddc50abd00fcd00f6ce4079f4a7f66052cf16d96412a09a9" "b71d5d49d0b9611c0afce5c6237aacab4f1775b74e513d8ba36ab67dfab35e5a" "756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e" "cdc7555f0b34ed32eb510be295b6b967526dd8060e5d04ff0dce719af789f8e5" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" default)))
+ '(custom-safe-themes (quote ("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "e56f1b1c1daec5dbddc50abd00fcd00f6ce4079f4a7f66052cf16d96412a09a9" "b71d5d49d0b9611c0afce5c6237aacab4f1775b74e513d8ba36ab67dfab35e5a" "756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e" "cdc7555f0b34ed32eb510be295b6b967526dd8060e5d04ff0dce719af789f8e5" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" default)))
  '(flycheck-display-errors-function (function flycheck-pos-tip-error-messages))
  '(global-ede-mode t)
  '(haskell-process-auto-import-loaded-modules t)
@@ -196,6 +196,7 @@
 			multiple-cursors
                         guide-key
                         pos-tip
+                        flycheck-clojure
                         flycheck-pos-tip
                         guide-key-tip
                         magit
@@ -210,9 +211,9 @@
                         fancy-narrow
                         flycheck
                         flycheck-haskell
-                        go-mode
+                        ;;go-mode
                         nyan-mode
-                        golden-ratio
+                        ;;golden-ratio
                         recentf-ext
 			popwin
                         dired+
@@ -231,7 +232,7 @@
                         git-messenger
                         yasnippet
                         auto-yasnippet
-			js3-mode
+			;;js3-mode
 			markdown-mode
                         wandbox
                         rcirc
@@ -271,24 +272,25 @@
                         smart-mode-line
                         smart-mode-line-powerline-theme
                         rich-minority
-                        everything
-                        haskell-mode
-                        shm ;; structured haskell mode
-                        ghc
-                        ghci-completion
+                        ;;everything
+                        ;;haskell-mode
+                        ;;shm ;; structured haskell mode
+                        ;;ghc
+                        ;;ghci-completion
                         highlight
                         hl-anything
 			highlight-tail
-                        ariadne
-                        company-ghc
+                        ;;ariadne
+                        ;;company-ghc
                         rust-mode
                         exec-path-from-shell
                         vkill
                         discover-my-major
-                        utop
-                        merlin
-                        ocp-indent
-                        tuareg))
+                        ;;utop
+                        ;;merlin
+                        ;;ocp-indent
+                        ;;tuareg
+                        ))
   (let ((not-yet-installed '()))
     (mapcar (lambda (pkg) (when (not (package-installed-p pkg))
                             (push pkg not-yet-installed)))
@@ -828,82 +830,82 @@
    ((string= (system-name "localhost.localdomain"))
     (message "go not configured for my centos vm yet..."))))
 
-(defun my-go ()
-  (require 'go-mode-load)
-  (add-hook 'before-save-hook 'gofmt-before-save)
-  (add-hook 'go-mode-hook 'my-go-customs))
+(quote (defun my-go ()
+           (require 'go-mode-load)
+           (add-hook 'before-save-hook 'gofmt-before-save)
+           (add-hook 'go-mode-hook 'my-go-customs)))
 
-(defun my-haskell ()
-  ;; you need...
-  ;; cabal install ghc-mod hlint structured-haskell-mode ghci-ng hlint ariadne
-  (add-hook 'haskell-mode-hook 'structured-haskell-mode)
+(quote (defun my-haskell ()
+           ;; you need...
+           ;; cabal install ghc-mod hlint structured-haskell-mode ghci-ng hlint ariadne
+           (add-hook 'haskell-mode-hook 'structured-haskell-mode)
 
-  (eval-after-load 'haskell-mode '(require 'ariadne))
+           (eval-after-load 'haskell-mode '(require 'ariadne))
 
-  ;;(add-hook 'haskell-mode-hook 'turn-on-haskell-unicode-input-method)
+           ;;(add-hook 'haskell-mode-hook 'turn-on-haskell-unicode-input-method)
 
-  (add-hook 'inferior-haskell-mode-hook 'turn-on-ghci-completion)
-  (add-hook 'inferior-haskell-mode-hook 'haskell-auto-insert-module-template)
-  (add-hook 'inferior-haskell-mode-hook 'turn-on-haskell-doc-mode)
+           (add-hook 'inferior-haskell-mode-hook 'turn-on-ghci-completion)
+           (add-hook 'inferior-haskell-mode-hook 'haskell-auto-insert-module-template)
+           (add-hook 'inferior-haskell-mode-hook 'turn-on-haskell-doc-mode)
 
-  ;;(custom-set-variables '(haskell-stylish-on-save t))
+           ;;(custom-set-variables '(haskell-stylish-on-save t))
 
-  (define-key haskell-mode-map (kbd "C-c C-d") 'ariadne-goto-definition)
+           (define-key haskell-mode-map (kbd "C-c C-d") 'ariadne-goto-definition)
 
-  (define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-or-reload)
-  (define-key haskell-mode-map (kbd "C-c i") 'haskell-interactive-bring)
-  (define-key haskell-mode-map (kbd "C-c C-t") 'haskell-process-do-type)
-  (define-key haskell-mode-map (kbd "C-c C-i") 'haskell-process-do-info)
-  (define-key haskell-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
-  (define-key haskell-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
-  (define-key haskell-mode-map (kbd "C-c c") 'haskell-process-cabal)
-  (define-key haskell-mode-map (kbd "SPC") 'haskell-mode-contextual-space)
-  ;;(define-key haskell-cabal-mode-map (kbd "C-`") 'haskell-interactive-bring)
-  ;;(define-key haskell-cabal-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
-  ;;(define-key haskell-cabal-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
-  ;;(define-key haskell-cabal-mode-map (kbd "C-c c") 'haskell-process-cabal)
+           (define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-or-reload)
+           (define-key haskell-mode-map (kbd "C-c i") 'haskell-interactive-bring)
+           (define-key haskell-mode-map (kbd "C-c C-t") 'haskell-process-do-type)
+           (define-key haskell-mode-map (kbd "C-c C-i") 'haskell-process-do-info)
+           (define-key haskell-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
+           (define-key haskell-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
+           (define-key haskell-mode-map (kbd "C-c c") 'haskell-process-cabal)
+           (define-key haskell-mode-map (kbd "SPC") 'haskell-mode-contextual-space)
+           ;;(define-key haskell-cabal-mode-map (kbd "C-`") 'haskell-interactive-bring)
+           ;;(define-key haskell-cabal-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
+           ;;(define-key haskell-cabal-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
+           ;;(define-key haskell-cabal-mode-map (kbd "C-c c") 'haskell-process-cabal)
 
-  (custom-set-variables  '(haskell-process-suggest-remove-import-lines t)
-                         '(haskell-process-auto-import-loaded-modules t)
-                         '(haskell-process-log t))
+           (custom-set-variables  '(haskell-process-suggest-remove-import-lines t)
+                                  '(haskell-process-auto-import-loaded-modules t)
+                                  '(haskell-process-log t))
 
-  ;;(custom-set-variables  '(haskell-process-type 'ghci))
-  (custom-set-variables  '(haskell-process-type 'cabal-repl)))
+           ;;(custom-set-variables  '(haskell-process-type 'ghci))
+           (custom-set-variables  '(haskell-process-type 'cabal-repl))))
 
 (defun my-rust ()
   (autoload 'rust-mode "rust-mode" nil t)
   (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode)))
 
-(defun my-ocaml ()
-  (require 'ocp-indent)
-  (setq opam-share
-        (substring
-         (shell-command-to-string "opam config var share 2> /dev/null") 0 -1))
+(quote (defun my-ocaml ()
+           (require 'ocp-indent)
+           (setq opam-share
+                 (substring
+                  (shell-command-to-string "opam config var share 2> /dev/null") 0 -1))
 
-  (autoload 'utop "utop" "Toplevel for OCaml" t)
-  (setq utop-command "opam config exec \"utop -emacs\"")
-  (add-to-list 'auto-mode-alist '("\\.ml[ily]?$" . tuareg-mode))
+           (autoload 'utop "utop" "Toplevel for OCaml" t)
+           (setq utop-command "opam config exec \"utop -emacs\"")
+           (add-to-list 'auto-mode-alist '("\\.ml[ily]?$" . tuareg-mode))
 
-  (autoload 'tuareg-mode "tuareg" "Major mode for editing Caml code" t)
-  ;;(autoload 'camldebug "camldebug" "Run the Caml debugger" t)
-  (autoload 'utop-setup-ocaml-buffer "utop" "Toplevel for OCaml" t)
-  (autoload 'merlin-mode "merlin" "Merlin mode" t)
-  (add-hook 'tuareg-mode-hook 'merlin-mode)
-  (add-hook 'caml-mode-hook 'merlin-mode)
-  (add-hook 'tuareg-mode-hook 'utop-setup-ocaml-buffer)
+           (autoload 'tuareg-mode "tuareg" "Major mode for editing Caml code" t)
+           ;;(autoload 'camldebug "camldebug" "Run the Caml debugger" t)
+           (autoload 'utop-setup-ocaml-buffer "utop" "Toplevel for OCaml" t)
+           (autoload 'merlin-mode "merlin" "Merlin mode" t)
+           (add-hook 'tuareg-mode-hook 'merlin-mode)
+           (add-hook 'caml-mode-hook 'merlin-mode)
+           (add-hook 'tuareg-mode-hook 'utop-setup-ocaml-buffer)
 
-  (setq merlin-use-auto-complete-mode 'easy)
-  (setq merlin-command 'opam)
+           (setq merlin-use-auto-complete-mode 'easy)
+           (setq merlin-command 'opam)
 
-  (add-hook 'tuareg-mode-hook
-            (lambda ()
-              (define-key tuareg-mode-map (kbd "C-c C-s" 'tuareg-run-caml)))))
+           (add-hook 'tuareg-mode-hook
+                     (lambda ()
+                       (define-key tuareg-mode-map (kbd "C-c C-s" 'tuareg-run-caml))))))
 
-(defun my-js ()
-  ;; I DON'T DO JS...
-  '(js3-auto-indent-p t)
-  '(js3-enter-indent-newline t)
-  '(js3-indent-on-enter-key t))
+(quote (defun my-js ()
+           ;; I DON'T DO JS...
+           (js3-auto-indent-p t)
+           (js3-enter-indent-newline t)
+           (js3-indent-on-enter-key t)))
 
 (defun my-shell ()
   (defun my-set-shell-to-bash ()
@@ -994,6 +996,17 @@
         "E" 'paxedit-macro-expand-replace
         "T" 'paxedit-transpose-forward)))
 
+(defun my-clojure-custom ()
+    (require 'clojure-mode-extra-font-locking)
+    (require 'clj-refactor)
+    (eval-after-load 'flycheck '(flycheck-clojure-setup))
+    (clj-refactor-mode t)
+    (flycheck-mode t)
+    (cljr-add-keybindings-with-prefix "C-r")
+    (local-set-key (kbd "C-c C-a") 'align-cljlet)
+    ;; remove the cider bind that overshadows the git messenger bind
+    (local-unset-key (kbd "C-c M-c")))
+
 (defun my-lisp ()
   (dolist (h '(clojure-mode-hook
                clojurescript-mode-hook
@@ -1005,32 +1018,15 @@
                geiser-repl-mode-hook
                scheme-mode-hook
                racket-mode-hook))
-    (add-hook h (lambda () (my-lisp-minor-mode t))))
+    (add-hook h 'my-lisp-minor-mode))
 
-  (add-hook 'clojure-mode-hook 'my-clojure-custom)
-
-  (defun my-clojure-custom ()
-    (require 'clojure-mode-extra-font-locking)
-    (require 'clj-refactor)
-    (eval-after-load 'flycheck '(flycheck-clojure-setup))
-    (clj-refactor-mode t)
-    (flycheck-mode t)
-    (cljr-add-keybindings-with-prefix "C-r")
-    (local-set-key (kbd "C-c C-a") 'align-cljlet)
-    ;; remove the cider bind that overshadows the git messenger bind
-    (local-unset-key (kbd "C-c M-c")))
+  (dolist (h '(clojure-mode-hook
+               clojurescript-mode-hook))
+    (add-hook h 'my-clojure-custom))
 
   ;;--- cider
   (add-hook 'cider-mode-hook 'company-mode)
   (add-hook 'cider-repl-mode-hook 'company-mode)
-
-  ;; (add-hook 'cider-mode-hook 'ac-cider-setup)
-  ;; (add-hook 'cider-repl-mode-hook 'ac-cider-setup)
-
-  ;; (eval-after-load "auto-complete"
-  ;;   '(progn
-  ;;      (add-to-list 'ac-modes 'cider-mode)
-  ;;      (add-to-list 'ac-modes 'cider-repl-mode)))
 
   (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
   (setq cider-repl-use-clojure-font-lock t)
@@ -1038,18 +1034,9 @@
 
   ;;--- typed clojure mode
   (add-hook 'clojure-mode-hook 'typed-clojure-mode)
-
-  (defun my-insert-quote-char ()
-    (interactive)
-    (insert-char #x0027))            ; codepoint for ' <- simple quote
-
-  (defun my-insert-parentheses ()
-    (interactive)
-    (insert-char 40))
+                                        ; codepoint for ' <- simple quote
 
   (setq nrepl-hide-special-buffers t)
-  ;;(setq cider-popup-stacktraces nil)
-  ;;(setq cider-repl-popup-stacktraces t)
   (setq nrepl-popup-stacktraces-in-repl t)
   (setq nrepl-history-file "~/nrepl-history.dat"))
 
@@ -1176,9 +1163,7 @@
       (with-current-buffer buf
         (narrow-to-region start end)
         (switch-to-buffer buf))))
-  (global-set-key (kbd "C-x n i") 'myfn-narrow-indirect)
-  ;; ---
-  )
+  (global-set-key (kbd "C-x n i") 'myfn-narrow-indirect))
 
 (defmacro my-wordy (&rest prog)
   (cons 'progn
@@ -1234,26 +1219,23 @@
    (my-git-messenger)
    (my-git-timemachine)
    (my-yasnippet)
-   ;; (my-workgroups2)
+   ;;(my-workgroups2)
    (my-dired+)
-   ;; (my-golden-ratio)
-   ;; (my-color-theme)
+   ;;(my-golden-ratio)
+   ;;(my-color-theme)
    (my-fancy-narrow)
    (my-android)
    (my-fill-column-indicator)
-   ;; -- configuring language specific packages
    (my-emacs-refactor)
    (my-slime)
-   (my-racket)
-   (my-chickenscheme)
-   (my-haskell)
+   ;;(my-racket)
+   ;;(my-chickenscheme)
+   ;;(my-haskell)
    (my-rust)
    (my-ruby)
-   (my-ocaml)
-   (my-js)
+   ;;(my-ocaml)
+   ;;(my-js)
    (my-shell)
-   (my-ruby)
-   (my-java)
    (my-lisp)
    (my-csharp)
    (my-markdown)
@@ -1261,7 +1243,7 @@
    (my-os-custom)
    ;; other
    (my-deft)
-   (my-highlight-tail)
+   ;;(my-highlight-tail)
    (my-funcs)
    (my-modeline)
    (my-gnus)
