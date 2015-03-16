@@ -763,7 +763,10 @@
   (add-hook 'dired-mode-hook 'diff-hl-dired-mode))
 
 (defun my-dired+ ()
-  (require 'dired+))
+  (require 'dired+)
+  (quote (when (eq system-type 'darwin)
+             (require 'ls-lisp)
+             (setq ls-lisp-use-insert-directory-program nil))))
 
 (defun my-vlf ()
   (require 'vlf-integrate)
@@ -834,6 +837,10 @@
            (require 'go-mode-load)
            (add-hook 'before-save-hook 'gofmt-before-save)
            (add-hook 'go-mode-hook 'my-go-customs)))
+
+(defun my-c++ ()
+  (add-hook 'c++-mode (lambda ()
+                        (local-set-key (kbd "C-c C-u") 'undo-tree-visualize))))
 
 (quote (defun my-haskell ()
            ;; you need...
@@ -1113,14 +1120,9 @@
     (add-to-list 'ido-ignore-files "\\.DS_Store"))
 
   (defun my-windows-custom ()
-    (setq everything-use-ftp t)
-    (setq everything-host "127.0.0.1")
-    (setq everything-port 22222)
-    (setq everything-user "emacs")
     ;; that should not be on github but... oh well... please don't try to
     ;; find me t_t...
-    (setq everything-pass "I have made a ceaseless effort not to ridicule, not to bewail, not to scorn human actions, but to understand them.")
-    (global-set-key (kbd "C-x f") 'everything-find-file))
+    )
 
   (defun my-linux-custom ()
     (setq dired-listing-switches "-lha --group-directories-first")
@@ -1227,6 +1229,7 @@
    (my-android)
    (my-fill-column-indicator)
    (my-emacs-refactor)
+   (my-c++)
    (my-slime)
    ;;(my-racket)
    ;;(my-chickenscheme)
