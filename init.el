@@ -1007,7 +1007,8 @@
     (add-to-list 'ido-ignore-files "\\.DS_Store"))
 
   (defun my-windows-custom ()
-    (server-start))
+    (server-start)
+    (switch-to-buffer "*Messages*"))
 
   (defun my-linux-custom ()
     (setq dired-listing-switches "-lha --group-directories-first")
