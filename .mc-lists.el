@@ -3,6 +3,7 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        bbyac-expand-symbols
         evil-emacs-state
         evil-execute-in-god-state
         evil-next-line
