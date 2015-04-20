@@ -181,6 +181,7 @@
 			evil
                         evil-terminal-cursor-changer
                         evil-numbers
+                        evil-surround
 			god-mode
 			evil-god-state
                         ;; --- completion
@@ -406,6 +407,10 @@
 (defun my-evil-numbers ()
   (global-set-key (kbd "C-c +") 'evil-numbers/inc-at-pt)
   (global-set-key (kbd "C-c -") 'evil-numbers/dec-at-pt))
+
+(defun my-evil-surround ()
+  (require 'evil-surround)
+  (global-evil-surround-mode 1))
 
 (defun my-modeline ()
   (require 'rich-minority)
@@ -1091,6 +1096,7 @@
    (my-discover-my-major)
    (my-evil)
    (my-evil-numbers)
+   (my-evil-surround)
    (my-ace-jump)
    (my-ace-jump-buffer)
    (my-help-swoop)
