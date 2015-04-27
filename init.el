@@ -183,6 +183,7 @@
 			evil
                         evil-terminal-cursor-changer
                         evil-numbers
+                        evil-surround
 			god-mode
 			evil-god-state
                         ;; --- completion
@@ -408,6 +409,10 @@
 (defun my-evil-numbers ()
   (global-set-key (kbd "C-c +") 'evil-numbers/inc-at-pt)
   (global-set-key (kbd "C-c -") 'evil-numbers/dec-at-pt))
+
+(defun my-evil-surround ()
+  (require 'evil-surround)
+  (global-evil-surround-mode 1))
 
 (defun my-modeline ()
   (require 'rich-minority)
@@ -873,6 +878,7 @@
       (smartparens-strict-mode t)
       (paxedit-mode t)
       (rainbow-delimiters-mode t)
+      (hs-minor-mode t)
       (evil-define-key 'normal my-lisp-minor-mode-map
         (kbd "C-f") 'sp-forward-sexp
         "K" 'paxedit-kill
@@ -929,6 +935,19 @@
   (setq nrepl-hide-special-buffers t)
   (setq nrepl-popup-stacktraces-in-repl t)
   (setq nrepl-history-file "~/nrepl-history.dat"))
+
+(defun my-rtags ()
+  (cond
+   ((string= system-name "W010391306024")
+    (progn
+      ))
+   ((string= system-name "localhost.localdomain")
+    (progn
+      (require 'cl-lib)
+      (add-to-list 'load-path "~/rtags/src")
+      (require 'rtags)
+      (rtags-enable-standard-keybindings c-mode-base-map)
+      (require 'company-rtags)))))
 
 (defun my-racket ()
   (add-to-list 'auto-mode-alist '("\\.rkt$" . racket-mode))
@@ -1004,7 +1023,7 @@
     (global-set-key (kbd "C-c w") 'my-swap-meta-and-super)
     ;; Work around a bug on OS X where system-name is a fully qualified
     ;; domain name
-    (setq system-name (car (split-string system-name "\\.")))
+    ;; (setq system-name (car (split-string system-name "\\.")))
     ;; Ignore .DS_Store files with ido mode
     (add-to-list 'ido-ignore-files "\\.DS_Store"))
 
@@ -1079,6 +1098,7 @@
    (my-discover-my-major)
    (my-evil)
    (my-evil-numbers)
+   (my-evil-surround)
    (my-ace-jump)
    (my-ace-jump-buffer)
    (my-help-swoop)
@@ -1115,6 +1135,7 @@
    (my-emacs-refactor)
    (my-c++)
    (my-slime)
+   (my-rtags)
    (my-racket)
    (my-rust)
    (my-ruby)
