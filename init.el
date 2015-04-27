@@ -155,6 +155,8 @@
 	savehist-file (concat my-temp-dir "savehist"))
   (savehist-mode t)
 
+  (require 'midnight)
+
   ;; C-x r j E -- to edit my config file
   (set-register ?E `(file . ,user-init-file)))
 
