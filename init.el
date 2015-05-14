@@ -1029,7 +1029,9 @@
     ;; domain name
     ;; (setq system-name (car (split-string system-name "\\.")))
     ;; Ignore .DS_Store files with ido mode
-    (add-to-list 'ido-ignore-files "\\.DS_Store"))
+    (add-to-list 'ido-ignore-files "\\.DS_Store")
+    (server-start)
+    (switch-to-buffer "*Messages*"))
 
   (defun my-windows-custom ()
     (server-start)
