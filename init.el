@@ -981,7 +981,7 @@
   (setq slime-contribs '(slime-fancy slime-banner))
   (cond
    ((string= system-name "localhost.localdomain")
-    (setq inferior-lisp-program "/usr/bin/sbcl")))
+    (setq inferior-lisp-program "/usr/local/bin/sbcl")))
   (add-hook 'slime-mode-hook 'set-up-slime-ac)
   (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
   (eval-after-load "auto-complete"
