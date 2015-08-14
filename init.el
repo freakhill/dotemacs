@@ -5,7 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
  '(custom-enabled-themes (quote (tango-dark)))
- '(custom-safe-themes (quote ("f0b0710b7e1260ead8f7808b3ee13c3bb38d45564e369cbe15fc6d312f0cd7a0" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "e56f1b1c1daec5dbddc50abd00fcd00f6ce4079f4a7f66052cf16d96412a09a9" "b71d5d49d0b9611c0afce5c6237aacab4f1775b74e513d8ba36ab67dfab35e5a" "756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e" "cdc7555f0b34ed32eb510be295b6b967526dd8060e5d04ff0dce719af789f8e5" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" default)))
+ '(custom-safe-themes (quote ("26614652a4b3515b4bbbb9828d71e206cc249b67c9142c06239ed3418eff95e2" "f0b0710b7e1260ead8f7808b3ee13c3bb38d45564e369cbe15fc6d312f0cd7a0" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "e56f1b1c1daec5dbddc50abd00fcd00f6ce4079f4a7f66052cf16d96412a09a9" "b71d5d49d0b9611c0afce5c6237aacab4f1775b74e513d8ba36ab67dfab35e5a" "756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e" "cdc7555f0b34ed32eb510be295b6b967526dd8060e5d04ff0dce719af789f8e5" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" default)))
  '(flycheck-display-errors-function (function flycheck-pos-tip-error-messages))
  '(global-ede-mode t)
  '(haskell-process-auto-import-loaded-modules t)
@@ -22,10 +22,10 @@
  ;; If there is more than one, they won't work right.
  '(diff-added ((t (:foreground "Green"))))
  '(diff-removed ((t (:foreground "Red"))))
- '(ediff-even-diff-A ((((class color) (background dark)) (:background "dark green"))))
- '(ediff-even-diff-B ((((class color) (background dark)) (:background "dark red"))))
- '(ediff-odd-diff-A ((((class color) (background dark)) (:background "dark green"))))
- '(ediff-odd-diff-B ((((class color) (background dark)) (:background "dark red"))))
+ '(ediff-even-diff-A ((((class color) (background dark)) (:background "dark green"))) t)
+ '(ediff-even-diff-B ((((class color) (background dark)) (:background "dark red"))) t)
+ '(ediff-odd-diff-A ((((class color) (background dark)) (:background "dark green"))) t)
+ '(ediff-odd-diff-B ((((class color) (background dark)) (:background "dark red"))) t)
  '(mumamo-background-chunk-major ((((class color) (background dark)) (:background "black"))) t)
  '(mumamo-background-chunk-submode1 ((((class color) (background dark)) (:background "black"))) t)
  '(shm-current-face ((t (:background "green" :foreground "black"))) t)
@@ -187,12 +187,12 @@
 			god-mode
 			evil-god-state
                         ;; --- completion
-                        auto-complete
+                        ;;auto-complete
                         company
                         browse-kill-ring
                         bbyac
-                        yasnippet
-                        auto-yasnippet
+                        ;;yasnippet
+                        ;;auto-yasnippet
                         guide-key
                         ;; --- flycheck
                         flycheck
@@ -231,6 +231,7 @@
                         ac-slime
                         slime-repl
                         ;; --- clojure
+                        slamhound
                         clojure-mode
                         clojure-mode-extra-font-locking
                         cider
@@ -241,7 +242,7 @@
                         cljdoc
                         align-cljlet
                         ;; --- elisp
-			auto-compile
+			;;auto-compile
                         ;; --- racket
                         racket-mode
                         ;; --- rust
@@ -268,6 +269,7 @@
                         fill-column-indicator ;;
 			multiple-cursors      ;;
                         restclient            ;; rest client
+                        json-reformat         ;; json reformatter
                         recentf-ext           ;;
                         buffer-move           ;;
 			expand-region         ;;
@@ -934,7 +936,8 @@
 
   (setq nrepl-hide-special-buffers t)
   (setq nrepl-popup-stacktraces-in-repl t)
-  (setq nrepl-history-file "~/nrepl-history.dat"))
+  (setq nrepl-history-file "~/nrepl-history.dat")
+  (add-to-list 'auto-mode-alist '("\\.boot$" . clojure-mode)))
 
 (defun my-rtags ()
   (cond
@@ -1107,10 +1110,10 @@
    (my-windmove)
    (my-ibuffer)
    (my-hippie)
-   (my-auto-complete)
+   ;;(my-auto-complete)
    (my-bbyac)
    (my-popwin)
-   (my-auto-compile)
+   ;;(my-auto-compile)
    (my-buffer-move)
    (my-mouse)
    (my-window-numbering)
