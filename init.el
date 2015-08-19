@@ -943,8 +943,14 @@
 (defun my-rtags ()
   (cond
    ((string= system-name "W010391306024")
+    (progn))
+   ((string= system-name "i022311303784m.local")
     (progn
-      ))
+      (require 'cl-lib)
+      (add-to-list 'load-path "~/rtags/src")
+      (require 'rtags)
+      (rtags-enable-standard-keybindings c-mode-base-map)
+      (require 'company-rtags)))
    ((string= system-name "localhost.localdomain")
     (progn
       (require 'cl-lib)
