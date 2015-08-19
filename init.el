@@ -25,10 +25,10 @@
  ;; If there is more than one, they won't work right.
  '(diff-added ((t (:foreground "Green"))))
  '(diff-removed ((t (:foreground "Red"))))
- '(ediff-even-diff-A ((((class color) (background dark)) (:background "dark green"))))
- '(ediff-even-diff-B ((((class color) (background dark)) (:background "dark red"))))
- '(ediff-odd-diff-A ((((class color) (background dark)) (:background "dark green"))))
- '(ediff-odd-diff-B ((((class color) (background dark)) (:background "dark red"))))
+ '(ediff-even-diff-A ((((class color) (background dark)) (:background "dark green"))) t)
+ '(ediff-even-diff-B ((((class color) (background dark)) (:background "dark red"))) t)
+ '(ediff-odd-diff-A ((((class color) (background dark)) (:background "dark green"))) t)
+ '(ediff-odd-diff-B ((((class color) (background dark)) (:background "dark red"))) t)
  '(mumamo-background-chunk-major ((((class color) (background dark)) (:background "black"))) t)
  '(mumamo-background-chunk-submode1 ((((class color) (background dark)) (:background "black"))) t)
  '(shm-current-face ((t (:background "green" :foreground "black"))) t)
@@ -190,12 +190,12 @@
 			god-mode
 			evil-god-state
                         ;; --- completion
-                        auto-complete
+                        ;;auto-complete
                         company
                         browse-kill-ring
                         bbyac
-                        yasnippet
-                        auto-yasnippet
+                        ;;yasnippet
+                        ;;auto-yasnippet
                         guide-key
                         ;; --- flycheck
                         flycheck
@@ -234,6 +234,7 @@
                         ac-slime
                         slime-repl
                         ;; --- clojure
+                        slamhound
                         clojure-mode
                         clojure-mode-extra-font-locking
                         cider
@@ -244,7 +245,7 @@
                         cljdoc
                         align-cljlet
                         ;; --- elisp
-			auto-compile
+			;;auto-compile
                         ;; --- racket
                         racket-mode
                         ;; --- rust
@@ -271,6 +272,7 @@
                         fill-column-indicator ;;
 			multiple-cursors      ;;
                         restclient            ;; rest client
+                        json-reformat         ;; json reformatter
                         recentf-ext           ;;
                         buffer-move           ;;
 			expand-region         ;;
@@ -938,7 +940,8 @@
 
   (setq nrepl-hide-special-buffers t)
   (setq nrepl-popup-stacktraces-in-repl t)
-  (setq nrepl-history-file "~/nrepl-history.dat"))
+  (setq nrepl-history-file "~/nrepl-history.dat")
+  (add-to-list 'auto-mode-alist '("\\.boot$" . clojure-mode)))
 
 (defun my-rtags ()
   (cond
@@ -1119,10 +1122,10 @@
    (my-windmove)
    (my-ibuffer)
    (my-hippie)
-   (my-auto-complete)
+   ;;(my-auto-complete)
    (my-bbyac)
    (my-popwin)
-   (my-auto-compile)
+   ;;(my-auto-compile)
    (my-buffer-move)
    (my-mouse)
    (my-window-numbering)
