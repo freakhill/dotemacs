@@ -1047,7 +1047,7 @@
     (switch-to-buffer "*Messages*"))
 
   (defun my-linux-custom ()
-    (server-start)
+    ;; (server-start) ;; should use emacs --daemon
     (switch-to-buffer "*Messages*")
     (setq dired-listing-switches "-lha --group-directories-first")
     (my-set-shell-to-bash))
