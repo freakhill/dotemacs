@@ -258,6 +258,7 @@
                         ;; --- markdown
 			markdown-mode
                         ;; --- various stuff
+                        dockerfile-mode       ;;
 			smex                  ;;
                         discover-my-major     ;;
                         ido-ubiquitous        ;;
