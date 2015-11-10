@@ -258,7 +258,9 @@
                         ;; --- markdown
 			markdown-mode
                         ;; --- various stuff
+                        dockerfile-mode       ;;
 			smex                  ;;
+                        shell-pop             ;; display and hide a shell
                         discover-my-major     ;;
                         ido-ubiquitous        ;;
                         flx-ido               ;;
@@ -422,8 +424,8 @@
 (defun my-modeline ()
   (require 'rich-minority)
   (require 'smart-mode-line)
-  (sml/setup)
-  (sml/apply-theme 'powerline)
+  ;;(sml/setup)
+  ;;(sml/apply-theme 'powerline)
   (setq sml/shorten-modes t
         sml/shorten-directory t)
   (add-to-list 'rm-blacklist '("SkelC" "UndoTree" "Projectile.*" "AC" "SP" "SP/s" "ht"))
@@ -1007,6 +1009,9 @@
   (add-hook 'csharp-mode-hook 'omnisharp-mode)
   (eval-after-load 'company-css  '(add-to-list 'company-backends 'company-omnisharp)))
 
+(defun my-shell-pop ()
+  (global-set-key (kbd "<f9>") 'shell-pop))
+
 (defun my-os-custom ()
 
   ;;--- set firefox as browser
@@ -1043,7 +1048,6 @@
     ;; (setq system-name (car (split-string system-name "\\.")))
     ;; Ignore .DS_Store files with ido mode
     (add-to-list 'ido-ignore-files "\\.DS_Store")
-    (server-start)
     (switch-to-buffer "*Messages*"))
 
   (defun my-windows-custom ()
@@ -1051,6 +1055,8 @@
     (switch-to-buffer "*Messages*"))
 
   (defun my-linux-custom ()
+    ;; (server-start) ;; should use emacs --daemon
+    (switch-to-buffer "*Messages*")
     (setq dired-listing-switches "-lha --group-directories-first")
     (my-set-shell-to-bash))
 
@@ -1165,6 +1171,7 @@
    ;; -- os specific customization
    (my-os-custom)
    ;; other
+   (my-shell-pop)
    (my-deft)
    (my-funcs)
    (my-modeline)
