@@ -258,7 +258,9 @@
                         ;; --- markdown
 			markdown-mode
                         ;; --- various stuff
+                        php-mode              ;;
                         dockerfile-mode       ;;
+                        lentic                ;; buffer lenses
 			smex                  ;;
                         shell-pop             ;; display and hide a shell
                         discover-my-major     ;;
@@ -502,7 +504,7 @@
 
 (defun my-expand-region ()
   ;;(require 'expand-region)
-  (global-set-key (kbd "C-SPC") 'er/expand-region))
+  (global-set-key (kbd "C-q") 'er/expand-region))
 
 (defun my-nyan ()
   (nyan-mode t))
