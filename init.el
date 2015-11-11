@@ -53,6 +53,7 @@
 
 (defun my-basic-init ()
   ;;(desktop-save-mode t)
+  (setq buffer-file-coding-system 'utf-8-unix)
   (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
   (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
   (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
@@ -1162,3 +1163,5 @@
    (my-auto-package-update)))
 
 (my-init)
+(put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
