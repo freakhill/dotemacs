@@ -971,12 +971,16 @@
   (cond
    ((string= system-name "W010391306024")
     (progn
-      (setq racket-program "c:\Program Files\Racket\Racket.exe"
-            raco-program "c:\Program Files\Racket\raco.exe")))
+      (setq racket-racket-program "c:\Program Files\Racket\Racket.exe"
+            racket-raco-program "c:\Program Files\Racket\raco.exe")))
+   ((string= system-name "i022311303784m.local")
+    (progn
+      (setq racket-racket-program "/usr/local/bin/racket"
+            racket-raco-program "/usr/local/bin/raco")))
    ((string= system-name "localhost.localdomain")
     (progn
-      (setq racket-program "/usr/local/bin/racket"
-            raco-program "/usr/local/bin/raco")))))
+      (setq racket-racket-program "/usr/local/bin/racket"
+            racket-raco-program "/usr/local/bin/raco")))))
 
 (defun my-fancy-narrow ()
   (fancy-narrow-mode))
