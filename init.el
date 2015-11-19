@@ -977,10 +977,10 @@
     (progn
       (setq racket-racket-program "/usr/local/bin/racket"
             racket-raco-program "/usr/local/bin/raco")))
-   ((string= system-name "localhost.localdomain")
+   ((string= system-name "jojovm")
     (progn
-      (setq racket-racket-program "/usr/local/bin/racket"
-            racket-raco-program "/usr/local/bin/raco")))))
+      (setq racket-racket-program "/usr/bin/racket"
+            racket-raco-program "/usr/bin/raco")))))
 
 (defun my-fancy-narrow ()
   (fancy-narrow-mode))
