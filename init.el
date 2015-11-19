@@ -1,3 +1,4 @@
+; -*- coding: utf8-unix -*-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -892,6 +893,7 @@
       (hs-minor-mode t)
       (evil-define-key 'normal my-lisp-minor-mode-map
         (kbd "C-f") 'sp-forward-sexp
+        (kbd "C-c I") 'slamhound
         "K" 'paxedit-kill
         "Y" 'paxedit-copy
         "S" 'paxedit-context-new-statement
@@ -932,6 +934,7 @@
   ;;--- cider
   (add-hook 'cider-mode-hook #'company-mode)
   (add-hook 'cider-repl-mode-hook #'company-mode)
+  (add-hook 'cider-repl-mode-hook #'subword-mode)
 
   (add-hook 'cider-mode-hook #'eldoc-mode)
   (setq cider-repl-use-clojure-font-lock t)
@@ -972,8 +975,8 @@
   (cond
    ((string= system-name "W010391306024")
     (progn
-      (setq racket-racket-program "c:\Program Files\Racket\Racket.exe"
-            racket-raco-program "c:\Program Files\Racket\raco.exe")))
+      (setq racket-racket-program "d:/Racket/Racket.exe"
+            racket-raco-program "d:/Racket/raco.exe")))
    ((string= system-name "i022311303784m.local")
     (progn
       (setq racket-racket-program "/usr/local/bin/racket"
@@ -1070,6 +1073,9 @@
    ((string-match "linux" system-configuration)
     (message "customizing GNU Emacs for Linux")
     (my-linux-custom))
+   ((string-match "i686-pc-mingw32" system-configuration)
+    (message "customizing GNU Emacs for Win 7")
+    (my-windows-custom))
    ((string-match "nt6" system-configuration)
     (message "customizing GNU Emacs for Win 7")
     (my-windows-custom))))
