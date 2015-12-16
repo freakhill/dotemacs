@@ -1,4 +1,4 @@
-; -*- coding: utf8-unix -*-
+; -*- coding: utf-8-unix -*-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -54,7 +54,6 @@
 
 (defun my-basic-init ()
   ;;(desktop-save-mode t)
-  (setq buffer-file-coding-system 'utf-8-unix)
   (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
   (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
   (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
@@ -127,14 +126,25 @@
 	query-replace-highlight t
 	next-error-highlight t
 	next-error-highlight-no-select t)
-  ;;set all coding systems to utf-8
-  (set-language-environment 'utf-8)
-  (set-default-coding-systems 'utf-8)
+  ;;set all coding systems to utf-8-unix
+  (prefer-coding-system 'utf-8)
+  (setq coding-system-for-read 'utf-8)
+  (setq coding-system-for-write 'utf-8)
+  (set-language-environment 'UTF-8) ; prefer utf-8 for language settings
   (setq locale-coding-system 'utf-8)
   (set-terminal-coding-system 'utf-8)
   (set-keyboard-coding-system 'utf-8)
   (set-selection-coding-system 'utf-8)
-  (prefer-coding-system 'utf-8)
+  (set-default-coding-systems 'utf-8)
+  (setq default-buffer-file-coding-system 'utf-8)
+  (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
+  (prefer-coding-system       'utf-8)
+  (setq buffer-file-coding-system 'utf-8-unix)
+  (setq default-file-name-coding-system 'utf-8-unix)
+  (setq default-keyboard-coding-system 'utf-8-unix)
+  (setq default-process-coding-system '(utf-8-unix . utf-8-unix))
+  (setq default-sendmail-coding-system 'utf-8-unix)
+  (setq default-terminal-coding-system 'utf-8-unix)
 
   (set-default 'indent-tabs-mode nil)
   (auto-compression-mode t)
@@ -161,6 +171,8 @@
   (savehist-mode t)
 
   (require 'midnight)
+  (require 'saveplace)
+  (setq-default save-place t)
 
   ;; C-x r j E -- to edit my config file
   (set-register ?E `(file . ,user-init-file)))
@@ -242,7 +254,7 @@
                         cider
                         cider-profile
                         clj-refactor
-                        squiggly-clojure
+                        ;;squiggly-clojure
                         typed-clojure-mode
                         cljdoc
                         align-cljlet
@@ -262,7 +274,7 @@
                         ;; --- various stuff
                         php-mode              ;;
                         dockerfile-mode       ;;
-                        lentic                ;; buffer lenses
+                        ;;lentic                ;; buffer lenses
 			smex                  ;;
                         shell-pop             ;; display and hide a shell
                         discover-my-major     ;;
@@ -906,7 +918,7 @@
     (require 'clojure-mode-extra-font-locking)
     (require 'clj-refactor)
     (require 'icomplete) ;; for cider minibuffer completion
-    (eval-after-load 'flycheck '(flycheck-clojure-setup))
+    ;;(eval-after-load 'flycheck '(flycheck-clojure-setup))
     (clj-refactor-mode t)
     (flycheck-mode t)
     (cljr-add-keybindings-with-prefix "C-r")
