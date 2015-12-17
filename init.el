@@ -1179,3 +1179,11 @@
    (my-auto-package-update)))
 
 (my-init)
+
+
+;;BEGIN-RACKET-SCRIBBLE-EMACS-INSTALL
+;; Updated: 2015-11-20T03:30:30Z
+(condition-case err
+    (require 'scribble "/Users/jp11629/Library/Racket/planet/300/6.2.1/cache/neil/scribble-emacs.plt/1/4/scribble")
+  (error (message "Could not load Scribble Emacs: %s" err)))
+;;END-RACKET-SCRIBBLE-EMACS-INSTALL
