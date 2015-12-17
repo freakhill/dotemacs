@@ -4,6 +4,8 @@
 (setq mc/cmds-to-run-for-all
       '(
         bbyac-expand-symbols
+        evil-backward-char
+        evil-change
         evil-emacs-state
         evil-execute-in-god-state
         evil-next-line

@@ -1,3 +1,4 @@
+; -*- coding: utf-8-unix -*-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -53,6 +54,8 @@
 
 (defun my-basic-init ()
   ;;(desktop-save-mode t)
+  (put 'upcase-region 'disabled nil)
+  (put 'downcase-region 'disabled nil)
   (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
   (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
   (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
@@ -125,14 +128,25 @@
 	query-replace-highlight t
 	next-error-highlight t
 	next-error-highlight-no-select t)
-  ;;set all coding systems to utf-8
-  (set-language-environment 'utf-8)
-  (set-default-coding-systems 'utf-8)
+  ;;set all coding systems to utf-8-unix
+  (prefer-coding-system 'utf-8)
+  (setq coding-system-for-read 'utf-8)
+  (setq coding-system-for-write 'utf-8)
+  (set-language-environment 'UTF-8) ; prefer utf-8 for language settings
   (setq locale-coding-system 'utf-8)
   (set-terminal-coding-system 'utf-8)
   (set-keyboard-coding-system 'utf-8)
   (set-selection-coding-system 'utf-8)
-  (prefer-coding-system 'utf-8)
+  (set-default-coding-systems 'utf-8)
+  (setq default-buffer-file-coding-system 'utf-8)
+  (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
+  (prefer-coding-system       'utf-8)
+  (setq buffer-file-coding-system 'utf-8-unix)
+  (setq default-file-name-coding-system 'utf-8-unix)
+  (setq default-keyboard-coding-system 'utf-8-unix)
+  (setq default-process-coding-system '(utf-8-unix . utf-8-unix))
+  (setq default-sendmail-coding-system 'utf-8-unix)
+  (setq default-terminal-coding-system 'utf-8-unix)
 
   (set-default 'indent-tabs-mode nil)
   (auto-compression-mode t)
@@ -159,6 +173,8 @@
   (savehist-mode t)
 
   (require 'midnight)
+  (require 'saveplace)
+  (setq-default save-place t)
 
   ;; C-x r j E -- to edit my config file
   (set-register ?E `(file . ,user-init-file)))
@@ -240,7 +256,7 @@
                         cider
                         cider-profile
                         clj-refactor
-                        squiggly-clojure
+                        ;;squiggly-clojure
                         typed-clojure-mode
                         cljdoc
                         align-cljlet
@@ -258,7 +274,9 @@
                         ;; --- markdown
 			markdown-mode
                         ;; --- various stuff
+                        php-mode              ;;
                         dockerfile-mode       ;;
+                        ;;lentic                ;; buffer lenses
 			smex                  ;;
                         shell-pop             ;; display and hide a shell
                         discover-my-major     ;;
@@ -502,7 +520,7 @@
 
 (defun my-expand-region ()
   ;;(require 'expand-region)
-  (global-set-key (kbd "C-SPC") 'er/expand-region))
+  (global-set-key (kbd "C-q") 'er/expand-region))
 
 (defun my-nyan ()
   (nyan-mode t))
@@ -889,6 +907,7 @@
       (hs-minor-mode t)
       (evil-define-key 'normal my-lisp-minor-mode-map
         (kbd "C-f") 'sp-forward-sexp
+        (kbd "C-c I") 'slamhound
         "K" 'paxedit-kill
         "Y" 'paxedit-copy
         "S" 'paxedit-context-new-statement
@@ -901,7 +920,7 @@
     (require 'clojure-mode-extra-font-locking)
     (require 'clj-refactor)
     (require 'icomplete) ;; for cider minibuffer completion
-    (eval-after-load 'flycheck '(flycheck-clojure-setup))
+    ;;(eval-after-load 'flycheck '(flycheck-clojure-setup))
     (clj-refactor-mode t)
     (flycheck-mode t)
     (cljr-add-keybindings-with-prefix "C-r")
@@ -929,6 +948,7 @@
   ;;--- cider
   (add-hook 'cider-mode-hook #'company-mode)
   (add-hook 'cider-repl-mode-hook #'company-mode)
+  (add-hook 'cider-repl-mode-hook #'subword-mode)
 
   (add-hook 'cider-mode-hook #'eldoc-mode)
   (setq cider-repl-use-clojure-font-lock t)
@@ -969,16 +989,16 @@
   (cond
    ((string= system-name "W010391306024")
     (progn
-      (setq racket-racket-program "c:\Program Files\Racket\Racket.exe"
-            racket-raco-program "c:\Program Files\Racket\raco.exe")))
+      (setq racket-racket-program "d:/Racket/Racket.exe"
+            racket-raco-program "d:/Racket/raco.exe")))
    ((string= system-name "i022311303784m.local")
     (progn
       (setq racket-racket-program "/usr/local/bin/racket"
             racket-raco-program "/usr/local/bin/raco")))
-   ((string= system-name "localhost.localdomain")
+   ((string= system-name "jojovm")
     (progn
-      (setq racket-racket-program "/usr/local/bin/racket"
-            racket-raco-program "/usr/local/bin/raco")))))
+      (setq racket-racket-program "/usr/bin/racket"
+            racket-raco-program "/usr/bin/raco")))))
 
 (defun my-fancy-narrow ()
   (fancy-narrow-mode))
@@ -1048,17 +1068,23 @@
     ;; (setq system-name (car (split-string system-name "\\.")))
     ;; Ignore .DS_Store files with ido mode
     (add-to-list 'ido-ignore-files "\\.DS_Store")
-    (switch-to-buffer "*Messages*"))
+    (switch-to-buffer "*Messages*")
+    (require 'cask "/usr/local/share/emacs/site-lisp/cask/cask.el")
+    (cask-initialize))
 
   (defun my-windows-custom ()
     (server-start)
-    (switch-to-buffer "*Messages*"))
+    (switch-to-buffer "*Messages*")
+    (require 'cask "~/.cask/cask.el")
+    (cask-initialize))
 
   (defun my-linux-custom ()
     ;; (server-start) ;; should use emacs --daemon
     (switch-to-buffer "*Messages*")
     (setq dired-listing-switches "-lha --group-directories-first")
-    (my-set-shell-to-bash))
+    (my-set-shell-to-bash)
+    (require 'cask "~/.cask/cask.el")
+    (cask-initialize))
 
   (cond
    ((string-match "darwin" system-configuration)
@@ -1067,6 +1093,9 @@
    ((string-match "linux" system-configuration)
     (message "customizing GNU Emacs for Linux")
     (my-linux-custom))
+   ((string-match "i686-pc-mingw32" system-configuration)
+    (message "customizing GNU Emacs for Win 7")
+    (my-windows-custom))
    ((string-match "nt6" system-configuration)
     (message "customizing GNU Emacs for Win 7")
     (my-windows-custom))))
@@ -1118,6 +1147,7 @@
    (my-load-extra-files)
    ;; --- and here we go!
    (my-basic-init)
+   (my-os-custom)
    (my-ensure-save-dir)
    ;; -- configuring global packages
    (my-discover-my-major)
@@ -1168,8 +1198,6 @@
    (my-lisp)
    (my-csharp)
    (my-markdown)
-   ;; -- os specific customization
-   (my-os-custom)
    ;; other
    (my-shell-pop)
    (my-deft)
@@ -1179,11 +1207,3 @@
    (my-auto-package-update)))
 
 (my-init)
-
-
-;;BEGIN-RACKET-SCRIBBLE-EMACS-INSTALL
-;; Updated: 2015-11-20T03:30:30Z
-(condition-case err
-    (require 'scribble "/Users/jp11629/Library/Racket/planet/300/6.2.1/cache/neil/scribble-emacs.plt/1/4/scribble")
-  (error (message "Could not load Scribble Emacs: %s" err)))
-;;END-RACKET-SCRIBBLE-EMACS-INSTALL
