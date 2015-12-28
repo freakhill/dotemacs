@@ -210,22 +210,22 @@
                         company
                         browse-kill-ring
                         bbyac
-                        ;;yasnippet
+                        ;;[cask]yasnippet
                         ;;auto-yasnippet
                         guide-key
                         ;; --- flycheck
-                        flycheck
+                        ;;[cask]flycheck
                         flycheck-clojure
                         flycheck-pos-tip
                         ;; --- projectile
+                        ;;[cask]projectile
                         org-projectile
                         ;; --- git
-                        magit
+                        ;;[cask]magit
                         git-gutter-fringe
                         git-timemachine
                         git-messenger
                         ;; --- ace
-			ace-jump-mode
 			ace-jump-buffer
                         ;; --- irc
                         rcirc
@@ -243,7 +243,7 @@
                         helm-projectile
                         helm-mode-manager
                         ;; --- lisp
-			smartparens
+			;;[cask]smartparens
                         emr
                         paxedit
                         slime
@@ -276,8 +276,8 @@
                         ;; --- various stuff
                         php-mode              ;;
                         dockerfile-mode       ;;
-                        ;;lentic                ;; buffer lenses
-			smex                  ;;
+                        ;;lentic              ;; buffer lenses
+			;;[cask]smex                  ;;
                         shell-pop             ;; display and hide a shell
                         discover-my-major     ;;
                         ido-ubiquitous        ;;
@@ -290,19 +290,19 @@
                         undo-tree             ;; undo tree
                         clipmon               ;; clipboard monitor
                         fill-column-indicator ;;
-			multiple-cursors      ;;
+			;;[cask]multiple-cursors ;;
                         restclient            ;; rest client
                         json-reformat         ;; json reformatter
                         recentf-ext           ;;
                         buffer-move           ;;
-			expand-region         ;;
-			popwin                ;;
+			;;[cask]expand-region ;;
+			;;[cask]popwin        ;;
                         vlf                   ;;
                         diff-hl               ;;
 			grizzl                ;;
-                        dash                  ;; lib
-                        s                     ;; lib
-                        exec-path-from-shell  ;;
+                        ;;[cask]dash          ;; lib
+                        ;;[cask]s             ;; lib
+                        ;;[cask]exec-path-from-shell  ;;
                         vkill                 ;; view and kill Unix processes
                         rich-minority         ;; hide/highlists list of minor modes
                         highlight             ;;
@@ -457,29 +457,11 @@
   (require 'bbyac)
   (bbyac-global-mode 1))
 
-(defun my-ace-jump ()
-  ;;
-  ;; ace jump mode major function
-  ;;
-  (autoload  'ace-jump-mode
-    "ace-jump-mode"
-    "Emacs quick move minor mode"
-    t)
-  ;; you can select the key you prefer to
-  ;; (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
-
-  ;;
-  ;; enable a more powerful jump back function from ace jump mode
-  ;;
-  (autoload  'ace-jump-mode-pop-mark
-    "ace-jump-mode"
-    "Ace jump back:-)"
-    t)
-  (eval-after-load "ace-jump-mode"
-    '(ace-jump-mode-enable-mark-sync))
-  (define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
-
-  (define-key evil-normal-state-map (kbd "SPC") 'ace-jump-mode))
+(defun my-avy ()
+  (avy-setup-default)
+  (define-key evil-motion-state-map (kbd "SPC") #'avy-goto-word-1)
+  (define-key evil-motion-state-map (kbd "C-SPC") #'avy-goto-char-2)
+  (define-key evil-normal-state-map (kbd "SPC") #'avy-goto-word-1))
 
 (defun my-ace-jump-buffer ()
   (global-set-key (kbd "C-b") 'ace-jump-buffer)
@@ -1153,7 +1135,7 @@
    (my-evil)
    (my-evil-numbers)
    (my-evil-surround)
-   (my-ace-jump)
+   (my-avy)
    (my-ace-jump-buffer)
    (my-help-swoop)
    (my-expand-region)
