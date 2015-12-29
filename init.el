@@ -98,7 +98,7 @@
    dired-recursive-deletes 'top
    dired-listing-switches "-lha")
 
-  (add-hook 'dired-mode-hook 'auto-revert-mode)
+  (add-hook 'dired-mode-hook #'auto-revert-mode)
 
   (setq c-basic-indent 2)
   (setq tab-width 4)
@@ -161,7 +161,7 @@
     (if (not (member major-mode live-ignore-whitespace-modes))
 	(let ((whitespace-style '(trailing empty)) )
 	  (whitespace-cleanup))))
-  (add-hook 'before-save-hook 'live-cleanup-whitespace)
+  (add-hook 'before-save-hook #'live-cleanup-whitespace)
   ;; savehist keeps track of some history
   (setq savehist-additional-variables
 	;; search entries
@@ -242,9 +242,7 @@
                         helm-projectile
                         helm-mode-manager
                         ;; --- lisp
-			;;[cask]smartparens
                         emr
-                        paxedit
                         slime
                         ac-slime
                         slime-repl
@@ -395,9 +393,6 @@
                          (apply dl-and-load-ac-dict dict)
                        ((debug-error) e))))))
 
-(defun my-auto-package-update ()
-  (setq auto-package-update-interval 3))
-
 (defun my-discover-my-major ()
   (define-key 'help-command (kbd "C-m") 'discover-my-major))
 
@@ -459,6 +454,9 @@
   ;; => EXCHANGE!
   (evil-exchange-install))
 
+(defun my-evil-cleverparens ()
+  (add-hook 'smartparens-strict-mode #'evil-cleverparens-mode))
+
 (defun my-evil-magit ()
   (require 'evil-magit))
 
@@ -469,7 +467,7 @@
               (set-fill-column 72)
               (auto-fill-mode 1)))
   ;; ,cgs in god-mode
-  (global-set-key (kbd "C-c M-s") 'magit-status))
+  (global-set-key (kbd "C-c s") 'magit-status))
 
 (defun my-modeline ()
   (require 'rich-minority)
@@ -877,19 +875,20 @@
 (defvar my-lisp-minor-mode-map
   (let ((map (make-sparse-keymap)))
     (progn
-      (define-key map (kbd "C-f") 'sp-forward-sexp)
-      (define-key map (kbd "M-f") 'sp-backward-sexp)
-      (define-key map (kbd "C-M-y") 'sp-copy-sexp)
-      (define-key map (kbd "C-M-k") 'sp-kill-sexp)
-      (define-key map (kbd "C-c C-s") 'sp-splice-sexp)
-      (define-key map (kbd "ESC <up>") 'sp-up-sexp)
-      (define-key map (kbd "ESC <down>") 'sp-down-sexp)
-      (define-key map (kbd "C-<right>") 'sp-forward-slurp-sexp)
-      (define-key map (kbd "C-<left>") 'sp-forward-barf-sexp)
-      (define-key map (kbd "M-<left>") 'sp-backward-sexp)
-      (define-key map (kbd "M-<right>") 'sp-forward-sexp)
-      (define-key map (kbd "M-<up>") 'paxedit-backward-up)
-      (define-key map (kbd "M-<down>") 'paxedit-backward-end))
+      ;; (define-key map (kbd "C-f") 'sp-forward-sexp)
+      ;; (define-key map (kbd "M-f") 'sp-backward-sexp)
+      ;; (define-key map (kbd "C-M-y") 'sp-copy-sexp)
+      ;; (define-key map (kbd "C-M-k") 'sp-kill-sexp)
+      ;; (define-key map (kbd "C-c C-s") 'sp-splice-sexp)
+      ;; (define-key map (kbd "ESC <up>") 'sp-up-sexp)
+      ;; (define-key map (kbd "ESC <down>") 'sp-down-sexp)
+      ;; (define-key map (kbd "C-<right>") 'sp-forward-slurp-sexp)
+      ;; (define-key map (kbd "C-<left>") 'sp-forward-barf-sexp)
+      ;; (define-key map (kbd "M-<left>") 'sp-backward-sexp)
+      ;; (define-key map (kbd "M-<right>") 'sp-forward-sexp)
+      ;; (define-key map (kbd "M-<up>") 'paxedit-backward-up)
+      ;; (define-key map (kbd "M-<down>") 'paxedit-backward-end)
+      )
     map)
   "Keymap used for `mylisp-minor-mode'.")
 
@@ -902,19 +901,20 @@
     (progn
       (require 'smartparens-config)
       (smartparens-strict-mode t)
-      (paxedit-mode t)
+      (evil-cleverparens-mode t)
       (rainbow-delimiters-mode t)
       (hs-minor-mode t)
       (evil-define-key 'normal my-lisp-minor-mode-map
-        (kbd "C-f") 'sp-forward-sexp
-        (kbd "C-c I") 'slamhound
-        "K" 'paxedit-kill
-        "Y" 'paxedit-copy
-        "S" 'paxedit-context-new-statement
-        "R" 'paxedit-sexp-raise
-        "C" 'paxedit-wrap-comment
-        "E" 'paxedit-macro-expand-replace
-        "T" 'paxedit-transpose-forward)))
+        ;; (kbd "C-f") 'sp-forward-sexp
+        ;; (kbd "C-c I") 'slamhound
+        ;; "K" 'paxedit-kill
+        ;; "Y" 'paxedit-copy
+        ;; "S" 'paxedit-context-new-statement
+        ;; "R" 'paxedit-sexp-raise
+        ;; "C" 'paxedit-wrap-comment
+        ;; "E" 'paxedit-macro-expand-replace
+        ;; "T" 'paxedit-transpose-forward
+        )))
 
 (defun my-clojure-custom ()
     (require 'clojure-mode-extra-font-locking)
@@ -1001,7 +1001,8 @@
             racket-raco-program "/usr/bin/raco")))))
 
 (defun my-fancy-narrow ()
-  (fancy-narrow-mode))
+  (define-key evil-motion-state-map (kbd "n") #'fancy-narrow-to-region)
+  (define-key evil-normal-state-map (kbd "g r w") #'fancy-widen))
 
 (defun my-chickenscheme ()
   (add-to-list 'auto-mode-alist '("\\.scm$" . scheme-mode))
@@ -1017,8 +1018,8 @@
   (cond
    ((string= system-name "localhost.localdomain")
     (setq inferior-lisp-program "/usr/local/bin/sbcl")))
-  (add-hook 'slime-mode-hook 'set-up-slime-ac)
-  (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+  (add-hook 'slime-mode-hook #'set-up-slime-ac)
+  (add-hook 'slime-repl-mode-hook #'set-up-slime-ac)
   (eval-after-load "auto-complete"
     '(add-to-list 'ac-modes 'slime-repl-mode)))
 
@@ -1026,7 +1027,7 @@
   (autoload 'csharp-mode "csharp-mode" "Major mode for editing C# code." t)
   (setq auto-mode-alist
         (append '(("\\.cs$" . csharp-mode)) auto-mode-alist))
-  (add-hook 'csharp-mode-hook 'omnisharp-mode)
+  (add-hook 'csharp-mode-hook #'omnisharp-mode)
   (eval-after-load 'company-css  '(add-to-list 'company-backends 'company-omnisharp)))
 
 (defun my-shell-pop ()
@@ -1145,17 +1146,25 @@
 
   (my-wordy
    (my-load-extra-files)
+   ;; --------------------------------------
    ;; --- and here we go!
+   ;; --------------------------------------
    (my-basic-init)
    (my-os-custom)
    (my-ensure-save-dir)
+   ;; --------------------------------------
    ;; -- configuring global packages
+   ;; --------------------------------------
    (my-discover-my-major)
    (my-evil)
    (my-evil-numbers)
    (my-evil-surround)
    (my-evil-mc)
    (my-evil-matchit)
+   ;;(my-evil-jumper)
+   (my-evil-exchange)
+   (my-evil-cleverparens)
+   ;;(my-evil-magit)
    (my-avy)
    (my-ace-jump-buffer)
    (my-help-swoop)
@@ -1171,7 +1180,9 @@
    (my-buffer-move)
    (my-mouse)
    (my-window-numbering)
+   ;; --------------------------------------
    ;; -- configuring ide packages
+   ;; --------------------------------------
    (my-guide-key)
    (my-recentf)
    (my-ido)
@@ -1199,12 +1210,13 @@
    (my-lisp)
    (my-csharp)
    (my-markdown)
+   ;; --------------------------------------
    ;; other
+   ;; --------------------------------------
    (my-shell-pop)
    (my-deft)
    (my-funcs)
    (my-modeline)
-   (my-gnus)
-   (my-auto-package-update)))
+   (my-gnus)))
 
 (my-init)
