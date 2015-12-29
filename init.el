@@ -823,10 +823,9 @@
   (autoload 'rust-mode "rust-mode" nil t)
   (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode)))
 
-(defun my-shell ()
-  (defun my-set-shell-to-bash ()
+(defun my-set-shell-to-bash ()
     (setq shell-file-name "bash")
-    (setq explicit-shell-file-name shell-file-name)))
+    (setq explicit-shell-file-name shell-file-name))
 
 (defun my-java ()
   ;; eclipse!
@@ -1068,7 +1067,7 @@
     ;; domain name
     ;; (setq system-name (car (split-string system-name "\\.")))
     ;; Ignore .DS_Store files with ido mode
-    (add-to-list 'ido-ignore-files "\\.DS_Store")
+    (setq ido-ignore-files '("\\.DS_Store"))
     (switch-to-buffer "*Messages*")
     (require 'cask "/usr/local/share/emacs/site-lisp/cask/cask.el")
     (cask-initialize))
@@ -1206,7 +1205,6 @@
    (my-racket)
    (my-rust)
    (my-ruby)
-   (my-shell)
    (my-lisp)
    (my-csharp)
    (my-markdown)
