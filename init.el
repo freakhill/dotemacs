@@ -221,7 +221,6 @@
                         ;;[cask]projectile
                         org-projectile
                         ;; --- git
-                        ;;[cask]magit
                         git-gutter-fringe
                         git-timemachine
                         git-messenger
@@ -290,7 +289,6 @@
                         undo-tree             ;; undo tree
                         clipmon               ;; clipboard monitor
                         fill-column-indicator ;;
-			;;[cask]multiple-cursors ;;
                         restclient            ;; rest client
                         json-reformat         ;; json reformatter
                         recentf-ext           ;;
@@ -426,9 +424,6 @@
   (evil-set-initial-state 'ibuffer-mode 'emacs)
 
   (evil-define-key 'normal global-map "," 'evil-execute-in-god-state)
-  ;;(require 'powerline)
-  ;;(require 'powerline-evil)
-  ;;(powerline-evil-vim-color-theme)
   (evil-define-key 'normal global-map (kbd "M") 'evil-goto-mark-line))
 
 (defun my-evil-numbers ()
@@ -438,6 +433,43 @@
 (defun my-evil-surround ()
   (require 'evil-surround)
   (global-evil-surround-mode 1))
+
+(defun my-evil-mc ()
+  ;; "gru" remove all cursors
+  ;; C-n C-p add cursor
+  ;; M-n M-p cycle thorugh cursor
+  ;; C-t skip cursor
+  (require 'evil-mc)
+  (global-evil-mc-mode 1))
+
+(defun my-evil-matchit ()
+  (require 'evil-matchit)
+  ;; use "%" to travel through matching syntax elements
+  (global-evil-matchit-mode 1))
+
+(defun my-evil-jumper ()
+  (require 'evil-jumper)
+  ;; can jump through buffer and revive dead buffers
+  (evil-jumper-mode t))
+
+(defun my-evil-exchange ()
+  (require 'evil-exchange)
+  ;; visual mode, select then "gx"
+  ;; visual mode, select then "gx"
+  ;; => EXCHANGE!
+  (evil-exchange-install))
+
+(defun my-evil-magit ()
+  (require 'evil-magit))
+
+(defun my-magit ()
+  (setq magit-last-seen-setup-instructions "1.4.0")
+  (add-hook 'magit-log-edit-mode-hook
+            (lambda ()
+              (set-fill-column 72)
+              (auto-fill-mode 1)))
+  ;; ,cgs in god-mode
+  (global-set-key (kbd "C-c M-s") 'magit-status))
 
 (defun my-modeline ()
   (require 'rich-minority)
@@ -449,10 +481,6 @@
   (add-to-list 'rm-blacklist '("SkelC" "UndoTree" "Projectile.*" "AC" "SP" "SP/s" "ht"))
   (hide-mode-line))
 
-(defun my-hl-anything ()
-  ;; TODO
-  )
-
 (defun my-bbyac ()
   (require 'bbyac)
   (bbyac-global-mode 1))
@@ -463,9 +491,14 @@
   (define-key evil-motion-state-map (kbd "C-SPC") #'avy-goto-char-2)
   (define-key evil-normal-state-map (kbd "SPC") #'avy-goto-word-1))
 
+(defun my-vimish-fold ()
+  (vimish-fold-global-mode 1)
+  (define-key evil-motion-state-map (kbd "C-v") #'vimish-fold)
+  (define-key evil-normal-state-map (kbd "C-v") #'vimish-fold-toggle)
+  (define-key evil-normal-state-map (kbd "M-v") #'vimish-fold-delete))
+
 (defun my-ace-jump-buffer ()
-  (global-set-key (kbd "C-b") 'ace-jump-buffer)
-  (define-key evil-normal-state-map "b" 'ace-jump-buffer))
+(define-key evil-normal-state-map "b" 'ace-jump-buffer))
 
 (defun my-help-swoop ()
   (define-key evil-normal-state-map "s" 'helm-swoop))
@@ -545,12 +578,6 @@
   (setq gnus-sum-thread-tree-leaf-with-other "+-> ")
   (setq gnus-sum-thread-tree-vertical "|")
   (setq gnus-sum-thread-tree-single-leaf "`-> "))
-
-(defun my-multiple-cursors ()
-  ;;(require 'multiple-cursors)
-  (global-set-key (kbd "C-c C-n") 'mc/mark-next-like-this)
-  (global-set-key (kbd "C-c C-p") 'mc/mark-previous-like-this)
-  (global-set-key (kbd "C-c C-SPC") 'mc/mark-all-like-this))
 
 (defun my-windmove ()
   (when (fboundp 'windmove-default-keybindings)
@@ -737,15 +764,6 @@
   (global-undo-tree-mode)
   (define-key undo-tree-map (kbd "C-/") 'undo-tree-visualize)
   (global-set-key (kbd "C-c C-u") 'undo-tree-visualize))
-
-(defun my-magit ()
-  (setq magit-last-seen-setup-instructions "1.4.0")
-  (add-hook 'magit-log-edit-mode-hook
-            (lambda ()
-              (set-fill-column 72)
-              (auto-fill-mode 1)))
-  ;; ,cgs in god-mode
-  (global-set-key (kbd "C-c M-s") 'magit-status))
 
 (defun my-git-messenger ()
   ;; ,cgc in god-mode
@@ -1136,14 +1154,16 @@
    (my-evil)
    (my-evil-numbers)
    (my-evil-surround)
+   (my-evil-mc)
+   (my-evil-matchit)
    (my-avy)
    (my-ace-jump-buffer)
    (my-help-swoop)
    (my-expand-region)
-   (my-multiple-cursors)
    (my-windmove)
    (my-ibuffer)
    (my-hippie)
+   (my-vimish-fold)
    ;;(my-auto-complete)
    (my-bbyac)
    (my-popwin)
@@ -1153,7 +1173,6 @@
    (my-window-numbering)
    ;; -- configuring ide packages
    (my-guide-key)
-   (my-hl-anything)
    (my-recentf)
    (my-ido)
    (my-smex)
