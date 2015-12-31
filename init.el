@@ -231,7 +231,6 @@
                         rcirc-color
                         rainbow-delimiters
                         ac-cider
-                        ac-cider-compliment
                         projectile
                         ;; --- helm
                         helm
@@ -787,7 +786,6 @@
 (defun my-yasnippet ()
   (global-set-key (kbd "C-c C-c") 'aya-create)
   (global-set-key (kbd "C-c C-v") 'aya-expand)
-  A
   (evil-define-key 'insert global-map (kbd "C-<tab>") 'aya-open-line))
 
 (defun my-guide-key ()
