@@ -177,148 +177,10 @@
   (setq-default save-place t)
 
   ;; C-x r j E -- to edit my config file
-  (set-register ?E `(file . ,user-init-file)))
+  (set-register ?c `(file . (expand-file-name "Cask"
+                                              (file-name-directory ,user-init-file))))
+  (set-register ?e `(file . ,user-init-file)))
 
-;; one day, rewrite emacs in my custom lisp
-;; And FASTER, FASTER, FASTER!
-
-;;--- packages
-(defun my-ensure-packages ()
-  (setq package-archives '(("gnu"       . "http://elpa.gnu.org/packages/")
-                           ("marmalade" . "http://marmalade-repo.org/packages/")
-                           ("melpa"     . "http://melpa.milkbox.net/packages/")))
-  (package-initialize)
-  (when (not package-archive-contents)
-    (package-refresh-contents))
-  (defvar my-packages '(;; --- themes
-                        color-theme
-                        color-theme-library
-                        monokai-theme
-                        zenburn-theme
-                        ;; --- mode line
-                        smart-mode-line
-                        smart-mode-line-powerline-theme
-                        ;; --- evil
-                        evil
-                        evil-terminal-cursor-changer
-                        evil-numbers
-                        evil-surround
-                        god-mode
-                        evil-god-state
-                        ;; --- completion
-                        ;;auto-complete
-                        company
-                        browse-kill-ring
-                        bbyac
-                        ;;[cask]yasnippet
-                        ;;auto-yasnippet
-                        guide-key
-                        ;; --- flycheck
-                        ;;[cask]flycheck
-                        flycheck-clojure
-                        flycheck-pos-tip
-                        ;; --- projectile
-                        ;;[cask]projectile
-                        org-projectile
-                        ;; --- git
-                        git-gutter-fringe
-                        git-timemachine
-                        git-messenger
-                        ;; --- ace
-                        ace-jump-buffer
-                        ;; --- irc
-                        rcirc
-                        rcirc-color
-                        rainbow-delimiters
-                        ac-cider
-                        projectile
-                        ;; --- helm
-                        helm
-                        helm-ag
-                        helm-make
-                        helm-swoop
-                        helm-themes
-                        helm-projectile
-                        helm-mode-manager
-                        ;; --- lisp
-                        emr
-                        slime
-                        ac-slime
-                        slime-repl
-                        ;; --- clojure
-                        slamhound
-                        clojure-mode
-                        clojure-mode-extra-font-locking
-                        cider
-                        cider-profile
-                        clj-refactor
-                        ;;squiggly-clojure
-                        typed-clojure-mode
-                        cljdoc
-                        align-cljlet
-                        ;; --- elisp
-                        ;;auto-compile
-                        ;; --- racket
-                        racket-mode
-                        ;; --- rust
-                        rust-mode
-                        ;; --- c#
-                        csharp-mode
-                        omnisharp
-                        ;; --- android
-                        android-mode
-                        ;; --- markdown
-                        markdown-mode
-                        ;; --- various stuff
-                        php-mode              ;;
-                        dockerfile-mode       ;;
-                        ;;lentic              ;; buffer lenses
-                        ;;[cask]smex                  ;;
-                        shell-pop             ;; display and hide a shell
-                        discover-my-major     ;;
-                        ido-ubiquitous        ;;
-                        flx-ido               ;;
-                        ibuffer-vc            ;;
-                        dired+                ;;
-                        fancy-narrow          ;;
-                        epl                   ;;
-                        pkg-info              ;;
-                        undo-tree             ;; undo tree
-                        clipmon               ;; clipboard monitor
-                        fill-column-indicator ;;
-                        restclient            ;; rest client
-                        json-reformat         ;; json reformatter
-                        recentf-ext           ;;
-                        buffer-move           ;;
-                        ;;[cask]expand-region ;;
-                        ;;[cask]popwin        ;;
-                        vlf                   ;;
-                        diff-hl               ;;
-                        grizzl                ;;
-                        ;;[cask]dash          ;; lib
-                        ;;[cask]s             ;; lib
-                        ;;[cask]exec-path-from-shell  ;;
-                        vkill                 ;; view and kill Unix processes
-                        rich-minority         ;; hide/highlists list of minor modes
-                        highlight             ;;
-                        hl-anything           ;;
-                        framesize             ;;
-                        window-numbering      ;;
-                        elmacro               ;; save macros as emacs lisp
-                        tiny                  ;; generates linear ranges
-                        deft                  ;; quicknote tool sync through my dropbox
-                        ))
-  (let ((not-yet-installed '()))
-    (mapcar (lambda (pkg) (when (not (package-installed-p pkg))
-                            (push pkg not-yet-installed)))
-            my-packages)
-    (when (not (eq (length not-yet-installed) 0))
-      (package-refresh-contents)
-      (dolist (pkg not-yet-installed) (with-demoted-errors
-                                          "Package install error: %S"
-                                        (package-install pkg))))))
-
-;;--- extra files
 (defun my-load-extra-files ()
   (let
       ((dl-dir              "~/.emacs.d/dl")
@@ -1068,23 +930,21 @@
     ;; (setq system-name (car (split-string system-name "\\.")))
     ;; Ignore .DS_Store files with ido mode
     (setq ido-ignore-files '("\\.DS_Store"))
+    (server-start)
     (switch-to-buffer "*Messages*")
-    (require 'cask "/usr/local/share/emacs/site-lisp/cask/cask.el")
-    (cask-initialize))
+    )
 
   (defun my-windows-custom ()
     (server-start)
     (switch-to-buffer "*Messages*")
-    (require 'cask "~/.cask/cask.el")
-    (cask-initialize))
+    )
 
   (defun my-linux-custom ()
     ;; (server-start) ;; should use emacs --daemon
     (switch-to-buffer "*Messages*")
     (setq dired-listing-switches "-lha --group-directories-first")
     (my-set-shell-to-bash)
-    (require 'cask "~/.cask/cask.el")
-    (cask-initialize))
+    )
 
   (cond
    ((string-match "darwin" system-configuration)
@@ -1099,6 +959,23 @@
    ((string-match "nt6" system-configuration)
     (message "customizing GNU Emacs for Win 7")
     (my-windows-custom))))
+
+(defun my-cask-init ()
+  (cond
+   ((string-match "darwin" system-configuration)
+    (require 'cask "/usr/local/share/emacs/site-lisp/cask/cask.el")
+    )
+   ((string-match "linux" system-configuration)
+    (require 'cask "~/.cask/cask.el")
+    )
+   ((string-match "i686-pc-mingw32" system-configuration)
+    (require 'cask "~/.cask/cask.el")
+    )
+   ((string-match "nt6" system-configuration)
+    (require 'cask "~/.cask/cask.el")
+    ))
+  (cask-initialize)
+  )
 
 (defun my-funcs ()
   (defun myfn-eval-last-sexp-with-value (value &optional prefix)
@@ -1138,16 +1015,16 @@
 (defun my-init()
   ;; -- getting external packages
   (message "PACKAGE LOADING!")
-  (my-ensure-packages)
-
+  (my-cask-init)
+  ;; little library for following code
   (require 'dash)
   (dash-enable-font-lock)
 
   (my-wordy
+   ;; --------------------------------------
+   ;; -- Base
+   ;; --------------------------------------
    (my-load-extra-files)
-   ;; --------------------------------------
-   ;; --- and here we go!
-   ;; --------------------------------------
    (my-basic-init)
    (my-os-custom)
    (my-ensure-save-dir)
@@ -1163,7 +1040,7 @@
    ;;(my-evil-jumper)
    (my-evil-exchange)
    (my-evil-cleverparens)
-   ;;(my-evil-magit)
+   (my-evil-magit)
    (my-avy)
    (my-ace-jump-buffer)
    (my-help-swoop)
@@ -1175,7 +1052,6 @@
    ;;(my-auto-complete)
    (my-bbyac)
    (my-popwin)
-   ;;(my-auto-compile)
    (my-buffer-move)
    (my-mouse)
    (my-window-numbering)
