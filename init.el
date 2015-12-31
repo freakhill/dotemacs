@@ -491,9 +491,9 @@
 
 (defun my-vimish-fold ()
   (vimish-fold-global-mode 1)
-  (define-key evil-motion-state-map (kbd "C-v") #'vimish-fold)
-  (define-key evil-normal-state-map (kbd "C-v") #'vimish-fold-toggle)
-  (define-key evil-normal-state-map (kbd "M-v") #'vimish-fold-delete))
+  (define-key evil-motion-state-map (kbd "C-f") #'vimish-fold)
+  (define-key evil-normal-state-map (kbd "C-f") #'vimish-fold-toggle)
+  (define-key evil-normal-state-map (kbd "M-f") #'vimish-fold-delete))
 
 (defun my-ace-jump-buffer ()
 (define-key evil-normal-state-map "b" 'ace-jump-buffer))
