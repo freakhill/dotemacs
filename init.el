@@ -1,4 +1,4 @@
-; -*- coding: utf-8-unix -*-
+                                        ; -*- coding: utf-8-unix -*-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -115,19 +115,19 @@
   (setq uniquify-ignore-buffers-re "^\\*")
 
   (setq initial-major-mode 'lisp-interaction-mode
-	redisplay-dont-pause t
-	column-number-mode t
-	echo-keystrokes 0.02
-	inhibit-startup-message t
-	transient-mark-mode t
-	shift-select-mode nil
-	require-final-newline t
-	truncate-partial-width-windows nil
-	delete-by-moving-to-trash nil
-	confirm-nonexistent-file-or-buffer nil
-	query-replace-highlight t
-	next-error-highlight t
-	next-error-highlight-no-select t)
+        redisplay-dont-pause t
+        column-number-mode t
+        echo-keystrokes 0.02
+        inhibit-startup-message t
+        transient-mark-mode t
+        shift-select-mode nil
+        require-final-newline t
+        truncate-partial-width-windows nil
+        delete-by-moving-to-trash nil
+        confirm-nonexistent-file-or-buffer nil
+        query-replace-highlight t
+        next-error-highlight t
+        next-error-highlight-no-select t)
   ;;set all coding systems to utf-8-unix
   (prefer-coding-system 'utf-8)
   (setq coding-system-for-read 'utf-8)
@@ -159,17 +159,17 @@
   (defvar live-ignore-whitespace-modes '(markdown-mode))
   (defun live-cleanup-whitespace ()
     (if (not (member major-mode live-ignore-whitespace-modes))
-	(let ((whitespace-style '(trailing empty)) )
-	  (whitespace-cleanup))))
+        (let ((whitespace-style '(trailing empty)) )
+          (whitespace-cleanup))))
   (add-hook 'before-save-hook #'live-cleanup-whitespace)
   ;; savehist keeps track of some history
   (setq savehist-additional-variables
-	;; search entries
-	'(search ring regexp-search-ring)
-	;; save every minute
-	savehist-autosave-interval 60
-	;; keep the home clean
-	savehist-file (concat my-temp-dir "savehist"))
+        ;; search entries
+        '(search ring regexp-search-ring)
+        ;; save every minute
+        savehist-autosave-interval 60
+        ;; keep the home clean
+        savehist-file (concat my-temp-dir "savehist"))
   (savehist-mode t)
 
   (require 'midnight)
@@ -185,8 +185,8 @@
 ;;--- packages
 (defun my-ensure-packages ()
   (setq package-archives '(("gnu"       . "http://elpa.gnu.org/packages/")
-			   ("marmalade" . "http://marmalade-repo.org/packages/")
-			   ("melpa"     . "http://melpa.milkbox.net/packages/")))
+                           ("marmalade" . "http://marmalade-repo.org/packages/")
+                           ("melpa"     . "http://melpa.milkbox.net/packages/")))
   (package-initialize)
   (when (not package-archive-contents)
     (package-refresh-contents))
@@ -199,12 +199,12 @@
                         smart-mode-line
                         smart-mode-line-powerline-theme
                         ;; --- evil
-			evil
+                        evil
                         evil-terminal-cursor-changer
                         evil-numbers
                         evil-surround
-			god-mode
-			evil-god-state
+                        god-mode
+                        evil-god-state
                         ;; --- completion
                         ;;auto-complete
                         company
@@ -225,14 +225,14 @@
                         git-timemachine
                         git-messenger
                         ;; --- ace
-			ace-jump-buffer
+                        ace-jump-buffer
                         ;; --- irc
                         rcirc
                         rcirc-color
-			rainbow-delimiters
+                        rainbow-delimiters
                         ac-cider
                         ac-cider-compliment
-			projectile
+                        projectile
                         ;; --- helm
                         helm
                         helm-ag
@@ -258,23 +258,23 @@
                         cljdoc
                         align-cljlet
                         ;; --- elisp
-			;;auto-compile
+                        ;;auto-compile
                         ;; --- racket
                         racket-mode
                         ;; --- rust
                         rust-mode
                         ;; --- c#
-			csharp-mode
-			omnisharp
+                        csharp-mode
+                        omnisharp
                         ;; --- android
                         android-mode
                         ;; --- markdown
-			markdown-mode
+                        markdown-mode
                         ;; --- various stuff
                         php-mode              ;;
                         dockerfile-mode       ;;
                         ;;lentic              ;; buffer lenses
-			;;[cask]smex                  ;;
+                        ;;[cask]smex                  ;;
                         shell-pop             ;; display and hide a shell
                         discover-my-major     ;;
                         ido-ubiquitous        ;;
@@ -291,11 +291,11 @@
                         json-reformat         ;; json reformatter
                         recentf-ext           ;;
                         buffer-move           ;;
-			;;[cask]expand-region ;;
-			;;[cask]popwin        ;;
+                        ;;[cask]expand-region ;;
+                        ;;[cask]popwin        ;;
                         vlf                   ;;
                         diff-hl               ;;
-			grizzl                ;;
+                        grizzl                ;;
                         ;;[cask]dash          ;; lib
                         ;;[cask]s             ;; lib
                         ;;[cask]exec-path-from-shell  ;;
@@ -312,7 +312,7 @@
   (let ((not-yet-installed '()))
     (mapcar (lambda (pkg) (when (not (package-installed-p pkg))
                             (push pkg not-yet-installed)))
-	    my-packages)
+            my-packages)
     (when (not (eq (length not-yet-installed) 0))
       (package-refresh-contents)
       (dolist (pkg not-yet-installed) (with-demoted-errors
@@ -496,7 +496,7 @@
   (define-key evil-normal-state-map (kbd "M-f") #'vimish-fold-delete))
 
 (defun my-ace-jump-buffer ()
-(define-key evil-normal-state-map "b" 'ace-jump-buffer))
+  (define-key evil-normal-state-map "b" 'ace-jump-buffer))
 
 (defun my-help-swoop ()
   (define-key evil-normal-state-map "s" 'helm-swoop))
@@ -702,7 +702,7 @@
 (defun my-flycheck ()
   (eval-after-load 'flycheck
     '(custom-set-variables
-         '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
+      '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
   (add-hook 'after-init-hook #'global-flycheck-mode))
 
 (defun my-golden-ratio ()
@@ -777,8 +777,8 @@
 (defun my-dired+ ()
   (require 'dired+)
   (quote (when (eq system-type 'darwin)
-             (require 'ls-lisp)
-             (setq ls-lisp-use-insert-directory-program nil))))
+           (require 'ls-lisp)
+           (setq ls-lisp-use-insert-directory-program nil))))
 
 (defun my-vlf ()
   (require 'vlf-integrate)
@@ -787,6 +787,7 @@
 (defun my-yasnippet ()
   (global-set-key (kbd "C-c C-c") 'aya-create)
   (global-set-key (kbd "C-c C-v") 'aya-expand)
+  A
   (evil-define-key 'insert global-map (kbd "C-<tab>") 'aya-open-line))
 
 (defun my-guide-key ()
@@ -824,8 +825,8 @@
   (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode)))
 
 (defun my-set-shell-to-bash ()
-    (setq shell-file-name "bash")
-    (setq explicit-shell-file-name shell-file-name))
+  (setq shell-file-name "bash")
+  (setq explicit-shell-file-name shell-file-name))
 
 (defun my-java ()
   ;; eclipse!
@@ -892,40 +893,41 @@
   "Keymap used for `mylisp-minor-mode'.")
 
 (define-minor-mode my-lisp-minor-mode
-    "My custom made lisp minor mode."
-    :init-value nil
-    :lighter " mylisp"
-    :group 'my-modes
-    :keymap my-lisp-minor-mode-map
-    (progn
-      (require 'smartparens-config)
-      (smartparens-strict-mode t)
-      (evil-cleverparens-mode t)
-      (rainbow-delimiters-mode t)
-      (hs-minor-mode t)
-      (evil-define-key 'normal my-lisp-minor-mode-map
-        ;; (kbd "C-f") 'sp-forward-sexp
-        ;; (kbd "C-c I") 'slamhound
-        ;; "K" 'paxedit-kill
-        ;; "Y" 'paxedit-copy
-        ;; "S" 'paxedit-context-new-statement
-        ;; "R" 'paxedit-sexp-raise
-        ;; "C" 'paxedit-wrap-comment
-        ;; "E" 'paxedit-macro-expand-replace
-        ;; "T" 'paxedit-transpose-forward
-        )))
+  "My custom made lisp minor mode."
+  :init-value nil
+  :lighter " mylisp"
+  :group 'my-modes
+  :keymap my-lisp-minor-mode-map
+  (progn
+    (require 'smartparens-config)
+    (smartparens-strict-mode t)
+    (evil-cleverparens-mode t)
+    (rainbow-delimiters-mode t)
+    (hs-minor-mode t)
+    ;;(evil-define-key 'normal my-lisp-minor-mode-map
+    ;; (kbd "C-f") 'sp-forward-sexp
+    ;; (kbd "C-c I") 'slamhound
+    ;; "K" 'paxedit-kill
+    ;; "Y" 'paxedit-copy
+    ;; "S" 'paxedit-context-new-statement
+    ;; "R" 'paxedit-sexp-raise
+    ;; "C" 'paxedit-wrap-comment
+    ;; "E" 'paxedit-macro-expand-replace
+    ;; "T" 'paxedit-transpose-forward
+    ;;)
+    ))
 
 (defun my-clojure-custom ()
-    (require 'clojure-mode-extra-font-locking)
-    (require 'clj-refactor)
-    (require 'icomplete) ;; for cider minibuffer completion
-    ;;(eval-after-load 'flycheck '(flycheck-clojure-setup))
-    (clj-refactor-mode t)
-    (flycheck-mode t)
-    (cljr-add-keybindings-with-prefix "C-r")
-    (local-set-key (kbd "C-c C-a") 'align-cljlet)
-    ;; remove the cider bind that overshadows the git messenger bind
-    (local-unset-key (kbd "C-c M-c")))
+  (require 'clojure-mode-extra-font-locking)
+  (require 'clj-refactor)
+  (require 'icomplete) ;; for cider minibuffer completion
+  ;;(eval-after-load 'flycheck '(flycheck-clojure-setup))
+  (clj-refactor-mode t)
+  (flycheck-mode t)
+  (cljr-add-keybindings-with-prefix "C-r")
+  (local-set-key (kbd "C-c C-a") 'align-cljlet)
+  ;; remove the cider bind that overshadows the git messenger bind
+  (local-unset-key (kbd "C-c M-c")))
 
 (defun my-lisp ()
   (dolist (h '(clojure-mode-hook
