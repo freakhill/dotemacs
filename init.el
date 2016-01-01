@@ -177,8 +177,10 @@
   (setq-default save-place t)
 
   ;; C-x r j E -- to edit my config file
-  (set-register ?c `(file . (expand-file-name "Cask"
-                                              (file-name-directory ,user-init-file))))
+  (setq user-cask-init-file
+        (expand-file-name "Cask"
+                          (file-name-directory user-init-file)))
+  (set-register ?c `(file . ,user-cask-init-file))
   (set-register ?e `(file . ,user-init-file)))
 
 (defun my-load-extra-files ()
@@ -978,6 +980,31 @@
   )
 
 (defun my-funcs ()
+  ;; ---
+  (defun copy-to-clipboard ()
+    (interactive)
+    (if (region-active-p)
+        (progn
+          ;; my clipboard manager only intercept CLIPBOARD
+          (shell-command-on-region (region-beginning) (region-end)
+                                   (cond
+                                    ((eq system-type 'cygwin) "putclip")
+                                    ((eq system-type 'darwin) "pbcopy")
+                                    (t "xsel -ib")))
+          (message "Yanked region to clipboard!")
+          (deactivate-mark))
+      (message "No region active; can't yank to clipboard!")))
+  ;; ---
+  (defun paste-from-clipboard()
+    (interactive)
+    (shell-command
+     (cond
+      ((eq system-type 'cygwin) "getclip")
+      ((eq system-type 'darwin) "pbpaste")
+      (t "xsel -ob")
+      )
+     1))
+  ;; ---
   (defun myfn-eval-last-sexp-with-value (value &optional prefix)
     (interactive "svalue: \nP")
     (cider-interactive-eval (s-concat "(" (cider-last-sexp) " " value " )")
