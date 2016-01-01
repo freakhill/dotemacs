@@ -178,8 +178,7 @@
 
   ;; C-x r j E -- to edit my config file
   (setq user-cask-init-file
-        (expand-file-name "Cask"
-                          (file-name-directory user-init-file)))
+        (expand-file-name "Cask" (file-name-directory user-init-file)))
   (set-register ?c `(file . ,user-cask-init-file))
   (set-register ?e `(file . ,user-init-file)))
 
