@@ -316,8 +316,8 @@
   ;; => EXCHANGE!
   (evil-exchange-install))
 
-(defun my-evil-cleverparens ()
-  (add-hook 'smartparens-strict-mode #'evil-cleverparens-mode))
+;;(defun my-evil-cleverparens ()
+;;  (add-hook 'smartparens-strict-mode #'evil-cleverparens-mode))
 
 (defun my-evil-magit ()
   (require 'evil-magit))
@@ -735,21 +735,7 @@
 
 (defvar my-lisp-minor-mode-map
   (let ((map (make-sparse-keymap)))
-    (progn
-      ;; (define-key map (kbd "C-f") 'sp-forward-sexp)
-      ;; (define-key map (kbd "M-f") 'sp-backward-sexp)
-      ;; (define-key map (kbd "C-M-y") 'sp-copy-sexp)
-      ;; (define-key map (kbd "C-M-k") 'sp-kill-sexp)
-      ;; (define-key map (kbd "C-c C-s") 'sp-splice-sexp)
-      ;; (define-key map (kbd "ESC <up>") 'sp-up-sexp)
-      ;; (define-key map (kbd "ESC <down>") 'sp-down-sexp)
-      ;; (define-key map (kbd "C-<right>") 'sp-forward-slurp-sexp)
-      ;; (define-key map (kbd "C-<left>") 'sp-forward-barf-sexp)
-      ;; (define-key map (kbd "M-<left>") 'sp-backward-sexp)
-      ;; (define-key map (kbd "M-<right>") 'sp-forward-sexp)
-      ;; (define-key map (kbd "M-<up>") 'paxedit-backward-up)
-      ;; (define-key map (kbd "M-<down>") 'paxedit-backward-end)
-      )
+    (progn)
     map)
   "Keymap used for `mylisp-minor-mode'.")
 
@@ -762,21 +748,20 @@
   (progn
     (require 'smartparens-config)
     (smartparens-strict-mode t)
-    (evil-cleverparens-mode t)
+    (evil-smartparens-mode t)
     (rainbow-delimiters-mode t)
     (hs-minor-mode t)
-    ;;(evil-define-key 'normal my-lisp-minor-mode-map
-    ;; (kbd "C-f") 'sp-forward-sexp
-    ;; (kbd "C-c I") 'slamhound
-    ;; "K" 'paxedit-kill
-    ;; "Y" 'paxedit-copy
-    ;; "S" 'paxedit-context-new-statement
-    ;; "R" 'paxedit-sexp-raise
-    ;; "C" 'paxedit-wrap-comment
-    ;; "E" 'paxedit-macro-expand-replace
-    ;; "T" 'paxedit-transpose-forward
-    ;;)
-    ))
+    (evil-define-key 'normal
+      evil-smartparens-mode-map
+      (kbd "K") #'sp-kill-sexp
+      (kbd "S") #'sp-splice-sexp
+      (kbd ">") #'sp-forward-slurp-sexp
+      (kbd "<") #'sp-forward-barf-sexp
+      (kbd "{") #'sp-up-sexp
+      (kbd "}") #'sp-down-sexp
+      (kbd "[") #'sp-backward-sexp
+      (kbd "]") #'sp-forward-sexp
+      (kbd "C-c I") #'slamhound)))
 
 (defun my-clojure-custom ()
   (require 'clojure-mode-extra-font-locking)
@@ -1065,7 +1050,6 @@
    (my-evil-matchit)
    ;;(my-evil-jumper)
    (my-evil-exchange)
-   (my-evil-cleverparens)
    (my-evil-magit)
    (my-avy)
    (my-ace-jump-buffer)

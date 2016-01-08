@@ -144,5 +144,5 @@
 (depends-on "evil-matchit")
 (depends-on "evil-jumper")
 (depends-on "evil-exchange")
-(depends-on "evil-cleverparens")
-;;(depends-on "evil-smartparens")
+;;(depends-on "evil-cleverparens")
+(depends-on "evil-smartparens")
