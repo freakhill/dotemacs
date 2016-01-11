@@ -45,9 +45,13 @@
 
 (defvar my-save-dir "~/.emacs.d/save")
 (defvar my-temp-dir "~/.emacs.d/tmp")
+(defvar my-irony-dir "~/.emacs.d/irony")
 
 (defun my-ensure-save-dir ()
   (my-ensure-dir my-save-dir))
+
+(defun my-ensure-irony-dir ()
+  (my-ensure-dir my-irony-dir))
 
 (defun my-ensure-temp-dir ()
   (my-ensure-dir my-temp-dir))
@@ -837,6 +841,15 @@
   (add-hook 'c-mode-hook 'irony-mode)
   (add-hook 'objc-mode-hook 'irony-mode))
 
+(defun my-compilation-buffer ()
+  (require 'ansi-color)
+  (setq compilation-scroll-output 'first-error)
+  (add-hook 'compilation-filter-hook
+            (lambda ()
+              (toggle-read-only)
+              (ansi-color-apply-on-region compilation-filter-start (point))
+              (toggle-read-only))))
+
 (defun my-racket ()
   (add-to-list 'auto-mode-alist '("\\.rkt$" . racket-mode))
   (cond
@@ -1045,6 +1058,7 @@
    (my-basic-init)
    (my-os-custom)
    (my-ensure-save-dir)
+   (my-ensure-irony-dir)
    ;; --------------------------------------
    ;; -- configuring global packages
    ;; --------------------------------------
@@ -1095,6 +1109,7 @@
    (my-c++)
    (my-slime)
    (my-irony)
+   (my-compilation-buffer)
    (my-racket)
    (my-rust)
    (my-ruby)
