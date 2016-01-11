@@ -146,3 +146,7 @@
 (depends-on "evil-exchange")
 (depends-on "evil-cleverparens")
 ;;(depends-on "evil-smartparens")
+(depends-on "irony")
+(depends-on "company-irony")
+(depends-on "irony-eldoc")
+(depends-on "flycheck-irony")
