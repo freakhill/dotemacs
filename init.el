@@ -921,20 +921,17 @@
     ;; Ignore .DS_Store files with ido mode
     (setq ido-ignore-files '("\\.DS_Store"))
     (server-start)
-    (switch-to-buffer "*Messages*")
-    )
+    (switch-to-buffer "*Messages*"))
 
   (defun my-windows-custom ()
     (server-start)
-    (switch-to-buffer "*Messages*")
-    )
+    (switch-to-buffer "*Messages*"))
 
   (defun my-linux-custom ()
     ;; (server-start) ;; should use emacs --daemon
     (switch-to-buffer "*Messages*")
     (setq dired-listing-switches "-lha --group-directories-first")
-    (my-set-shell-to-bash)
-    )
+    (my-set-shell-to-bash))
 
   (cond
    ((string-match "darwin" system-configuration)
