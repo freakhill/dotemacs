@@ -45,9 +45,13 @@
 
 (defvar my-save-dir "~/.emacs.d/save")
 (defvar my-temp-dir "~/.emacs.d/tmp")
+(defvar my-irony-dir "~/.emacs.d/irony")
 
 (defun my-ensure-save-dir ()
   (my-ensure-dir my-save-dir))
+
+(defun my-ensure-irony-dir ()
+  (my-ensure-dir my-irony-dir))
 
 (defun my-ensure-temp-dir ()
   (my-ensure-dir my-temp-dir))
@@ -812,24 +816,24 @@
   (setq nrepl-history-file "~/nrepl-history.dat")
   (add-to-list 'auto-mode-alist '("\\.boot$" . clojure-mode)))
 
-(defun my-rtags ()
-  (cond
-   ((string= system-name "W010391306024")
-    (progn))
-   ((string= system-name "i022311303784m.local")
-    (progn
-      (require 'cl-lib)
-      (add-to-list 'load-path "~/rtags/src")
-      (require 'rtags)
-      (rtags-enable-standard-keybindings c-mode-base-map)
-      (require 'company-rtags)))
-   ((string= system-name "localhost.localdomain")
-    (progn
-      (require 'cl-lib)
-      (add-to-list 'load-path "~/rtags/src")
-      (require 'rtags)
-      (rtags-enable-standard-keybindings c-mode-base-map)
-      (require 'company-rtags)))))
+(defun my-irony ()
+  (eval-after-load 'flycheck
+    '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
+  (eval-after-load 'company
+    '(add-to-list 'company-backends 'company-irony))
+  (setq w32-pipe-read-delay 0)
+  (add-hook 'c++-mode-hook 'irony-mode)
+  (add-hook 'c-mode-hook 'irony-mode)
+  (add-hook 'objc-mode-hook 'irony-mode))
+
+(defun my-compilation-buffer ()
+  (require 'ansi-color)
+  (setq compilation-scroll-output 'first-error)
+  (add-hook 'compilation-filter-hook
+            (lambda ()
+              (toggle-read-only)
+              (ansi-color-apply-on-region compilation-filter-start (point))
+              (toggle-read-only))))
 
 (defun my-racket ()
   (add-to-list 'auto-mode-alist '("\\.rkt$" . racket-mode))
@@ -1039,6 +1043,7 @@
    (my-basic-init)
    (my-os-custom)
    (my-ensure-save-dir)
+   (my-ensure-irony-dir)
    ;; --------------------------------------
    ;; -- configuring global packages
    ;; --------------------------------------
@@ -1087,7 +1092,8 @@
    (my-emacs-refactor)
    (my-c++)
    (my-slime)
-   (my-rtags)
+   (my-irony)
+   (my-compilation-buffer)
    (my-racket)
    (my-rust)
    (my-ruby)
