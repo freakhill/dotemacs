@@ -144,14 +144,9 @@
 (depends-on "evil-matchit")
 (depends-on "evil-jumper")
 (depends-on "evil-exchange")
-<<<<<<< HEAD
 ;;(depends-on "evil-cleverparens")
 (depends-on "evil-smartparens")
-=======
-(depends-on "evil-cleverparens")
-;;(depends-on "evil-smartparens")
 (depends-on "irony")
 (depends-on "company-irony")
 (depends-on "irony-eldoc")
 (depends-on "flycheck-irony")
->>>>>>> 63096821264fd256591e2c8b9cddcd6c8c83dbb7
