@@ -150,3 +150,4 @@
 (depends-on "company-irony")
 (depends-on "irony-eldoc")
 (depends-on "flycheck-irony")
+(depends-on "markdown-preview-eww") ;; requires "gem install redcarpet"
