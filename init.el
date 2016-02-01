@@ -852,7 +852,7 @@
             racket-raco-program "/usr/bin/raco")))))
 
 (defun my-fancy-narrow ()
-  (define-key evil-motion-state-map (kbd "n") #'fancy-narrow-to-region)
+  (define-key evil-visual-state-map (kbd "n") #'fancy-narrow-to-region)
   (define-key evil-normal-state-map (kbd "g r w") #'fancy-widen))
 
 (defun my-chickenscheme ()
