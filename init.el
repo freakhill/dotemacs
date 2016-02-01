@@ -884,6 +884,10 @@
 (defun my-shell-pop ()
   (global-set-key (kbd "<f9>") 'shell-pop))
 
+(defun my-asciidoc ()
+  (autoload 'adoc-mode "adoc-mode" nil t)
+  (add-to-list 'auto-mode-alist (cons "\\.txt\\'" 'adoc-mode)))
+
 (defun my-os-custom ()
 
   ;;--- set firefox as browser
@@ -1092,6 +1096,7 @@
    (my-lisp)
    (my-csharp)
    (my-markdown)
+   (my-asciidoc)
    ;; --------------------------------------
    ;; other
    ;; --------------------------------------
