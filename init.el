@@ -357,7 +357,7 @@
 
 (defun my-vimish-fold ()
   (vimish-fold-global-mode 1)
-  (define-key evil-motion-state-map (kbd "C-f") #'vimish-fold)
+  (define-key evil-visual-state-map (kbd "C-f") #'vimish-fold)
   (define-key evil-normal-state-map (kbd "C-f") #'vimish-fold-toggle)
   (define-key evil-normal-state-map (kbd "M-f") #'vimish-fold-delete))
 
