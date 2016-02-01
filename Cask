@@ -150,7 +150,8 @@
 (depends-on "company-irony")
 (depends-on "irony-eldoc")
 (depends-on "flycheck-irony")
+(depends-on "use-package")
 ;; markdown
 (depends-on "markdown-preview-eww") ;; requires "gem install redcarpet"
 ;; AsciiDoc
-(depends-on "adoc-mode")
+(depends-on "adoc-mode") ;; gem install asciidoctor (not required)
