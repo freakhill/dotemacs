@@ -68,6 +68,7 @@
 (depends-on "racket-mode")
 ;; --- rust
 (depends-on "rust-mode")
+(depends-on "toml-mode")
 ;; --- c#
 (depends-on "csharp-mode")
 (depends-on "omnisharp")

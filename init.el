@@ -111,8 +111,6 @@
 
   (define-key global-map (kbd "RET") 'reindent-then-newline-and-indent)
 
-  (setq tramp-default-method "ssh")
-
   (setq uniquify-buffer-name-style 'forward)
   (setq uniquify-separator "/")
   (setq uniquify-after-kill-buffer-p t)
@@ -258,6 +256,11 @@
       (lambda (dict) (condition-case e
                          (apply dl-and-load-ac-dict dict)
                        ((debug-error) e))))))
+
+(defun my-tramp ()
+  (setq tramp-default-method "ssh")
+  (setq tramp-default-proxies-alist
+        '(("\\.nhnjp\\.ism" nil "/ssh:kerberos:"))))
 
 (defun my-discover-my-major ()
   (define-key 'help-command (kbd "C-m") 'discover-my-major))
@@ -1040,6 +1043,7 @@
    (my-os-custom)
    (my-ensure-save-dir)
    (my-ensure-irony-dir)
+   (my-tramp)
    ;; --------------------------------------
    ;; -- configuring global packages
    ;; --------------------------------------
