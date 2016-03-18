@@ -212,9 +212,6 @@
           ("https://raw.githubusercontent.com/overtone/emacs-live/master/packs/stable/colour-pack/lib/gandalf.el"
            "gandalf.el"
            "gandalf")
-          ("http://www.emacswiki.org/emacs-en/download/wide-n.el"
-           "wide-n.el"
-           wide-n)
           ("http://webonastick.com/emacs-lisp/hide-mode-line.el"
            "hide-mode-line.el"
            hide-mode-line))
@@ -282,10 +279,10 @@
 
   (evil-mode 1)
 
-  (evil-set-initial-state 'magit-log-edit-mode 'emacs)
-  (evil-set-initial-state 'nav-mode 'emacs)
-  (evil-set-initial-state 'grep-mode 'emacs)
-  (evil-set-initial-state 'ibuffer-mode 'emacs)
+  ;;(evil-set-initial-state 'magit-log-edit-mode 'emacs)
+  ;;(evil-set-initial-state 'nav-mode 'emacs)
+  ;;(evil-set-initial-state 'grep-mode 'emacs)
+  ;;(evil-set-initial-state 'ibuffer-mode 'emacs)
 
   (evil-define-key 'normal global-map "," 'evil-execute-in-god-state)
   (evil-define-key 'normal global-map (kbd "M") 'evil-goto-mark-line))
@@ -303,8 +300,9 @@
   ;; C-n C-p add cursor
   ;; M-n M-p cycle thorugh cursor
   ;; C-t skip cursor
-  (require 'evil-mc)
-  (global-evil-mc-mode 1))
+  ;;(require 'evil-mc)
+  ;;(global-evil-mc-mode 1)
+)
 
 (defun my-evil-matchit ()
   (require 'evil-matchit)
