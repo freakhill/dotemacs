@@ -572,28 +572,6 @@
       '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
   (add-hook 'after-init-hook #'global-flycheck-mode))
 
-(defun my-golden-ratio ()
-  (eval-after-load "golden-ratio"
-    '(progn
-       (add-to-list 'golden-ratio-exclude-modes "ediff-mode")
-       (add-to-list 'golden-ratio-exclude-modes "helm-mode")
-       (add-to-list 'golden-ratio-exclude-modes "dired-mode")
-       (add-to-list 'golden-ratio-inhibit-functions 'pl/helm-alive-p)))
-                                        ;(add-to-list 'golden-ratio-inhibit-functions 'pl/ediff-comparison-buffer-p)))
-                                        ;(defun pl/ediff-comparison-buffer-p () ediff-this-buffer-ediff-sessions)
-  (defun pl/helm-alive-p () (if (boundp 'helm-alive-p) (symbol-value 'helm-alive-p)))
-  (setq golden-ratio-exclude-modes '("ediff-mode"
-                                     "gdb-locals-mode"
-                                     "gdb-frame-modes"
-                                     "gud-mode"
-                                     "gdb-inferior-io-mode"
-                                     "magit-log-mode"
-                                     "magit-reflog-mode"
-                                     "magit-status-mode"
-                                     "eshell-mode"
-                                     "dired-mode"))
-  (golden-ratio-mode))
-
 (defun my-smex ()
   (require 'smex)
   (smex-initialize)
@@ -688,6 +666,9 @@
 
 (defun my-rust ()
   (autoload 'rust-mode "rust-mode" nil t)
+  (add-hook 'rust-mode-hook #'racer-mode)
+  (add-hook 'racer-mode-hook #'eldoc-mode)
+  (add-hook 'racer-mode-hook #'company-mode)
   (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode)))
 
 (defun my-set-shell-to-bash ()
