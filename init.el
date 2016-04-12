@@ -214,7 +214,10 @@
            "gandalf")
           ("http://webonastick.com/emacs-lisp/hide-mode-line.el"
            "hide-mode-line.el"
-           hide-mode-line))
+           hide-mode-line)
+          ("https://raw.githubusercontent.com/sandstorm-io/capnproto/master/highlighting/emacs/capnp-mode.el"
+           "capnp-mode.el"
+           capnp-mode))
       (lambda (pkg)
         (condition-case e
             (apply dl-and-load-mode pkg)
@@ -665,6 +668,7 @@
                         (local-set-key (kbd "C-c C-u") 'undo-tree-visualize))))
 
 (defun my-rust ()
+  (setq racer-cmd "/home/johan/.cargo/bin/racer")
   (autoload 'rust-mode "rust-mode" nil t)
   (add-hook 'rust-mode-hook #'racer-mode)
   (add-hook 'racer-mode-hook #'eldoc-mode)
@@ -869,6 +873,9 @@
 (defun my-asciidoc ()
   (autoload 'adoc-mode "adoc-mode" nil t)
   (add-to-list 'auto-mode-alist (cons "\\.txt\\'" 'adoc-mode)))
+
+(defun my-capnp ()
+  (add-to-list 'auto-mode-alist '("\\.capnp\\'" . capnp-mode)))
 
 (defun my-os-custom ()
 
@@ -1080,6 +1087,7 @@
    (my-csharp)
    (my-markdown)
    (my-asciidoc)
+   (my-capnp)
    ;; --------------------------------------
    ;; other
    ;; --------------------------------------
