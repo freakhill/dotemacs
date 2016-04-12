@@ -178,11 +178,15 @@
   (require 'saveplace)
   (setq-default save-place t)
 
-  ;; C-x r j E -- to edit my config file
+  ;; recompile binding
+  (global-set-key (kbd "<f8>") #'recompile)
+
+  ;; C-x r j i -- to edit my init file
+  ;; C-x r j c -- to edit my cask file
   (setq user-cask-init-file
         (expand-file-name "Cask" (file-name-directory user-init-file)))
   (set-register ?c `(file . ,user-cask-init-file))
-  (set-register ?e `(file . ,user-init-file)))
+  (set-register ?i `(file . ,user-init-file)))
 
 (defun my-load-extra-files ()
   (let
