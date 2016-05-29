@@ -45,7 +45,6 @@
 
 (defvar my-save-dir "~/.emacs.d/save")
 (defvar my-temp-dir "~/.emacs.d/tmp")
-(defvar my-irony-dir "~/.emacs.d/irony")
 
 (defun my-ensure-save-dir ()
   (my-ensure-dir my-save-dir))
@@ -806,15 +805,23 @@
   (setq nrepl-history-file "~/nrepl-history.dat")
   (add-to-list 'auto-mode-alist '("\\.boot$" . clojure-mode)))
 
-(defun my-irony ()
-  (eval-after-load 'flycheck
-    '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
-  (eval-after-load 'company
-    '(add-to-list 'company-backends 'company-irony))
-  (setq w32-pipe-read-delay 0)
-  (add-hook 'c++-mode-hook 'irony-mode)
-  (add-hook 'c-mode-hook 'irony-mode)
-  (add-hook 'objc-mode-hook 'irony-mode))
+(defun my-rtags ()
+  (cond
+   ((string-match "darwin" system-configuration)
+    (message "rtags for MacOS")
+    (load-file "~/rtags/src/rtags.el")
+    (load-file "~/rtags/src/company-rtags.el")
+    ;;(load-file "~/rtags/src/flycheck-rtags.el")
+    (rtags-enable-standard-keybindings c-mode-base-map)
+    (setq rtags-autostart-diagnostic t
+          rtags-completion-enabled t
+          rtags-path "~/rtags/bin"))
+   ((string-match "linux" system-configuration)
+    (message "no rtags for Linux yet"))
+   ((string-match "i686-pc-mingw32" system-configuration)
+    (message "no rtags for Win 7 yet"))
+   ((string-match "nt6" system-configuration)
+    (message "no rtags for Win 7 yet"))))
 
 (defun my-compilation-buffer ()
   (require 'ansi-color)
@@ -1032,7 +1039,6 @@
    (my-basic-init)
    (my-os-custom)
    (my-ensure-save-dir)
-   (my-ensure-irony-dir)
    (my-tramp)
    ;; --------------------------------------
    ;; -- configuring global packages
@@ -1082,7 +1088,7 @@
    (my-emacs-refactor)
    (my-c++)
    (my-slime)
-   (my-irony)
+   (my-rtags)
    (my-compilation-buffer)
    (my-racket)
    (my-rust)
