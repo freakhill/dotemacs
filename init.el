@@ -955,7 +955,6 @@
    ;; -- configuring ide packages
    ;; --------------------------------------
    (my-guide-key)
-   (my-recentf)
    (my-ido)
    (my-smex)
    (my-flycheck)
