@@ -1,4 +1,4 @@
-; -*- coding: utf-8-unix -*-
+                                        ; -*- coding: utf-8-unix -*-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -250,8 +250,6 @@
            "lua-mode")
           ("https://raw.githubusercontent.com/overtone/emacs-live/master/packs/stable/clojure-pack/lib/auto-complete/dict/ruby-mode"
            "ruby-mode")
-          ("https://raw.githubusercontent.com/overtone/emacs-live/master/packs/stable/clojure-pack/lib/auto-complete/dict/scheme-mode"
-           "scheme-mode")
           ("https://raw.githubusercontent.com/overtone/emacs-live/master/packs/stable/clojure-pack/lib/auto-complete/dict/sh-mode"
            "sh-mode")
           ("https://raw.githubusercontent.com/overtone/emacs-live/master/packs/stable/clojure-pack/lib/auto-complete/dict/tuareg-mode"
@@ -285,11 +283,6 @@
 
   (evil-mode 1)
 
-  ;;(evil-set-initial-state 'magit-log-edit-mode 'emacs)
-  ;;(evil-set-initial-state 'nav-mode 'emacs)
-  ;;(evil-set-initial-state 'grep-mode 'emacs)
-  ;;(evil-set-initial-state 'ibuffer-mode 'emacs)
-
   (evil-define-key 'normal global-map "," 'evil-execute-in-god-state)
   (evil-define-key 'normal global-map (kbd "M") 'evil-goto-mark-line))
 
@@ -308,27 +301,16 @@
   ;; C-t skip cursor
   ;;(require 'evil-mc)
   ;;(global-evil-mc-mode 1)
-)
+  )
 
 (defun my-evil-matchit ()
   (require 'evil-matchit)
   ;; use "%" to travel through matching syntax elements
   (global-evil-matchit-mode 1))
 
-(defun my-evil-jumper ()
-  (require 'evil-jumper)
-  ;; can jump through buffer and revive dead buffers
-  (evil-jumper-mode t))
-
 (defun my-evil-exchange ()
   (require 'evil-exchange)
-  ;; visual mode, select then "gx"
-  ;; visual mode, select then "gx"
-  ;; => EXCHANGE!
   (evil-exchange-install))
-
-;;(defun my-evil-cleverparens ()
-;;  (add-hook 'smartparens-strict-mode #'evil-cleverparens-mode))
 
 (defun my-evil-magit ()
   (require 'evil-magit))
@@ -404,61 +386,12 @@
                                (interactive)
                                (scroll-up 1))))
 
-(defun my-expand-region ()
-  ;;(require 'expand-region)
-  (global-set-key (kbd "C-q") 'er/expand-region))
-
 (defun my-nyan ()
   (nyan-mode t))
-
-(defun my-gnus ()
-  ;; stuff picked from www.xsteve.at/prg/gnus
-  (setq gnus-select-method '(nntp "news.gmane.org"))
-  (setq gnus-use-adaptive-scoring t)
-  (setq gnus-score-expiry-days 14)
-  (setq gnus-default-adaptive-score-alist
-        '((gnus-unread-mark)
-          (gnus-ticked-mark (from 4))
-          (gnus-dormant-mark (from 5))
-          (gnus-saved-mark (from 20) (subject 5))
-          (gnus-del-mark (from -2) (subject -5))
-          (gnus-read-mark (from 2) (subject 1))))
-  (setq gnus-score-decay-constant 1)
-  (setq gnus-score-decay-scale 0.03)
-  (setq gnus-decay-scores t)
-
-  (setq gnus-global-score-files '("~/Dropbox/gnus/all.SCORE"))
-  (setq gnus-summary-expunge-below -999)
-
-  (add-hook 'message-sent-hook 'gnus-score-followup-article)
-  (add-hook 'message-sent-hook 'gnus-score-followup-thread)
-
-  (setq gnus-directory "~/Dropbox/gnus")
-  (setq message-directory "~/Dropbox/gnus/mail")
-  (setq nnml-directory "~/Dropbox/gnus/nnml-mail")
-  (setq gnus-article-save-directory "~/Dropbox/gnus/saved")
-  (setq gnus-kill-files-directory "~/Dropbox/gnus/scores")
-  (setq gnus-cache-directory "~/Dropbox/gnus/cache")
-
-  (setq gnus-summary-line-format "%O%U%R%z%d %B%(%[%4L: %-22,22f%]%) %s\n")
-  (setq gnus-summary-mode-line-format "Gnus: %p [%A / Sc:%4z] %Z")
-
-  (setq gnus-summary-same-subject "")
-  (setq gnus-sum-thread-tree-root "")
-  (setq gnus-sum-thread-tree-single-indent "")
-  (setq gnus-sum-thread-tree-leaf-with-other "+-> ")
-  (setq gnus-sum-thread-tree-vertical "|")
-  (setq gnus-sum-thread-tree-single-leaf "`-> "))
 
 (defun my-windmove ()
   (when (fboundp 'windmove-default-keybindings)
     (windmove-default-keybindings)))
-
-(defun my-recentf ()
-  (require 'recentf-ext)
-  (recentf-mode 1)
-  (setq recentf-max-menu-items 25)
-  (setq recentf-max-saved-items 5000))
 
 (defun my-ibuffer ()
   (autoload 'ibuffer "ibuffer" "List buffers." t)
@@ -565,6 +498,7 @@
         ido-save-directory-list-file (expand-file-name "ido.hist" my-save-dir)
         ido-default-file-method 'selected-window
         ido-auto-merge-work-directories-length -1)
+
   (ido-mode +1)
   (ido-ubiquitous-mode +1)
   ;; smarter fuzzy matching for ido
@@ -573,6 +507,8 @@
   (setq ido-use-faces nil))
 
 (defun my-flycheck ()
+  (with-eval-after-load 'flycheck
+    (flycheck-pos-tip-mode))
   (eval-after-load 'flycheck
     '(custom-set-variables
       '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
@@ -643,7 +579,7 @@
 (defun my-guide-key ()
   (guide-key-mode t)
   (setq guide-key/recursive-key-sequence-flag t)
-  (setq guide-key/guide-key-sequence '("C-x" "C-c")))
+  (setq guide-key/guide-key-sequence '("C-x" "C-c" "C-r")))
 
 (defun my-android ()
   (cond
@@ -666,10 +602,6 @@
   (setq history-history-max 999)
   (history-mode))
 
-(defun my-c++ ()
-  (add-hook 'c++-mode (lambda ()
-                        (local-set-key (kbd "C-c C-u") 'undo-tree-visualize))))
-
 (defun my-rust ()
   (setq racer-cmd "/home/johan/.cargo/bin/racer")
   (autoload 'rust-mode "rust-mode" nil t)
@@ -681,10 +613,6 @@
 (defun my-set-shell-to-bash ()
   (setq shell-file-name "bash")
   (setq explicit-shell-file-name shell-file-name))
-
-(defun my-java ()
-  ;; eclipse!
-  )
 
 (defun my-ruby ()
   (add-hook 'ruby-mode-hook 'robe-mode)
@@ -698,10 +626,6 @@
   (add-to-list 'auto-mode-alist '("\\.thor$" . ruby-mode))
   (add-to-list 'auto-mode-alist '("Capfile$" . ruby-mode))
   (add-to-list 'auto-mode-alist '("Vagrantfile$" . ruby-mode)))
-
-(defun my-emacs-refactor ()
-  (define-key prog-mode-map (kbd "M-RET") 'emr-show-refactor-menu)
-  (add-hook 'prog-mode-hook 'emr-initialize))
 
 (defun my-fill-column-indicator ()
   (setq fci-rule-column 80)
@@ -739,22 +663,9 @@
   :group 'my-modes
   :keymap my-lisp-minor-mode-map
   (progn
-    (require 'smartparens-config)
-    (smartparens-strict-mode t)
-    (evil-smartparens-mode t)
+    (evil-lispy-mode t)
     (rainbow-delimiters-mode t)
-    (hs-minor-mode t)
-    (evil-define-key 'normal
-      evil-smartparens-mode-map
-      (kbd "K") #'sp-kill-sexp
-      (kbd "S") #'sp-splice-sexp
-      (kbd ">") #'sp-forward-slurp-sexp
-      (kbd "<") #'sp-forward-barf-sexp
-      (kbd "{") #'sp-up-sexp
-      (kbd "}") #'sp-down-sexp
-      (kbd "[") #'sp-backward-sexp
-      (kbd "]") #'sp-forward-sexp
-      (kbd "C-c I") #'slamhound)))
+    (hs-minor-mode t)))
 
 (defun my-clojure-custom ()
   (require 'clojure-mode-extra-font-locking)
@@ -795,14 +706,10 @@
   (setq cider-repl-tab-command #'indent-for-tab-command)
   (setq cider-prefer-local-resources t)
   (setq nrepl-log-messages t)
-  ;;(setq cider-repl-pop-to-buffer-on-connect nil)
 
-  ;;--- typed clojure mode
-  (add-hook 'clojure-mode-hook #'typed-clojure-mode)
-
-  (setq nrepl-hide-special-buffers t)
-  (setq nrepl-popup-stacktraces-in-repl t)
-  (setq nrepl-history-file "~/nrepl-history.dat")
+  (setq nrepl-hide-special-buffers      t
+        nrepl-popup-stacktraces-in-repl t
+        nrepl-history-file              "~/nrepl-history.dat")
   (add-to-list 'auto-mode-alist '("\\.boot$" . clojure-mode)))
 
 (defun my-rtags ()
@@ -851,25 +758,6 @@
 (defun my-fancy-narrow ()
   (define-key evil-visual-state-map (kbd "n") #'fancy-narrow-to-region)
   (define-key evil-normal-state-map (kbd "g r w") #'fancy-widen))
-
-(defun my-chickenscheme ()
-  (add-to-list 'auto-mode-alist '("\\.scm$" . scheme-mode))
-  (setq geiser-mode-auto-p nil)
-  (setq scheme-program-name "csi -:c")
-  (when (string= system-name "localhost.localdomain")
-    (add-to-list 'load-path "/usr/lib64/chicken/6")
-    (autoload 'chicken-slime "chicken-slime" "SWANK backend for Chicken" t))
-  (add-hook 'scheme-mode-hook (lambda () (auto-fill-mode t))))
-
-(defun my-slime ()
-  (setq slime-contribs '(slime-fancy slime-banner))
-  (cond
-   ((string= system-name "localhost.localdomain")
-    (setq inferior-lisp-program "/usr/local/bin/sbcl")))
-  (add-hook 'slime-mode-hook #'set-up-slime-ac)
-  (add-hook 'slime-repl-mode-hook #'set-up-slime-ac)
-  (eval-after-load "auto-complete"
-    '(add-to-list 'ac-modes 'slime-repl-mode)))
 
 (defun my-csharp ()
   (autoload 'csharp-mode "csharp-mode" "Major mode for editing C# code." t)
@@ -985,8 +873,7 @@
      (cond
       ((eq system-type 'cygwin) "getclip")
       ((eq system-type 'darwin) "pbpaste")
-      (t "xsel -ob")
-      )
+      (t "xsel -ob"))
      1))
   ;; ---
   (defun myfn-eval-last-sexp-with-value (value &optional prefix)
@@ -1049,13 +936,11 @@
    (my-evil-surround)
    (my-evil-mc)
    (my-evil-matchit)
-   ;;(my-evil-jumper)
    (my-evil-exchange)
    (my-evil-magit)
    (my-avy)
    (my-ace-jump-buffer)
    (my-help-swoop)
-   (my-expand-region)
    (my-windmove)
    (my-ibuffer)
    (my-hippie)
@@ -1085,9 +970,6 @@
    (my-fancy-narrow)
    (my-android)
    (my-fill-column-indicator)
-   (my-emacs-refactor)
-   (my-c++)
-   (my-slime)
    (my-rtags)
    (my-compilation-buffer)
    (my-racket)
@@ -1104,7 +986,6 @@
    (my-shell-pop)
    (my-deft)
    (my-funcs)
-   (my-modeline)
-   (my-gnus)))
+   (my-modeline)))
 
 (my-init)
