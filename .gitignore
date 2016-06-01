@@ -1,4 +1,5 @@
 *~
+.*
 *.dat
 *.eld
 .smex-items
@@ -18,6 +19,8 @@ url/
 dl/
 save/
 eshell/
+irony/
+vimish-fold/
 projectile.cache
 recentf
 smex-items
