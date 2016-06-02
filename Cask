@@ -127,5 +127,6 @@
 (depends-on "use-package")
 (depends-on "web-mode")
 (depends-on "auto-yasnippet")
+(depends-on "find-file-in-project")
 (depends-on "avy")
 (depends-on "vimish-fold")
