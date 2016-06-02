@@ -12,10 +12,6 @@
     ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "26614652a4b3515b4bbbb9828d71e206cc249b67c9142c06239ed3418eff95e2" "f0b0710b7e1260ead8f7808b3ee13c3bb38d45564e369cbe15fc6d312f0cd7a0" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "e56f1b1c1daec5dbddc50abd00fcd00f6ce4079f4a7f66052cf16d96412a09a9" "b71d5d49d0b9611c0afce5c6237aacab4f1775b74e513d8ba36ab67dfab35e5a" "756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e" "cdc7555f0b34ed32eb510be295b6b967526dd8060e5d04ff0dce719af789f8e5" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" default)))
  '(flycheck-display-errors-function (function flycheck-pos-tip-error-messages))
  '(global-ede-mode t)
- '(haskell-process-auto-import-loaded-modules t)
- '(haskell-process-log t)
- '(haskell-process-suggest-remove-import-lines t)
- '(haskell-process-type (quote cabal-repl))
  '(inhibit-startup-screen t)
  '(semantic-mode t)
  '(uniquify-buffer-name-style (quote post-forward-angle-brackets) nil (uniquify)))
@@ -43,8 +39,9 @@
   (unless (file-exists-p d)
     (make-directory d)))
 
-(defvar my-save-dir "~/.emacs.d/save")
-(defvar my-temp-dir "~/.emacs.d/tmp")
+(defvar my-save-dir  "~/.emacs.d/save")
+(defvar my-temp-dir  "~/.emacs.d/tmp")
+(defvar my-irony-dir "~/.emacs.d/irony")
 
 (defun my-ensure-save-dir ()
   (my-ensure-dir my-save-dir))
@@ -56,7 +53,6 @@
   (my-ensure-dir my-temp-dir))
 
 (defun my-basic-init ()
-  ;;(desktop-save-mode t)
   (put 'upcase-region 'disabled nil)
   (put 'downcase-region 'disabled nil)
   (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
@@ -614,6 +610,36 @@
   (setq shell-file-name "bash")
   (setq explicit-shell-file-name shell-file-name))
 
+(defun my-evil-multiedit ()
+  (require 'evil-multiedit)
+  ;; Highlights all matches of the selection in the buffer.
+  (define-key evil-visual-state-map "R" 'evil-multiedit-match-all)
+  ;; Match the word under cursor (i.e. make it an edit region). Consecutive presses will
+  ;; incrementally add the next unmatched match.
+  (define-key evil-normal-state-map (kbd "M-d") 'evil-multiedit-match-and-next)
+  ;; Match selected region.
+  (define-key evil-visual-state-map (kbd "M-d") 'evil-multiedit-match-and-next)
+  ;; Same as M-d but in reverse.
+  (define-key evil-normal-state-map (kbd "M-D") 'evil-multiedit-match-and-prev)
+  (define-key evil-visual-state-map (kbd "M-D") 'evil-multiedit-match-and-prev)
+
+  ;; OPTIONAL: If you prefer to grab symbols rather than words, use
+  ;; `evil-multiedit-match-symbol-and-next` (or prev).
+
+  ;; Restore the last group of multiedit regions.
+  (define-key evil-visual-state-map (kbd "C-M-D") 'evil-multiedit-restore)
+  ;; RET will toggle the region under the cursor
+  (define-key evil-multiedit-state-map (kbd "RET") 'evil-multiedit-toggle-or-restrict-region)
+  ;; ...and in visual mode, RET will disable all fields outside the selected region
+  (define-key evil-motion-state-map (kbd "RET") 'evil-multiedit-toggle-or-restrict-region)
+  ;; For moving between edit regions
+  (define-key evil-multiedit-state-map (kbd "C-n") 'evil-multiedit-next)
+  (define-key evil-multiedit-state-map (kbd "C-p") 'evil-multiedit-prev)
+  (define-key evil-multiedit-insert-state-map (kbd "C-n") 'evil-multiedit-next)
+  (define-key evil-multiedit-insert-state-map (kbd "C-p") 'evil-multiedit-prev)
+  ;; Ex command that allows you to invoke evil-multiedit with a regular expression, e.g.
+  (evil-ex-define-cmd "ie[dit]" 'evil-multiedit-ex-match))
+
 (defun my-ruby ()
   (add-hook 'ruby-mode-hook 'robe-mode)
   (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
@@ -663,6 +689,7 @@
   :group 'my-modes
   :keymap my-lisp-minor-mode-map
   (progn
+    (require 'evil-lispy)
     (evil-lispy-mode t)
     (rainbow-delimiters-mode t)
     (hs-minor-mode t)))
@@ -934,7 +961,7 @@
    (my-evil)
    (my-evil-numbers)
    (my-evil-surround)
-   (my-evil-mc)
+   (my-evil-multiedit)
    (my-evil-matchit)
    (my-evil-exchange)
    (my-evil-magit)
