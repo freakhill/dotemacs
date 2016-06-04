@@ -878,6 +878,10 @@
   (autoload 'adoc-mode "adoc-mode" nil t)
   (add-to-list 'auto-mode-alist (cons "\\.txt\\'" 'adoc-mode)))
 
+(defun my-groovy ()
+  (autoload 'groovy-mode "groovy-mode" nil t)
+  (add-to-list 'auto-mode-alist (cons "\\Jenkinsfile\\'" 'groovy-mode)))
+
 (defun my-capnp ()
   (add-to-list 'auto-mode-alist '("\\.capnp\\'" . capnp-mode)))
 
@@ -1085,6 +1089,7 @@
    (my-irony)
    (my-compilation-buffer)
    (my-racket)
+   (my-groovy)
    (my-rust)
    (my-ruby)
    (my-lisp)

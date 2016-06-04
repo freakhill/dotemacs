@@ -66,6 +66,8 @@
 (depends-on "align-cljlet")
 ;; --- racket
 (depends-on "racket-mode")
+;; --- groovy (jenkinsfile)
+(depends-on "groovy-mode")
 ;; --- rust
 (depends-on "rust-mode")
 (depends-on "toml-mode")
