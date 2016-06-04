@@ -1,6 +1,8 @@
 (source gnu)
 (source melpa)
 
+(depends-on "cask")
+
 ;; --- themes
 (depends-on "color-theme")
 (depends-on "monokai-theme")
@@ -10,25 +12,25 @@
 (depends-on "smart-mode-line-powerline-theme")
 ;; --- evil
 (depends-on "evil")
+(depends-on "god-mode")
 (depends-on "evil-terminal-cursor-changer")
 (depends-on "evil-numbers")
 (depends-on "evil-surround")
-(depends-on "god-mode")
 (depends-on "evil-god-state")
+(depends-on "evil-mc")
+(depends-on "evil-magit")
+(depends-on "evil-matchit")
+(depends-on "evil-exchange")
+(depends-on "evil-lispy")
 ;; --- completion
-;;auto-complete
 (depends-on "company")
 (depends-on "browse-kill-ring")
 (depends-on "bbyac")
-;;[cask]yasnippet
-;;auto-yasnippet
 (depends-on "guide-key")
 ;; --- flycheck
-;;[cask]flycheck
 (depends-on "flycheck-clojure")
 (depends-on "flycheck-pos-tip")
 ;; --- projectile
-;;[cask]projectile
 (depends-on "org-projectile")
 ;; --- git
 (depends-on "git-gutter-fringe")
@@ -40,8 +42,6 @@
 (depends-on "rcirc")
 (depends-on "rcirc-color")
 (depends-on "rainbow-delimiters")
-(depends-on "ac-cider")
-(depends-on "projectile")
 ;; --- helm
 (depends-on "helm")
 (depends-on "helm-ag")
@@ -50,10 +50,6 @@
 (depends-on "helm-themes")
 (depends-on "helm-projectile")
 (depends-on "helm-mode-manager")
-;; --- lisp
-(depends-on "emr")
-(depends-on "slime")
-(depends-on "ac-slime")
 ;; --- clojure
 (depends-on "slamhound")
 (depends-on "clojure-mode")
@@ -61,9 +57,8 @@
 (depends-on "cider")
 (depends-on "cider-profile")
 (depends-on "clj-refactor")
-;;squiggly-clojure
-(depends-on "typed-clojure-mode")
 (depends-on "align-cljlet")
+(depends-on "ac-cider")
 ;; --- racket
 (depends-on "racket-mode")
 ;; --- groovy (jenkinsfile)
@@ -75,15 +70,20 @@
 ;; --- c#
 (depends-on "csharp-mode")
 (depends-on "omnisharp")
+;; --- c/c++
+(depends-on "irony")
+(depends-on "company-irony")
+(depends-on "irony-eldoc")
 ;; --- android
 (depends-on "android-mode")
 ;; --- markdown
 (depends-on "markdown-mode")
+(depends-on "markdown-preview-eww") ;; requires "gem install redcarpet"
+;; --- AsciiDoc
+(depends-on "adoc-mode") ;; gem install asciidoctor (not required)
 ;; --- various stuff
-(depends-on "php-mode")              ;;
+(depends-on "projectile")
 (depends-on "dockerfile-mode")       ;;
-;;lentic              ;; buffer lenses
-;;[cask]smex                  ;;
 (depends-on "shell-pop")             ;; display and hide a shell
 (depends-on "discover-my-major")     ;;
 (depends-on "ido-ubiquitous")        ;;
@@ -98,16 +98,10 @@
 (depends-on "fill-column-indicator") ;;
 (depends-on "restclient")            ;; rest client
 (depends-on "json-reformat")         ;; json reformatter
-(depends-on "recentf-ext")           ;;
 (depends-on "buffer-move")           ;;
-;;[cask]expand-region ;;
-;;[cask]popwin        ;;
 (depends-on "vlf")                   ;;
 (depends-on "diff-hl")               ;;
 (depends-on "grizzl")                ;;
-;;[cask]dash          ;; lib
-;;[cask]s             ;; lib
-;;[cask]exec-path-from-shell  ;;
 (depends-on "vkill")                 ;; view and kill Unix processes
 (depends-on "rich-minority")         ;; hide/highlists list of minor modes
 (depends-on "highlight")             ;;
@@ -117,13 +111,10 @@
 (depends-on "elmacro")               ;; save macros as emacs lisp
 (depends-on "tiny")                  ;; generates linear ranges
 (depends-on "deft")                  ;; quicknote tool sync through my dropbox
-
 (depends-on "bind-key")
-(depends-on "cask")
 (depends-on "dash")
 (depends-on "drag-stuff")
 (depends-on "exec-path-from-shell")
-(depends-on "expand-region")
 (depends-on "f")
 (depends-on "flycheck")
 (depends-on "flycheck-cask")
@@ -131,7 +122,6 @@
 (depends-on "idle-highlight-mode")
 (depends-on "multiple-cursors")
 (depends-on "nyan-mode")
-(depends-on "pallet")
 (depends-on "popwin")
 (depends-on "prodigy")
 (depends-on "projectile")
@@ -142,20 +132,3 @@
 (depends-on "yasnippet")
 (depends-on "avy")
 (depends-on "vimish-fold")
-(depends-on "smartparens")
-(depends-on "evil-mc")
-(depends-on "evil-magit")
-(depends-on "evil-matchit")
-(depends-on "evil-jumper")
-(depends-on "evil-exchange")
-;;(depends-on "evil-cleverparens")
-(depends-on "evil-smartparens")
-(depends-on "irony")
-(depends-on "company-irony")
-(depends-on "irony-eldoc")
-(depends-on "flycheck-irony")
-(depends-on "use-package")
-;; markdown
-(depends-on "markdown-preview-eww") ;; requires "gem install redcarpet"
-;; AsciiDoc
-(depends-on "adoc-mode") ;; gem install asciidoctor (not required)
