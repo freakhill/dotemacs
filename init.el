@@ -692,7 +692,8 @@
     (require 'evil-lispy)
     (evil-lispy-mode t)
     (rainbow-delimiters-mode t)
-    (hs-minor-mode t)))
+    (hs-minor-mode t)
+    (evil-)))
 
 (defun my-clojure-custom ()
   (require 'clojure-mode-extra-font-locking)
@@ -700,6 +701,7 @@
   (require 'icomplete) ;; for cider minibuffer completion
   ;;(eval-after-load 'flycheck '(flycheck-clojure-setup))
   (clj-refactor-mode t)
+  (helm-cider-mode 1)
   (flycheck-mode t)
   (cljr-add-keybindings-with-prefix "C-r")
   (local-set-key (kbd "C-c C-a") 'align-cljlet)

@@ -59,6 +59,7 @@
 (depends-on "clj-refactor")
 (depends-on "align-cljlet")
 (depends-on "ac-cider")
+(depends-on "helm-cider")
 ;; --- racket
 (depends-on "racket-mode")
 ;; --- rust
