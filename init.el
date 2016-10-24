@@ -1,4 +1,11 @@
 ; -*- coding: utf-8-unix -*-
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -13,6 +20,10 @@
  '(flycheck-display-errors-function (function flycheck-pos-tip-error-messages))
  '(global-ede-mode t)
  '(inhibit-startup-screen t)
+ '(package-selected-packages
+   (quote
+    (yaml-mode zenburn-theme window-numbering web-mode vlf vkill vimish-fold use-package toml-mode tiny smex smart-mode-line-powerline-theme slamhound shell-pop restclient rcirc-color rainbow-delimiters racket-mode racer prodigy org-projectile omnisharp nyan-mode monokai-theme markdown-preview-eww markdown-mode json-reformat irony-eldoc ido-ubiquitous idle-highlight-mode ibuffer-vc htmlize hl-anything highlight helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-cider helm-ag haskell-mode guide-key groovy-mode grizzl git-timemachine git-messenger git-gutter-fringe framesize flycheck-pos-tip flycheck-clojure flycheck-cask flx-ido find-file-in-project fill-column-indicator fancy-narrow exec-path-from-shell evil-terminal-cursor-changer evil-surround evil-numbers evil-multiedit evil-matchit evil-magit evil-lispy evil-god-state evil-exchange elmacro drag-stuff dockerfile-mode discover-my-major dired+ diff-hl deft company-irony color-theme clojure-mode-extra-font-locking clj-refactor clipmon cider-profile cask buffer-move bbyac auto-yasnippet android-mode align-cljlet adoc-mode ace-jump-buffer ac-cider)))
+ '(safe-local-variable-values (quote ((c-basic-indent . 4))))
  '(semantic-mode t)
  '(uniquify-buffer-name-style (quote post-forward-angle-brackets) nil (uniquify)))
 (custom-set-faces
@@ -22,10 +33,10 @@
  ;; If there is more than one, they won't work right.
  '(diff-added ((t (:foreground "Green"))))
  '(diff-removed ((t (:foreground "Red"))))
- '(ediff-even-diff-A ((((class color) (background dark)) (:background "dark green"))) t)
- '(ediff-even-diff-B ((((class color) (background dark)) (:background "dark red"))) t)
- '(ediff-odd-diff-A ((((class color) (background dark)) (:background "dark green"))) t)
- '(ediff-odd-diff-B ((((class color) (background dark)) (:background "dark red"))) t)
+ '(ediff-even-diff-A ((((class color) (background dark)) (:background "dark green"))))
+ '(ediff-even-diff-B ((((class color) (background dark)) (:background "dark red"))))
+ '(ediff-odd-diff-A ((((class color) (background dark)) (:background "dark green"))))
+ '(ediff-odd-diff-B ((((class color) (background dark)) (:background "dark red"))))
  '(mumamo-background-chunk-major ((((class color) (background dark)) (:background "black"))) t)
  '(mumamo-background-chunk-submode1 ((((class color) (background dark)) (:background "black"))) t)
  '(shm-current-face ((t (:background "green" :foreground "black"))) t)
@@ -202,18 +213,19 @@
     (my-ensure-dir ac-dict-dir)
     (add-to-list 'load-path dl-dir)
     (-each ;; packages
-        '(("https://raw.githubusercontent.com/buzztaiki/auto-complete/master/ac-company.el"
-           "ac-company.el"
-           ac-company)
-          ("https://raw.githubusercontent.com/overtone/emacs-live/master/packs/stable/colour-pack/lib/cyberpunk.el"
-           "cyberpunk.el"
-           "cyberpunk")
+     '(
+       ("https://raw.githubusercontent.com/buzztaiki/auto-complete/master/ac-company.el"
+	"ac-company.el"
+	ac-company)
+       ("https://raw.githubusercontent.com/overtone/emacs-live/master/packs/stable/colour-pack/lib/cyberpunk.el"
+	"cyberpunk.el"
+	"cyberpunk")
           ("https://raw.githubusercontent.com/overtone/emacs-live/master/packs/stable/colour-pack/lib/gandalf.el"
            "gandalf.el"
            "gandalf")
           ("http://webonastick.com/emacs-lisp/hide-mode-line.el"
            "hide-mode-line.el"
-           hide-mode-line)
+          hide-mode-line)
           ("https://raw.githubusercontent.com/sandstorm-io/capnproto/master/highlighting/emacs/capnp-mode.el"
            "capnp-mode.el"
            capnp-mode))
@@ -830,8 +842,8 @@
 
   (defun my-macos-custom ()
     (my-set-shell-to-bash)
-    (require 'exec-path-from-shell)
-    (exec-path-from-shell-initialize)
+    ;;(require 'exec-path-from-shell)
+    ;;(exec-path-from-shell-initialize)
     (setq ns-function-modifier 'hyper)
     (autoload 'vkill "vkill" nil t)
     (setq dired-listing-switches "-lha --group-directories-first")
@@ -1001,7 +1013,7 @@
    (my-fancy-narrow)
    (my-android)
    (my-fill-column-indicator)
-   (my-rtags)
+   ;(my-rtags)
    (my-compilation-buffer)
    (my-racket)
    (my-groovy)

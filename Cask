@@ -23,6 +23,7 @@
 (depends-on "evil-exchange")
 (depends-on "evil-lispy" :git "git@github.com:sp3ctum/evil-lispy.git")
 ;; --- completion
+;;(depends-on "auto-complete")
 (depends-on "company")
 (depends-on "browse-kill-ring")
 (depends-on "bbyac")
@@ -75,6 +76,8 @@
 (depends-on "irony")
 (depends-on "company-irony")
 (depends-on "irony-eldoc")
+;; --- haskell
+(depends-on "haskell-mode")
 ;; --- android
 (depends-on "android-mode")
 ;; --- markdown
@@ -133,3 +136,4 @@
 (depends-on "find-file-in-project")
 (depends-on "avy")
 (depends-on "vimish-fold")
+(depends-on "ripgrep")
