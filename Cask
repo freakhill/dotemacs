@@ -137,3 +137,4 @@
 (depends-on "avy")
 (depends-on "vimish-fold")
 (depends-on "ripgrep")
+(depends-on "polymode")
