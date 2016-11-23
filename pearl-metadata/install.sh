@@ -7,7 +7,8 @@ post_install() {
     cask install # install new emacs packages
     cask update  # update all packages
     popd
-    ln -sf "$PEARL_PKGDIR" ~/.emacs.d
+    rm -fr ~/.emacs ~/.emacs.d
+    ln -s "$PEARL_PKGDIR" ~/.emacs.d
 }
 
 pre_update() {
