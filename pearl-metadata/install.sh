@@ -12,7 +12,7 @@ post_install() {
 }
 
 pre_update() {
-    echo "nothing yet in pre-update..."
+    info "NYI"
 }
 
 post_update() {
@@ -24,9 +24,9 @@ post_update() {
 }
 
 pre_remove() {
-    echo "nothing yet in pre-remove..."
+    info "NYI"
 }
 
 post_remove() {
-    echo "nothing yet in post-remove..."
+    info "NYI"
 }
