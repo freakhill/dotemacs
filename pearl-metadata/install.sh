@@ -3,7 +3,7 @@ post_install() {
     curl -fsSL https://raw.githubusercontent.com/cask/cask/master/go | python
     # update
     pushd "$PEARL_PKGDIR"
-    export PATH="/home/freakhill/.cask/bin:$PATH"
+    export PATH="$HOME/.cask/bin":$PATH
     cask install # install new emacs packages
     cask update  # update all packages
     popd

@@ -1,4 +1,4 @@
-export PATH=$PATH:/home/freakhill/.cask/bin
+export PATH=$PATH:"$HOME/.cask/bin"
 
 alias e="emacsclient -nw"
 # supossing fasd is there
