@@ -7,11 +7,12 @@ post_install() {
     cask install # install new emacs packages
     cask update  # update all packages
     popd
-    ln -sf "$PEARL_PKGDIR" ~/.emacs.d
+    rm -fr ~/.emacs ~/.emacs.d
+    ln -s "$PEARL_PKGDIR" ~/.emacs.d
 }
 
 pre_update() {
-    echo "nothing yet in pre-update..."
+    info "NYI"
 }
 
 post_update() {
@@ -23,9 +24,9 @@ post_update() {
 }
 
 pre_remove() {
-    echo "nothing yet in pre-remove..."
+    info "NYI"
 }
 
 post_remove() {
-    echo "nothing yet in post-remove..."
+    info "NYI"
 }
