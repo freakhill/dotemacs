@@ -705,6 +705,8 @@
     (require 'evil-lispy)
     (evil-lispy-mode t)
     (evil-define-key 'normal evil-lispy-mode-map (kbd "m") 'evil-set-marker)
+    (evil-define-key 'normal global-map (kbd "{") 'evil-lispy/enter-state-left)
+    (evil-define-key 'normal global-map (kbd "}") 'evil-lispy/enter-state-right)
     (rainbow-delimiters-mode t)
     (hs-minor-mode t)))
 
