@@ -715,6 +715,7 @@
   (require 'clj-refactor)
   (require 'icomplete) ;; for cider minibuffer completion
   ;;(eval-after-load 'flycheck '(flycheck-clojure-setup))
+  (add-to-list 'exec-path "~/.local/bin")
   (clj-refactor-mode t)
   (helm-cider-mode 1)
   (flycheck-mode t)
