@@ -352,9 +352,9 @@
 
 (defun my-avy ()
   (avy-setup-default)
-  (define-key evil-motion-state-map (kbd "SPC") #'avy-goto-word-2)
+  (define-key evil-motion-state-map (kbd "SPC") #'avy-goto-char-2)
   (define-key evil-motion-state-map (kbd "C-SPC") #'avy-goto-char-1)
-  (define-key evil-normal-state-map (kbd "SPC") #'avy-goto-word-1))
+  (define-key evil-normal-state-map (kbd "SPC") #'avy-goto-char-2))
 
 (defun my-vimish-fold ()
   (vimish-fold-global-mode 1)
