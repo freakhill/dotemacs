@@ -52,7 +52,6 @@
 (depends-on "helm-projectile")
 (depends-on "helm-mode-manager")
 ;; --- clojure
-(depends-on "slamhound")
 (depends-on "clojure-mode")
 (depends-on "clojure-mode-extra-font-locking")
 (depends-on "cider")
