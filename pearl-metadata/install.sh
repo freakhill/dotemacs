@@ -28,5 +28,6 @@ pre_remove() {
 }
 
 post_remove() {
-    info "NYI"
+    rm -fr ~/.cask
+    rm -fr ~/.emacs.d
 }
