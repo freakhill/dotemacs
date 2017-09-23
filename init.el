@@ -727,6 +727,7 @@
   (cljr-add-keybindings-with-prefix "M-q")
   (local-set-key (kbd "C-c C-a") 'align-cljlet)
   (setq cider-cljs-lein-repl "(do (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))\")\"")
+  (setq cider-lein-parameters "repl :headless :host localhost")
   ;; remove the cider bind that overshadows the git messenger bind
   (local-unset-key (kbd "C-c M-c")))
 
