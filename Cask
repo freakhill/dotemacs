@@ -21,7 +21,7 @@
 (depends-on "evil-magit")
 (depends-on "evil-matchit")
 (depends-on "evil-exchange")
-(depends-on "evil-lispy" :git "git@github.com:sp3ctum/evil-lispy.git")
+;;(depends-on "evil-lispy" :git "git@github.com:sp3ctum/evil-lispy.git")
 ;; --- completion
 ;;(depends-on "auto-complete")
 (depends-on "company")
@@ -60,6 +60,8 @@
 (depends-on "align-cljlet")
 (depends-on "ac-cider")
 (depends-on "helm-cider")
+(depends-on "parinfer-mode" :git "git@github.com:DogLooksGood/parinfer-mode.git")
+(depends-on "lispy")
 ;; --- racket
 (depends-on "racket-mode")
 ;; --- groovy (jenkinsfile)
