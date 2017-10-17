@@ -588,10 +588,12 @@
   (global-set-key (kbd "C-c C-v") 'aya-expand)
   (evil-define-key 'insert global-map (kbd "C-<tab>") 'aya-open-line))
 
-(defun my-guide-key ()
-  (guide-key-mode t)
-  (setq guide-key/recursive-key-sequence-flag t)
-  (setq guide-key/guide-key-sequence '("C-x" "C-c" "C-r")))
+(defun my-which-key ()
+  (which-key-mode t)
+  (which-key-setup-side-window-bottom)
+  ;; (which-key-setup-side-window-right)
+  ;; (which-key-setup-side-window-right-bottom)
+)
 
 (defun my-android ()
   (cond
@@ -733,6 +735,7 @@
   (cljr-add-keybindings-with-prefix "M-q")
   (local-set-key (kbd "C-c C-a") 'align-cljlet)
   (setq cider-cljs-lein-repl "(do (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))\")\"")
+  (setq cider-lein-parameters "repl :headless :host localhost")
   ;; remove the cider bind that overshadows the git messenger bind
   (local-unset-key (kbd "C-c M-c")))
 
@@ -1051,7 +1054,7 @@
    ;; --------------------------------------
    ;; -- configuring ide packages
    ;; --------------------------------------
-   (my-guide-key)
+   (my-which-key)
    (my-ido)
    (my-smex)
    (my-flycheck)

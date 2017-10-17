@@ -27,7 +27,8 @@
 (depends-on "company")
 (depends-on "browse-kill-ring")
 (depends-on "bbyac")
-(depends-on "guide-key")
+; (depends-on "guide-key")
+(depends-on "which-key")
 ;; --- flycheck
 (depends-on "flycheck-clojure")
 (depends-on "flycheck-pos-tip")
