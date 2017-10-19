@@ -61,7 +61,6 @@
 (depends-on "align-cljlet")
 (depends-on "ac-cider")
 (depends-on "helm-cider")
-;;(depends-on "parinfer-mode" :git "git@github.com:DogLooksGood/parinfer-mode.git")
 (depends-on "parinfer")
 (depends-on "lispy")
 ;; --- racket
