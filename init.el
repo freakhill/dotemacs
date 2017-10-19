@@ -499,10 +499,11 @@
 
 (defun my-ido ()
   (require 'ido)
-  (require 'ido-ubiquitous)
   (require 'flx-ido)
+  (require 'ido-completing-read+)
 
   (setq ido-enable-prefix nil
+	ido-use-faces nil ;; to see flx highlights
         ido-enable-flex-matching t
         ido-create-new-buffer 'always
         ido-use-filename-at-point 'guess
@@ -511,12 +512,10 @@
         ido-default-file-method 'selected-window
         ido-auto-merge-work-directories-length -1)
 
-  (ido-mode +1)
-  (ido-ubiquitous-mode +1)
-  ;; smarter fuzzy matching for ido
-  (flx-ido-mode +1)
-  ;; disable ido faces to see flx highlights
-  (setq ido-use-faces nil))
+  (ido-mode 1)
+  (ido-everywhere 1)
+  (flx-ido-mode 1)
+  (ido-ubiquitous-mode 1))
 
 (defun my-flycheck ()
   (with-eval-after-load 'flycheck
@@ -590,10 +589,12 @@
 
 (defun my-which-key ()
   (which-key-mode t)
-  (which-key-setup-side-window-bottom)
+  (setq which-key-allow-evil-operators t)
+  (setq which-key-show-operator-state-maps t)
+  (which-key-enable-god-mode-support)
   ;; (which-key-setup-side-window-right)
   ;; (which-key-setup-side-window-right-bottom)
-)
+  (which-key-setup-side-window-bottom))
 
 (defun my-android ()
   (cond
@@ -713,10 +714,10 @@
   :keymap my-lisp-minor-mode-map
   (progn
     ;; (require 'evil-lispy)
-    (require 'parinfer-mode)
+    (require 'parinfer)
     (parinfer-mode t)
-    (evil-define-key 'insert global-map (kbd "C-,") parinfer-toggle-mode)
-    (evil-define-key 'normal global-map (kbd "g =") parinfer-auto-fix)
+    (evil-define-key 'insert global-map (kbd "C-,") 'parinfer-toggle-mode)
+    (evil-define-key 'normal global-map (kbd "g =") 'parinfer-auto-fix)
     ;; (evil-define-key 'normal evil-lispy-mode-map (kbd "m") 'evil-set-marker)
     ;; (evil-define-key 'normal global-map (kbd "{") 'evil-lispy/enter-state-left)
     ;; (evil-define-key 'normal global-map (kbd "}") 'evil-lispy/enter-state-right)
