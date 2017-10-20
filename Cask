@@ -21,7 +21,7 @@
 (depends-on "evil-magit")
 (depends-on "evil-matchit")
 (depends-on "evil-exchange")
-;;(depends-on "evil-lispy" :git "git@github.com:sp3ctum/evil-lispy.git")
+(depends-on "evil-lispy" :git "git@github.com:sp3ctum/evil-lispy.git")
 ;; --- completion
 ;;(depends-on "auto-complete")
 (depends-on "company")
