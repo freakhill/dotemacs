@@ -22,7 +22,7 @@
  '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
-    (lispyville evil-lispy parinfer nginx-mode package-build shut-up epl git commander f dash s markdown-mode+ polymode yaml-mode zenburn-theme window-numbering web-mode vlf vkill vimish-fold use-package toml-mode tiny smex smart-mode-line-powerline-theme slamhound shell-pop restclient rcirc-color rainbow-delimiters racket-mode racer prodigy org-projectile omnisharp nyan-mode monokai-theme markdown-preview-eww markdown-mode json-reformat irony-eldoc ido-ubiquitous idle-highlight-mode ibuffer-vc htmlize hl-anything highlight helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-cider helm-ag haskell-mode guide-key groovy-mode grizzl git-timemachine git-messenger git-gutter-fringe framesize flycheck-pos-tip flycheck-clojure flycheck-cask flx-ido find-file-in-project fill-column-indicator fancy-narrow exec-path-from-shell evil-terminal-cursor-changer evil-surround evil-numbers evil-multiedit evil-matchit evil-magit evil-god-state evil-exchange elmacro drag-stuff dockerfile-mode discover-my-major dired+ diff-hl deft company-irony color-theme clojure-mode-extra-font-locking clj-refactor clipmon cider-profile cask buffer-move bbyac auto-yasnippet android-mode align-cljlet adoc-mode ace-jump-buffer ac-cider)))
+    (lispyville evil-lispy nginx-mode package-build shut-up epl git commander f dash s markdown-mode+ polymode yaml-mode zenburn-theme window-numbering web-mode vlf vkill vimish-fold use-package toml-mode tiny smex smart-mode-line-powerline-theme slamhound shell-pop restclient rcirc-color rainbow-delimiters racket-mode racer prodigy org-projectile omnisharp nyan-mode monokai-theme markdown-preview-eww markdown-mode json-reformat irony-eldoc ido-ubiquitous idle-highlight-mode ibuffer-vc htmlize hl-anything highlight helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-cider helm-ag haskell-mode guide-key groovy-mode grizzl git-timemachine git-messenger git-gutter-fringe framesize flycheck-pos-tip flycheck-clojure flycheck-cask flx-ido find-file-in-project fill-column-indicator fancy-narrow exec-path-from-shell evil-terminal-cursor-changer evil-surround evil-numbers evil-multiedit evil-matchit evil-magit evil-god-state evil-exchange elmacro drag-stuff dockerfile-mode discover-my-major dired+ diff-hl deft company-irony color-theme clojure-mode-extra-font-locking clj-refactor clipmon cider-profile cask buffer-move bbyac auto-yasnippet android-mode align-cljlet adoc-mode ace-jump-buffer ac-cider)))
  '(safe-local-variable-values (quote ((c-basic-indent . 4))))
  '(semantic-mode t)
  '(uniquify-buffer-name-style (quote post-forward-angle-brackets) nil (uniquify)))
@@ -714,14 +714,14 @@
   :keymap my-lisp-minor-mode-map
   (progn
     (require 'evil-lispy)
-    (require 'parinfer)
-    (parinfer-mode t)
+    ;; (require 'parinfer)
+    ;; (parinfer-mode t)
     (evil-define-key 'insert global-map (kbd "M-a") 'parinfer-toggle-mode)
     (evil-define-key 'normal global-map (kbd "g =") 'parinfer-auto-fix)
-    ;; (evil-define-key 'normal evil-lispy-mode-map (kbd "m") 'evil-set-marker)
+    (evil-define-key 'normal evil-lispy-mode-map (kbd "m") 'evil-set-marker)
     (evil-define-key 'normal global-map (kbd "{") 'evil-lispy/enter-state-left)
     (evil-define-key 'normal global-map (kbd "}") 'evil-lispy/enter-state-right)
-    ;; (rainbow-delimiters-mode t)
+    (rainbow-delimiters-mode t)
     (hs-minor-mode t)))
 
 (defun my-clojure-custom ()
@@ -1076,6 +1076,7 @@
    (my-groovy)
    (my-rust)
    (my-ruby)
+   (my-parinfer)
    (my-lisp)
    (my-csharp)
    (my-markdown)
