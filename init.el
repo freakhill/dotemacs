@@ -714,10 +714,7 @@
   :keymap my-lisp-minor-mode-map
   (progn
     (require 'evil-lispy)
-    ;; (require 'parinfer)
-    ;; (parinfer-mode t)
-    (evil-define-key 'insert global-map (kbd "M-a") 'parinfer-toggle-mode)
-    (evil-define-key 'normal global-map (kbd "g =") 'parinfer-auto-fix)
+    (evil-lispy-mode t)
     (evil-define-key 'normal evil-lispy-mode-map (kbd "m") 'evil-set-marker)
     (evil-define-key 'normal global-map (kbd "{") 'evil-lispy/enter-state-left)
     (evil-define-key 'normal global-map (kbd "}") 'evil-lispy/enter-state-right)
