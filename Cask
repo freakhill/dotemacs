@@ -79,6 +79,7 @@
 (depends-on "irony-eldoc")
 ;; --- haskell
 (depends-on "haskell-mode")
+(depends-on "intero")
 ;; --- android
 (depends-on "android-mode")
 ;; --- markdown
