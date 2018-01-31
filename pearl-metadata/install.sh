@@ -1,13 +1,18 @@
 post_install() {
     # cask
+    info "installing cask"
     curl -fsSL https://raw.githubusercontent.com/cask/cask/master/go | python
     # update
     pushd "$PEARL_PKGDIR"
     export PATH="$HOME/.cask/bin":$PATH
+    info "installing packages"
     cask install # install new emacs packages
+    info "updating packages"
     cask update  # update all packages
     popd
+    info "deleting old emacs conf folder"
     rm -fr ~/.emacs ~/.emacs.d
+    info "linking new emacs conf folder"
     ln -s "$PEARL_PKGDIR" ~/.emacs.d
 }
 
