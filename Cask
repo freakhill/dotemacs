@@ -93,7 +93,6 @@
 (depends-on "ido-completing-read+")  ;;
 (depends-on "flx-ido")               ;;
 (depends-on "ibuffer-vc")            ;;
-(depends-on "dired+")                ;;
 (depends-on "fancy-narrow")          ;;
 (depends-on "epl")                   ;;
 (depends-on "pkg-info")              ;;
