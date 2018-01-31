@@ -22,7 +22,7 @@
  '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
-    (nginx-mode package-build shut-up epl git commander f dash s markdown-mode+ polymode yaml-mode zenburn-theme window-numbering web-mode vlf vkill vimish-fold use-package toml-mode tiny smex smart-mode-line-powerline-theme slamhound shell-pop restclient rcirc-color rainbow-delimiters racket-mode racer prodigy org-projectile omnisharp nyan-mode monokai-theme markdown-preview-eww markdown-mode json-reformat irony-eldoc ido-ubiquitous idle-highlight-mode ibuffer-vc htmlize hl-anything highlight helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-cider helm-ag haskell-mode guide-key groovy-mode grizzl git-timemachine git-messenger git-gutter-fringe framesize flycheck-pos-tip flycheck-clojure flycheck-cask flx-ido find-file-in-project fill-column-indicator fancy-narrow exec-path-from-shell evil-terminal-cursor-changer evil-surround evil-numbers evil-multiedit evil-matchit evil-magit evil-lispy evil-god-state evil-exchange elmacro drag-stuff dockerfile-mode discover-my-major dired+ diff-hl deft company-irony color-theme clojure-mode-extra-font-locking clj-refactor clipmon cider-profile cask buffer-move bbyac auto-yasnippet android-mode align-cljlet adoc-mode ace-jump-buffer ac-cider)))
+    (## intero lispyville evil-lispy nginx-mode package-build shut-up epl git commander f dash s markdown-mode+ polymode yaml-mode zenburn-theme window-numbering web-mode vlf vkill vimish-fold use-package toml-mode tiny smex smart-mode-line-powerline-theme slamhound shell-pop restclient rcirc-color rainbow-delimiters racket-mode racer prodigy org-projectile omnisharp nyan-mode monokai-theme markdown-preview-eww markdown-mode json-reformat irony-eldoc ido-ubiquitous idle-highlight-mode ibuffer-vc htmlize hl-anything highlight helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-cider helm-ag haskell-mode guide-key groovy-mode grizzl git-timemachine git-messenger git-gutter-fringe framesize flycheck-pos-tip flycheck-clojure flycheck-cask flx-ido find-file-in-project fill-column-indicator fancy-narrow exec-path-from-shell evil-terminal-cursor-changer evil-surround evil-numbers evil-multiedit evil-matchit evil-magit evil-god-state evil-exchange elmacro drag-stuff dockerfile-mode discover-my-major dired+ diff-hl deft company-irony color-theme clojure-mode-extra-font-locking clj-refactor clipmon cider-profile cask buffer-move bbyac auto-yasnippet android-mode align-cljlet adoc-mode ace-jump-buffer ac-cider)))
  '(safe-local-variable-values (quote ((c-basic-indent . 4))))
  '(semantic-mode t)
  '(uniquify-buffer-name-style (quote post-forward-angle-brackets) nil (uniquify)))
@@ -499,10 +499,11 @@
 
 (defun my-ido ()
   (require 'ido)
-  (require 'ido-ubiquitous)
   (require 'flx-ido)
+  (require 'ido-completing-read+)
 
   (setq ido-enable-prefix nil
+	ido-use-faces nil ;; to see flx highlights
         ido-enable-flex-matching t
         ido-create-new-buffer 'always
         ido-use-filename-at-point 'guess
@@ -511,12 +512,10 @@
         ido-default-file-method 'selected-window
         ido-auto-merge-work-directories-length -1)
 
-  (ido-mode +1)
-  (ido-ubiquitous-mode +1)
-  ;; smarter fuzzy matching for ido
-  (flx-ido-mode +1)
-  ;; disable ido faces to see flx highlights
-  (setq ido-use-faces nil))
+  (ido-mode 1)
+  (ido-everywhere 1)
+  (flx-ido-mode 1)
+  (ido-ubiquitous-mode 1))
 
 (defun my-flycheck ()
   (with-eval-after-load 'flycheck
@@ -588,10 +587,14 @@
   (global-set-key (kbd "C-c C-v") 'aya-expand)
   (evil-define-key 'insert global-map (kbd "C-<tab>") 'aya-open-line))
 
-(defun my-guide-key ()
-  (guide-key-mode t)
-  (setq guide-key/recursive-key-sequence-flag t)
-  (setq guide-key/guide-key-sequence '("C-x" "C-c" "C-r")))
+(defun my-which-key ()
+  (which-key-mode t)
+  (setq which-key-allow-evil-operators t)
+  (setq which-key-show-operator-state-maps t)
+  (which-key-enable-god-mode-support)
+  ;; (which-key-setup-side-window-right)
+  ;; (which-key-setup-side-window-right-bottom)
+  (which-key-setup-side-window-bottom))
 
 (defun my-android ()
   (cond
@@ -692,6 +695,11 @@
       (turn-on-fci-mode)))
   (add-hook 'prog-mode-hook (lambda () (fci-mode t))))
 
+(defun my-parinfer ()
+  (setq parinfer-extensions
+        '(defaults pretty-parens evil lispy paredit smart-tab smart-yank))
+  (setq parinfer-lighters '(" (indent)" . "(paren)")))
+
 (defvar my-lisp-minor-mode-map
   (let ((map (make-sparse-keymap)))
     (progn)
@@ -725,6 +733,7 @@
   (cljr-add-keybindings-with-prefix "M-q")
   (local-set-key (kbd "C-c C-a") 'align-cljlet)
   (setq cider-cljs-lein-repl "(do (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))\")\"")
+  (setq cider-lein-parameters "repl :headless :host localhost")
   ;; remove the cider bind that overshadows the git messenger bind
   (local-unset-key (kbd "C-c M-c")))
 
@@ -760,6 +769,9 @@
         nrepl-popup-stacktraces-in-repl t
         nrepl-history-file              "~/nrepl-history.dat")
   (add-to-list 'auto-mode-alist '("\\.boot$" . clojure-mode)))
+
+(defun my-haskell ()
+  (add-hook 'haskell-mode-hook 'intero-mode))
 
 (defun my-rtags ()
   (cond
@@ -1043,7 +1055,7 @@
    ;; --------------------------------------
    ;; -- configuring ide packages
    ;; --------------------------------------
-   (my-guide-key)
+   (my-which-key)
    (my-ido)
    (my-smex)
    (my-flycheck)
@@ -1064,7 +1076,9 @@
    (my-groovy)
    (my-rust)
    (my-ruby)
+   (my-parinfer)
    (my-lisp)
+   (my-haskell)
    (my-csharp)
    (my-markdown)
    (my-asciidoc)

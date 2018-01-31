@@ -27,7 +27,8 @@
 (depends-on "company")
 (depends-on "browse-kill-ring")
 (depends-on "bbyac")
-(depends-on "guide-key")
+; (depends-on "guide-key")
+(depends-on "which-key" :git "git@github.com:justbur/emacs-which-key.git")
 ;; --- flycheck
 (depends-on "flycheck-clojure")
 (depends-on "flycheck-pos-tip")
@@ -60,6 +61,7 @@
 (depends-on "align-cljlet")
 (depends-on "ac-cider")
 (depends-on "helm-cider")
+(depends-on "lispy")
 ;; --- racket
 (depends-on "racket-mode")
 ;; --- groovy (jenkinsfile)
@@ -77,6 +79,7 @@
 (depends-on "irony-eldoc")
 ;; --- haskell
 (depends-on "haskell-mode")
+(depends-on "intero")
 ;; --- android
 (depends-on "android-mode")
 ;; --- markdown
@@ -89,7 +92,7 @@
 (depends-on "dockerfile-mode")       ;;
 (depends-on "shell-pop")             ;; display and hide a shell
 (depends-on "discover-my-major")     ;;
-(depends-on "ido-ubiquitous")        ;;
+(depends-on "ido-completing-read+")  ;;
 (depends-on "flx-ido")               ;;
 (depends-on "ibuffer-vc")            ;;
 (depends-on "dired+")                ;;
