@@ -32,8 +32,6 @@
 ;; --- flycheck
 (depends-on "flycheck-clojure")
 (depends-on "flycheck-pos-tip")
-;; --- projectile
-(depends-on "org-projectile")
 ;; --- git
 (depends-on "git-gutter-fringe")
 (depends-on "git-timemachine")
