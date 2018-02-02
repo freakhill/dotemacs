@@ -22,7 +22,7 @@
  '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
-    (## intero lispyville evil-lispy nginx-mode package-build shut-up epl git commander f dash s markdown-mode+ polymode yaml-mode zenburn-theme window-numbering web-mode vlf vkill vimish-fold use-package toml-mode tiny smex smart-mode-line-powerline-theme slamhound shell-pop restclient rcirc-color rainbow-delimiters racket-mode racer prodigy org-projectile omnisharp nyan-mode monokai-theme markdown-preview-eww markdown-mode json-reformat irony-eldoc ido-ubiquitous idle-highlight-mode ibuffer-vc htmlize hl-anything highlight helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-cider helm-ag haskell-mode guide-key groovy-mode grizzl git-timemachine git-messenger git-gutter-fringe framesize flycheck-pos-tip flycheck-clojure flycheck-cask flx-ido find-file-in-project fill-column-indicator fancy-narrow exec-path-from-shell evil-terminal-cursor-changer evil-surround evil-numbers evil-multiedit evil-matchit evil-magit evil-god-state evil-exchange elmacro drag-stuff dockerfile-mode discover-my-major dired+ diff-hl deft company-irony color-theme clojure-mode-extra-font-locking clj-refactor clipmon cider-profile cask buffer-move bbyac auto-yasnippet android-mode align-cljlet adoc-mode ace-jump-buffer ac-cider)))
+    (## intero lispyville evil-lispy nginx-mode package-build shut-up epl git commander f dash s markdown-mode+ polymode yaml-mode zenburn-theme window-numbering web-mode vlf vkill vimish-fold use-package toml-mode tiny smex smart-mode-line-powerline-theme slamhound shell-pop restclient rcirc-color rainbow-delimiters racket-mode racer prodigy org-projectile omnisharp nyan-mode monokai-theme markdown-preview-eww markdown-mode json-reformat irony-eldoc ido-ubiquitous idle-highlight-mode ibuffer-vc htmlize hl-anything highlight helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-cider helm-ag haskell-mode guide-key groovy-mode grizzl git-timemachine git-messenger git-gutter-fringe framesize flycheck-pos-tip flycheck-clojure flycheck-cask flx-ido find-file-in-project fill-column-indicator fancy-narrow exec-path-from-shell evil-terminal-cursor-changer evil-surround evil-numbers evil-multiedit evil-matchit evil-magit evil-god-state evil-exchange elmacro drag-stuff dockerfile-mode discover-my-major diff-hl deft company-irony clojure-mode-extra-font-locking clj-refactor clipmon cider-profile cask buffer-move bbyac auto-yasnippet android-mode align-cljlet adoc-mode ace-jump-buffer ac-cider)))
  '(safe-local-variable-values (quote ((c-basic-indent . 4))))
  '(semantic-mode t)
  '(uniquify-buffer-name-style (quote post-forward-angle-brackets) nil (uniquify)))
@@ -213,19 +213,13 @@
     (my-ensure-dir ac-dict-dir)
     (add-to-list 'load-path dl-dir)
     (-each ;; packages
-     '(
-       ("https://raw.githubusercontent.com/buzztaiki/auto-complete/master/ac-company.el"
-	"ac-company.el"
-	ac-company)
-       ("https://raw.githubusercontent.com/overtone/emacs-live/master/packs/stable/colour-pack/lib/cyberpunk.el"
-	"cyberpunk.el"
-	"cyberpunk")
-          ("https://raw.githubusercontent.com/overtone/emacs-live/master/packs/stable/colour-pack/lib/gandalf.el"
-           "gandalf.el"
-           "gandalf")
+        '(
+          ("https://raw.githubusercontent.com/buzztaiki/auto-complete/master/ac-company.el"
+           "ac-company.el"
+           ac-company)
           ("http://webonastick.com/emacs-lisp/hide-mode-line.el"
            "hide-mode-line.el"
-          hide-mode-line)
+           hide-mode-line)
           ("https://raw.githubusercontent.com/sandstorm-io/capnproto/master/highlighting/emacs/capnp-mode.el"
            "capnp-mode.el"
            capnp-mode))
@@ -503,7 +497,7 @@
   (require 'ido-completing-read+)
 
   (setq ido-enable-prefix nil
-	ido-use-faces nil ;; to see flx highlights
+        ido-use-faces nil ;; to see flx highlights
         ido-enable-flex-matching t
         ido-create-new-buffer 'always
         ido-use-filename-at-point 'guess
@@ -571,12 +565,6 @@
 (defun my-diff-hl ()
   (global-diff-hl-mode)
   (add-hook 'dired-mode-hook 'diff-hl-dired-mode))
-
-(defun my-dired+ ()
-  (require 'dired+)
-  (quote (when (eq system-type 'darwin)
-           (require 'ls-lisp)
-           (setq ls-lisp-use-insert-directory-program nil))))
 
 (defun my-vlf ()
   (require 'vlf-integrate)
@@ -869,9 +857,9 @@
     :type 'object)
   (defcustom pm-poly/c++doc
     (pm-polymode-multi "c++doc"
-                     :hostmode 'pm-host/C++
-                     :innermodes '(pm-inner/Org
-                                   pm-inner/Markdown))
+                       :hostmode 'pm-host/C++
+                       :innermodes '(pm-inner/Org
+                                     pm-inner/Markdown))
     "C++ & Org polymode."
     :group 'polymodes
     :type 'object)
@@ -1036,9 +1024,9 @@
    (my-evil-numbers)
    (my-evil-surround)
    (my-evil-multiedit)
-   ;(my-evil-matchit)
+                                        ;(my-evil-matchit)
    (my-evil-exchange)
-   ;(my-evil-magit)
+                                        ;(my-evil-magit)
    (my-avy)
    (my-ace-jump-buffer)
    (my-help-swoop)
@@ -1066,11 +1054,10 @@
    (my-git-messenger)
    (my-git-timemachine)
    (my-yasnippet)
-   (my-dired+)
    (my-fancy-narrow)
    (my-android)
    (my-fill-column-indicator)
-   ;(my-rtags)
+                                        ;(my-rtags)
    (my-compilation-buffer)
    (my-racket)
    (my-groovy)
