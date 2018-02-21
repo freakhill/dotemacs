@@ -4,9 +4,7 @@
 (depends-on "cask")
 
 ;; --- themes
-(depends-on "color-theme")
 (depends-on "monokai-theme")
-(depends-on "zenburn-theme")
 ;; --- mode line
 (depends-on "smart-mode-line")
 (depends-on "smart-mode-line-powerline-theme")
