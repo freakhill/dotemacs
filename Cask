@@ -54,7 +54,6 @@
 (depends-on "clojure-mode")
 (depends-on "clojure-mode-extra-font-locking")
 (depends-on "cider")
-(depends-on "cider-profile")
 (depends-on "clj-refactor")
 (depends-on "align-cljlet")
 (depends-on "ac-cider")
