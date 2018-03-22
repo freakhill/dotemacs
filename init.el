@@ -20,9 +20,6 @@
  '(flycheck-display-errors-function (function flycheck-pos-tip-error-messages))
  '(global-ede-mode t)
  '(inhibit-startup-screen t)
- '(package-selected-packages
-   (quote
-    (## intero lispyville evil-lispy nginx-mode package-build shut-up epl git commander f dash s markdown-mode+ polymode yaml-mode zenburn-theme window-numbering web-mode vlf vkill vimish-fold use-package toml-mode tiny smex smart-mode-line-powerline-theme slamhound shell-pop restclient rcirc-color rainbow-delimiters racket-mode racer prodigy org-projectile omnisharp nyan-mode monokai-theme markdown-preview-eww markdown-mode json-reformat irony-eldoc ido-ubiquitous idle-highlight-mode ibuffer-vc htmlize hl-anything highlight helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-cider helm-ag haskell-mode guide-key groovy-mode grizzl git-timemachine git-messenger git-gutter-fringe framesize flycheck-pos-tip flycheck-clojure flycheck-cask flx-ido find-file-in-project fill-column-indicator fancy-narrow exec-path-from-shell evil-terminal-cursor-changer evil-surround evil-numbers evil-multiedit evil-matchit evil-magit evil-god-state evil-exchange elmacro drag-stuff dockerfile-mode discover-my-major diff-hl deft company-irony clojure-mode-extra-font-locking clj-refactor clipmon cider-profile cask buffer-move bbyac auto-yasnippet android-mode align-cljlet adoc-mode ace-jump-buffer ac-cider)))
  '(safe-local-variable-values (quote ((c-basic-indent . 4))))
  '(semantic-mode t)
  '(uniquify-buffer-name-style (quote post-forward-angle-brackets) nil (uniquify)))
@@ -359,9 +356,6 @@
 (defun my-ace-jump-buffer ()
   (define-key evil-normal-state-map "b" 'ace-jump-buffer))
 
-(defun my-help-swoop ()
-  (define-key evil-normal-state-map "s" 'helm-swoop))
-
 (defun my-window-numbering ()
   (window-numbering-mode t)
   (setq window-numbering-assign-func
@@ -525,26 +519,26 @@
   (global-set-key (kbd "M-x") 'smex)
   (global-set-key (kbd "M-X") 'smex-major-mode-commands))
 
-(defun my-helm-and-projectile ()
-  (require 'helm)
+(defun my-ivy ()
   (require 'projectile)
-  (require 'helm-projectile)
+  (require 'ivy)
+  (require 'swiper)
+  (require 'counsel)
+  (require 'counsel-projectile)
 
-  (defun my-open-files ()
-    "picked from https://www.youtube.com/watch?v=qpv9i_I4jYU -> mr. Renn Seo"
-    (interactive)
-    (if (projectile-project-p)
-        (helm-projectile)
-      (helm-mini)))
+  (ivy-mode 1)
+  (counsel-projectile-mode 1)
 
-  (global-set-key (kbd "C-x x") 'helm-M-x)
-  (global-set-key (kbd "M-y") 'helm-show-kill-ring)
-  (global-set-key (kbd "C-c C-i") 'helm-semantic-or-imenu)
-  (global-set-key (kbd "C-c C-o") 'helm-occur)
-  (global-set-key (kbd "C-c C-r") 'helm-all-mark-rings)
+  (setq ivy-use-virtual-buffers      t
+        enable-recursive-minibuffers t
+        ;; ivy-re-builders-alist        '((t . ivy--regex-fuzzy))
+        ivy-re-builders-alist        '((t . ivy--regex-plus)))
 
-  (global-set-key (kbd "C-o") 'my-open-files)
-  (global-set-key (kbd "C-x C-f" ) 'helm-find-files)
+  (define-key evil-normal-state-map "s" 'swiper)
+
+  (global-set-key (kbd "C-x x") 'counsel-M-x)
+  (global-set-key (kbd "C-o") 'counsel-projectile)
+  (global-set-key (kbd "C-x C-f" ) 'counsel-find-file)
 
   (projectile-global-mode)
   (setq projectile-completion-system 'grizzl)
@@ -716,7 +710,7 @@
   ;;(eval-after-load 'flycheck '(flycheck-clojure-setup))
   (add-to-list 'exec-path "~/.local/bin")
   (clj-refactor-mode t)
-  (helm-cider-mode 1)
+  ;; (helm-cider-mode 1)
   (flycheck-mode t)
   (cljr-add-keybindings-with-prefix "M-q")
   (local-set-key (kbd "C-c C-a") 'align-cljlet)
@@ -1029,7 +1023,6 @@
                                         ;(my-evil-magit)
    (my-avy)
    (my-ace-jump-buffer)
-   (my-help-swoop)
    (my-windmove)
    (my-ibuffer)
    (my-hippie)
@@ -1047,7 +1040,7 @@
    (my-ido)
    (my-smex)
    (my-flycheck)
-   (my-helm-and-projectile)
+   (my-ivy)
    (my-diff-hl)
    (my-undo-tree)
    (my-magit)

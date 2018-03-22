@@ -40,14 +40,19 @@
 (depends-on "rcirc")
 (depends-on "rcirc-color")
 (depends-on "rainbow-delimiters")
+;; --- ivy
+(depends-on "ivy")
+(depends-on "counsel")
+(depends-on "counsel-projectile")
+(depends-on "swiper")
 ;; --- helm
-(depends-on "helm")
-(depends-on "helm-ag")
-(depends-on "helm-make")
-(depends-on "helm-swoop")
-(depends-on "helm-themes")
-(depends-on "helm-projectile")
-(depends-on "helm-mode-manager")
+;; (depends-on "helm")
+;; (depends-on "helm-ag")
+;; (depends-on "helm-make")
+;; (depends-on "helm-swoop")
+;; (depends-on "helm-themes")
+;; (depends-on "helm-projectile")
+;; (depends-on "helm-mode-manager")
 ;; --- clojure
 (depends-on "clojure-mode")
 (depends-on "clojure-mode-extra-font-locking")
@@ -109,12 +114,12 @@
 (depends-on "framesize")             ;;
 (depends-on "window-numbering")      ;;
 (depends-on "elmacro")               ;; save macros as emacs lisp
-(depends-on "tiny")                  ;; generates linear ranges
+;; (depends-on "tiny")                  ;; generates linear ranges
 (depends-on "deft")                  ;; quicknote tool sync through my dropbox
 (depends-on "bind-key")
 (depends-on "dash")
 (depends-on "drag-stuff")
-(depends-on "exec-path-from-shell")
+;; (depends-on "exec-path-from-shell")
 (depends-on "f")
 (depends-on "flycheck")
 (depends-on "flycheck-cask")
@@ -122,14 +127,12 @@
 (depends-on "idle-highlight-mode")
 (depends-on "nyan-mode")
 (depends-on "popwin")
-(depends-on "prodigy")
 (depends-on "projectile")
 (depends-on "s")
 (depends-on "smex")
 (depends-on "use-package")
 (depends-on "web-mode")
 (depends-on "auto-yasnippet")
-(depends-on "find-file-in-project")
 (depends-on "avy")
 (depends-on "vimish-fold")
 (depends-on "ripgrep")
