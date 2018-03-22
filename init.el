@@ -538,7 +538,7 @@
 
   (global-set-key (kbd "C-x x") 'counsel-M-x)
   (global-set-key (kbd "C-o") 'counsel-projectile)
-  (global-set-key (kbd "C-S") 'counsel-projectile-rg)
+  (global-set-key (kbd "M-s s") 'counsel-projectile-rg)
   (global-set-key (kbd "C-x C-f" ) 'counsel-find-file)
 
   (projectile-global-mode)
