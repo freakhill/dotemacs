@@ -20,14 +20,13 @@
 (depends-on "evil-magit")
 (depends-on "evil-matchit")
 (depends-on "evil-exchange")
-(depends-on "evil-lispy" :git "git@github.com:sp3ctum/evil-lispy.git")
+(depends-on "evil-lispy") ;; :git "git@github.com:sp3ctum/evil-lispy.git"
 ;; --- completion
 ;;(depends-on "auto-complete")
 (depends-on "company")
 (depends-on "browse-kill-ring")
 (depends-on "bbyac")
-; (depends-on "guide-key")
-(depends-on "which-key" :git "git@github.com:justbur/emacs-which-key.git")
+(depends-on "which-key") ;; :git "git@github.com:justbur/emacs-which-key.git"
 ;; --- flycheck
 (depends-on "flycheck-clojure")
 (depends-on "flycheck-pos-tip")
