@@ -3,6 +3,7 @@
 
 (depends-on "cask")
 
+(depends-on "melpa")
 ;; --- themes
 (depends-on "monokai-theme")
 ;; --- mode line
