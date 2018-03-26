@@ -28,6 +28,7 @@
 (depends-on "bbyac")
 ; (depends-on "guide-key")
 (depends-on "which-key" :git "git@github.com:justbur/emacs-which-key.git")
+(depends-on "bind-key")
 ;; --- flycheck
 (depends-on "flycheck-clojure")
 (depends-on "flycheck-pos-tip")
@@ -46,14 +47,6 @@
 (depends-on "counsel")
 (depends-on "counsel-projectile")
 (depends-on "swiper")
-;; --- helm
-;; (depends-on "helm")
-;; (depends-on "helm-ag")
-;; (depends-on "helm-make")
-;; (depends-on "helm-swoop")
-;; (depends-on "helm-themes")
-;; (depends-on "helm-projectile")
-;; (depends-on "helm-mode-manager")
 ;; --- clojure
 (depends-on "clojure-mode")
 (depends-on "clojure-mode-extra-font-locking")
@@ -89,7 +82,6 @@
 ;; --- AsciiDoc
 (depends-on "adoc-mode") ;; gem install asciidoctor (not required)
 ;; --- various stuff
-(depends-on "projectile")
 (depends-on "dockerfile-mode")       ;;
 (depends-on "shell-pop")             ;; display and hide a shell
 (depends-on "discover-my-major")     ;;
@@ -115,12 +107,9 @@
 (depends-on "framesize")             ;;
 (depends-on "window-numbering")      ;;
 (depends-on "elmacro")               ;; save macros as emacs lisp
-;; (depends-on "tiny")                  ;; generates linear ranges
 (depends-on "deft")                  ;; quicknote tool sync through my dropbox
-(depends-on "bind-key")
 (depends-on "dash")
 (depends-on "drag-stuff")
-;; (depends-on "exec-path-from-shell")
 (depends-on "f")
 (depends-on "flycheck")
 (depends-on "flycheck-cask")
@@ -138,3 +127,5 @@
 (depends-on "vimish-fold")
 (depends-on "ripgrep")
 (depends-on "polymode")
+;; (depends-on "tiny")                  ;; generates linear ranges
+;; (depends-on "exec-path-from-shell")
