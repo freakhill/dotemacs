@@ -603,16 +603,22 @@
   (setq history-history-max 999)
   (history-mode))
 
+(defun my-lsp ()
+  (require 'lsp-mode)
+  (require 'lsp-ui)
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+  (add-hook 'rust-mode-hook 'flycheck-mode))
+
 (defun my-rust ()
+  (with-eval-after-load 'lsp-mode
+    (setq lsp-rust-rls-command '("rustup" "run" "nightly" "rls"))
+    (require 'lsp-rust))
   ;; (setq racer-cmd "/home/JP11629/.cargo/bin/racer")
   (autoload 'rust-mode "rust-mode" nil t)
   ;; (add-hook 'rust-mode-hook #'racer-mode)
   ;; (add-hook 'racer-mode-hook #'eldoc-mode)
   ;; (add-hook 'racer-mode-hook #'company-mode)
   (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
-  (with-eval-after-load 'lsp-mode
-    (setq lsp-rust-rls-command '("rustup" "run" "nightly" "rls"))
-    (require 'lsp-rust))
   (add-hook 'rust-mode-hook #'lsp-rust-enable)
   (add-hook 'rust-mode-hook #'flycheck-mode))
 
@@ -1063,6 +1069,7 @@
    (my-compilation-buffer)
    (my-racket)
    (my-groovy)
+   (my-lsp)
    (my-rust)
    (my-ruby)
    (my-parinfer)

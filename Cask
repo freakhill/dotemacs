@@ -65,6 +65,7 @@
 (depends-on "racer")                 ;; cargo install racer
 (depends-on "lsp-mode")
 (depends-on "lsp-rust")
+(depends-on "lsp-ui")
 ;; --- c#
 (depends-on "csharp-mode")
 (depends-on "omnisharp")
