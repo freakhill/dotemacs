@@ -64,6 +64,7 @@
 (depends-on "toml-mode")
 (depends-on "racer")                 ;; cargo install racer
 (depends-on "lsp-mode")
+(depends-on "lsp-rust")
 ;; --- c#
 (depends-on "csharp-mode")
 (depends-on "omnisharp")

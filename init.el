@@ -20,7 +20,9 @@
  '(flycheck-display-errors-function (function flycheck-pos-tip-error-messages))
  '(global-ede-mode t)
  '(inhibit-startup-screen t)
- '(package-selected-packages (quote (package-build shut-up epl git commander f dash s)))
+ '(package-selected-packages
+   (quote
+    (lsp-rust package-build shut-up epl git commander f dash s)))
  '(safe-local-variable-values (quote ((c-basic-indent . 4))))
  '(semantic-mode t)
  '(uniquify-buffer-name-style (quote post-forward-angle-brackets) nil (uniquify)))
