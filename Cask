@@ -132,3 +132,4 @@
 (depends-on "vimish-fold")
 (depends-on "ripgrep")
 (depends-on "polymode")
+(depends-on "hide-mode-line")

@@ -22,7 +22,7 @@
  '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
-    (lsp-rust package-build shut-up epl git commander f dash s)))
+    (hide-mode-line lsp-rust package-build shut-up epl git commander f dash s)))
  '(safe-local-variable-values (quote ((c-basic-indent . 4))))
  '(semantic-mode t)
  '(uniquify-buffer-name-style (quote post-forward-angle-brackets) nil (uniquify)))
@@ -181,6 +181,7 @@
   (savehist-mode t)
 
   (require 'midnight)
+  (midnight-delay-set 'midnight-delay "4:30am")
   (require 'saveplace)
   (setq-default save-place t)
 
@@ -217,9 +218,6 @@
           ("https://raw.githubusercontent.com/buzztaiki/auto-complete/master/ac-company.el"
            "ac-company.el"
            ac-company)
-          ("http://webonastick.com/emacs-lisp/hide-mode-line.el"
-           "hide-mode-line.el"
-           hide-mode-line)
           ("https://raw.githubusercontent.com/sandstorm-io/capnproto/master/highlighting/emacs/capnp-mode.el"
            "capnp-mode.el"
            capnp-mode))
@@ -259,11 +257,6 @@
       (lambda (dict) (condition-case e
                          (apply dl-and-load-ac-dict dict)
                        ((debug-error) e))))))
-
-(defun my-tramp ()
-  (setq tramp-default-method "ssh")
-  (setq tramp-default-proxies-alist
-        '(("\\.nhnjp\\.ism" nil "/ssh:kerberos:"))))
 
 (defun my-discover-my-major ()
   (define-key 'help-command (kbd "C-m") 'discover-my-major))
@@ -338,7 +331,7 @@
   (setq sml/shorten-modes t
         sml/shorten-directory t)
   (add-to-list 'rm-blacklist '("SkelC" "UndoTree" "Projectile.*" "AC" "SP" "SP/s" "ht"))
-  (hide-mode-line))
+  (hide-mode-line-mode))
 
 (defun my-bbyac ()
   (require 'bbyac)
@@ -437,7 +430,8 @@
 
 (defun my-popwin ()
   (require 'popwin)
-  (setq display-buffer-function 'popwin:display-buffer)
+  (popwin-mode 1)
+  ;; (setq display-buffer-function 'popwin:display-buffer)
   (setq popwin:special-display-config
         '(("*Help*" :height 30)
           ("*undo-tree*" :width 72 :heigth 40)
@@ -1024,7 +1018,6 @@
    (my-basic-init)
    (my-os-custom)
    (my-ensure-save-dir)
-   (my-tramp)
    ;; --------------------------------------
    ;; -- configuring global packages
    ;; --------------------------------------
@@ -1033,16 +1026,16 @@
    (my-evil-numbers)
    (my-evil-surround)
    (my-evil-multiedit)
-                                        ;(my-evil-matchit)
+   ;; (my-evil-matchit)
    (my-evil-exchange)
-                                        ;(my-evil-magit)
+   ;; (my-evil-magit)
    (my-avy)
    (my-ace-jump-buffer)
    (my-windmove)
    (my-ibuffer)
    (my-hippie)
    (my-vimish-fold)
-   ;;(my-auto-complete)
+   ;; (my-auto-complete)
    (my-bbyac)
    (my-popwin)
    (my-buffer-move)
@@ -1052,7 +1045,7 @@
    ;; -- configuring ide packages
    ;; --------------------------------------
    (my-which-key)
-   (my-ido)
+   ;; (my-ido)
    (my-smex)
    (my-flycheck)
    (my-ivy)
@@ -1060,31 +1053,31 @@
    (my-undo-tree)
    (my-magit)
    (my-git-messenger)
-   (my-git-timemachine)
-   (my-yasnippet)
-   (my-fancy-narrow)
-   (my-android)
+   ;; (my-git-timemachine)
+   ;; (my-yasnippet)
+   ;; (my-fancy-narrow)
+   ;; (my-android)
    (my-fill-column-indicator)
-                                        ;(my-rtags)
+   ;; (my-rtags)
    (my-compilation-buffer)
-   (my-racket)
-   (my-groovy)
+   ;; (my-racket)
+   ;; (my-groovy)
    (my-lsp)
    (my-rust)
    (my-ruby)
    (my-parinfer)
    (my-lisp)
-   (my-haskell)
-   (my-csharp)
+   ;; (my-haskell)
+   ;; (my-csharp)
    (my-markdown)
    (my-asciidoc)
    (my-capnp)
-   (my-polymodes)
+   ;; (my-polymodes)
    ;; --------------------------------------
    ;; other
    ;; --------------------------------------
    (my-shell-pop)
-   (my-deft)
+   ;; (my-deft)
    (my-funcs)
    (my-modeline)))
 
