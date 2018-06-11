@@ -63,6 +63,9 @@
 (depends-on "rust-mode")
 (depends-on "toml-mode")
 (depends-on "racer")                 ;; cargo install racer
+(depends-on "lsp-mode")
+(depends-on "lsp-rust")
+(depends-on "lsp-ui")
 ;; --- c#
 (depends-on "csharp-mode")
 (depends-on "omnisharp")
@@ -128,3 +131,4 @@
 (depends-on "vimish-fold")
 (depends-on "ripgrep")
 (depends-on "polymode")
+(depends-on "hide-mode-line")
