@@ -99,7 +99,6 @@
 (depends-on "vlf")                   ;;
 (depends-on "diff-hl")               ;;
 (depends-on "grizzl")                ;;
-(depends-on "vkill")                 ;; view and kill Unix processes
 (depends-on "rich-minority")         ;; hide/highlists list of minor modes
 (depends-on "highlight")             ;;
 (depends-on "hl-anything")           ;;

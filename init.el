@@ -885,10 +885,8 @@
     ;;(require 'exec-path-from-shell)
     ;;(exec-path-from-shell-initialize)
     (setq ns-function-modifier 'hyper)
-    (autoload 'vkill "vkill" nil t)
     (setq dired-listing-switches "-lha --group-directories-first")
     ;; from prelude, proced mode doesnt work on macos
-    (global-set-key (kbd "C-x p") 'vkill)
     (global-set-key (kbd "s-/") 'hippie-expand)
     (global-set-key (kbd "C-c w") 'my-swap-meta-and-super)
     ;; Work around a bug on OS X where system-name is a fully qualified
