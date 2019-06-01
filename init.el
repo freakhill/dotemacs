@@ -22,7 +22,7 @@
  '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
-    (hide-mode-line lsp-rust package-build shut-up epl git commander f dash s)))
+    (dap-mode ansi hide-mode-line lsp-rust package-build shut-up epl git commander f dash s)))
  '(safe-local-variable-values (quote ((c-basic-indent . 4))))
  '(semantic-mode t)
  '(uniquify-buffer-name-style (quote post-forward-angle-brackets) nil (uniquify)))
@@ -601,6 +601,18 @@
   (setq history-history-max 999)
   (history-mode))
 
+(defun my-dap ()
+  ;; debugging library
+  (require 'dap-gdb-lldb)
+  (dap-gdb-lldb-setup)
+  ;; (require 'dap-lldb)
+  (require 'dap-firefox)
+  (dap-firefox-setup)
+  (require 'dap-chrome)
+  (dap-chrome-setup)
+  (require 'dap-node)
+  (dap-node-setup))
+
 (defun my-lsp ()
   (require 'lsp-mode)
   (require 'lsp-ui)
@@ -1064,6 +1076,7 @@
    (my-compilation-buffer)
    ;; (my-racket)
    ;; (my-groovy)
+   (my-dap)
    (my-lsp)
    (my-rust)
    (my-ruby)
