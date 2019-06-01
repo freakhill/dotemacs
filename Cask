@@ -51,7 +51,7 @@
 (depends-on "treemacs-evil")
 (depends-on "treemacs-projectile")
 ;; --- dap (debugging mode)
-(require 'dap-node)
+(depends-on 'dap-mode)
 ;; --- clojure
 (depends-on "clojure-mode")
 (depends-on "cider")
