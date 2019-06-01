@@ -357,6 +357,10 @@
   (setq window-numbering-assign-func
         (lambda () (when (equal (buffer-name) "*scratch*") 0))))
 
+(defun my-company ()
+  (require 'company)
+  (global-company-mode))
+
 (defun my-mouse ()
   ;; Mouse in terminal
   (require 'mouse)
@@ -601,17 +605,18 @@
   (require 'lsp-mode)
   (require 'lsp-ui)
   (add-hook 'lsp-mode-hook 'lsp-ui-mode)
-  (add-hook 'rust-mode-hook 'flycheck-mode))
+  (add-hook 'lsp-mode-hook 'company-lsp)
+  (add-hook 'lsp-mode-hook 'lsp-treemacs)
+  (add-hook 'rust-mode-hook 'flycheck-mode)
+  (push 'company-lsp company-backends))
 
 (defun my-rust ()
   (with-eval-after-load 'lsp-mode
-    (setq lsp-rust-rls-command '("rustup" "run" "nightly" "rls"))
-    (require 'lsp-rust))
+    (setq lsp-rust-rls-command '("rustup" "run" "nightly" "rls")))
   ;; (setq racer-cmd "/home/JP11629/.cargo/bin/racer")
   (autoload 'rust-mode "rust-mode" nil t)
   ;; (add-hook 'rust-mode-hook #'racer-mode)
   ;; (add-hook 'racer-mode-hook #'eldoc-mode)
-  ;; (add-hook 'racer-mode-hook #'company-mode)
   (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
   (add-hook 'rust-mode-hook #'lsp-rust-enable)
   (add-hook 'rust-mode-hook #'flycheck-mode))
@@ -710,17 +715,18 @@
     (evil-define-key 'normal global-map (kbd "{") 'evil-lispy/enter-state-left)
     (evil-define-key 'normal global-map (kbd "}") 'evil-lispy/enter-state-right)
     (rainbow-delimiters-mode t)
-    (hs-minor-mode t)))
+    (hs-minor-mode t)
+    (aggressive-indent-mode t)))
 
 (defun my-clojure-custom ()
-  (require 'clojure-mode-extra-font-locking)
+  (add-to-list 'exec-path "~/.local/bin")
   (require 'clj-refactor)
   (require 'icomplete) ;; for cider minibuffer completion
-  ;;(eval-after-load 'flycheck '(flycheck-clojure-setup))
-  (add-to-list 'exec-path "~/.local/bin")
+  (require 'subword-mode)
   (clj-refactor-mode t)
-  ;; (helm-cider-mode 1)
   (flycheck-mode t)
+  (subword-mode t)
+  (my-lisp-minor-mode t)
   (cljr-add-keybindings-with-prefix "M-q")
   (local-set-key (kbd "C-c C-a") 'align-cljlet)
   (setq cider-cljs-lein-repl "(do (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))\")\"")
@@ -729,10 +735,8 @@
   (local-unset-key (kbd "C-c M-c")))
 
 (defun my-lisp ()
-  (dolist (h '(clojure-mode-hook
-               clojurescript-mode-hook
-               cider-mode-hook
-               emacs-lisp-mode-hook
+  ;; all non clojure lisps
+  (dolist (h '(emacs-lisp-mode-hook
                ielm-mode-hook
                lisp-mode-hook
                lisp-interaction-mode-hook
@@ -740,22 +744,21 @@
                scheme-mode-hook
                racket-mode-hook))
     (add-hook h #'my-lisp-minor-mode))
-
+  ;; clojure
   (dolist (h '(clojure-mode-hook
-               clojurescript-mode-hook))
-    (add-hook h 'my-clojure-custom))
-
-  ;;--- cider
-  (add-hook 'cider-mode-hook #'company-mode)
-  (add-hook 'cider-repl-mode-hook #'company-mode)
-  (add-hook 'cider-repl-mode-hook #'subword-mode)
-
-  (add-hook 'cider-mode-hook #'eldoc-mode)
-  (setq cider-repl-use-clojure-font-lock t)
+               cider-mode-hook
+               cider-repl-mode-hook))
+    (add-hook h #'my-clojure-custom))
+  ;; cider
+  (dolist (h '( cider-mode-hook
+               cider-repl-mode-hook))
+    (add-hook h #'cider-company-enable-fuzzy-completion)
+    (add-hook h #'eldoc-mode))
+  ;; some conf...
   (setq cider-repl-tab-command #'indent-for-tab-command)
+  ;; (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
   (setq cider-prefer-local-resources t)
   (setq nrepl-log-messages t)
-
   (setq nrepl-hide-special-buffers      t
         nrepl-popup-stacktraces-in-repl t
         nrepl-history-file              "~/nrepl-history.dat")
@@ -1039,6 +1042,7 @@
    (my-buffer-move)
    (my-mouse)
    (my-window-numbering)
+   (my-company)
    ;; --------------------------------------
    ;; -- configuring ide packages
    ;; --------------------------------------

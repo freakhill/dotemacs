@@ -46,15 +46,19 @@
 (depends-on "counsel-projectile")
 (depends-on "swiper")
 (depends-on "projectile")
+;; --- treemacs
+(depends-on "treemacs")
+(depends-on "treemacs-evil")
+(depends-on "treemacs-projectile")
 ;; --- clojure
 (depends-on "clojure-mode")
-(depends-on "clojure-mode-extra-font-locking")
 (depends-on "cider")
 (depends-on "clj-refactor")
 (depends-on "align-cljlet")
 (depends-on "ac-cider")
 (depends-on "helm-cider")
 (depends-on "lispy")
+(depends-on "aggressive-indent")
 ;; --- racket
 (depends-on "racket-mode")
 ;; --- groovy (jenkinsfile)
@@ -64,8 +68,9 @@
 (depends-on "toml-mode")
 (depends-on "racer")                 ;; cargo install racer
 (depends-on "lsp-mode")
-(depends-on "lsp-rust")
+(depends-on "company-lsp")
 (depends-on "lsp-ui")
+(depends-on "lsp-treemacs")
 ;; --- c#
 (depends-on "csharp-mode")
 (depends-on "omnisharp")
