@@ -722,7 +722,7 @@
   (add-to-list 'exec-path "~/.local/bin")
   (require 'clj-refactor)
   (require 'icomplete) ;; for cider minibuffer completion
-  (require 'subword-mode)
+  (subword-mode t)
   (clj-refactor-mode t)
   (flycheck-mode t)
   (subword-mode t)
