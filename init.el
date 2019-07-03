@@ -193,7 +193,9 @@
   (setq user-cask-init-file
         (expand-file-name "Cask" (file-name-directory user-init-file)))
   (set-register ?c `(file . ,user-cask-init-file))
-  (set-register ?i `(file . ,user-init-file)))
+  (set-register ?i `(file . ,user-init-file))
+  ;; backspace turns into C-h...
+  (normal-erase-is-backspace-mode 0))
 
 (defun my-load-extra-files ()
   (let
