@@ -1,4 +1,4 @@
-; -*- coding: utf-8-unix -*-
+;;; -*- coding: utf-8-unix -*-
 
 ;; Added by Package.el.  This must come before configurations of
 ;; installed packages.  Don't delete this line.  If you don't want it,
@@ -193,9 +193,7 @@
   (setq user-cask-init-file
         (expand-file-name "Cask" (file-name-directory user-init-file)))
   (set-register ?c `(file . ,user-cask-init-file))
-  (set-register ?i `(file . ,user-init-file))
-  ;; backspace turns into C-h...
-  (normal-erase-is-backspace-mode 0))
+  (set-register ?i `(file . ,user-init-file)))
 
 (defun my-load-extra-files ()
   (let
@@ -355,9 +353,7 @@
   (define-key evil-normal-state-map "b" 'ace-jump-buffer))
 
 (defun my-window-numbering ()
-  (window-numbering-mode t)
-  (setq window-numbering-assign-func
-        (lambda () (when (equal (buffer-name) "*scratch*") 0))))
+  (window-numbering-mode t))
 
 (defun my-company ()
   (require 'company)
@@ -392,8 +388,7 @@
   (nyan-mode t))
 
 (defun my-windmove ()
-  (when (fboundp 'windmove-default-keybindings)
-    (windmove-default-keybindings)))
+  (windmove-default-keybindings))
 
 (defun my-ibuffer ()
   (autoload 'ibuffer "ibuffer" "List buffers." t)
@@ -765,7 +760,7 @@
     (add-hook h #'my-clojure-custom))
   ;; cider
   (dolist (h '( cider-mode-hook
-               cider-repl-mode-hook))
+                cider-repl-mode-hook))
     (add-hook h #'cider-company-enable-fuzzy-completion)
     (add-hook h #'eldoc-mode))
   ;; some conf...
