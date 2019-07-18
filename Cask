@@ -76,6 +76,8 @@
 ;; --- c#
 (depends-on "csharp-mode")
 (depends-on "omnisharp")
+;; --- yaml
+(depends-on "yaml-mode")
 ;; --- c/c++
 (depends-on "irony")
 (depends-on "company-irony")
