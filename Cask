@@ -46,6 +46,7 @@
 (depends-on "counsel-projectile")
 (depends-on "swiper")
 (depends-on "projectile")
+(depends-on "projectile-ripgrep")
 ;; --- treemacs
 (depends-on "treemacs")
 (depends-on "treemacs-evil")
@@ -54,7 +55,7 @@
 (depends-on "dap-mode")
 ;; --- clojure
 (depends-on "clojure-mode")
-(depends-on "cider")
+(depends-on "cider" "0.22.4")
 (depends-on "clj-refactor")
 (depends-on "align-cljlet")
 (depends-on "ac-cider")
@@ -74,8 +75,8 @@
 (depends-on "lsp-ui")
 (depends-on "lsp-treemacs")
 ;; --- c#
-(depends-on "csharp-mode")
-(depends-on "omnisharp")
+;; (depends-on "csharp-mode")
+;; (depends-on "omnisharp")
 ;; --- yaml
 (depends-on "yaml-mode")
 ;; --- c/c++

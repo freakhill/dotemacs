@@ -22,7 +22,7 @@
  '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
-    (dap-mode ansi hide-mode-line lsp-rust package-build shut-up epl git commander f dash s)))
+    (projectile-ripgrep company-restclient dap-mode ansi hide-mode-line lsp-rust package-build shut-up epl git commander f dash s)))
  '(safe-local-variable-values (quote ((c-basic-indent . 4))))
  '(semantic-mode t)
  '(uniquify-buffer-name-style (quote post-forward-angle-brackets) nil (uniquify)))
